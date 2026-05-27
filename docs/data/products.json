@@ -1,0 +1,321 @@
+[
+  {
+    "id": "p001",
+    "name": "TourEdge Pro Driver 460cc",
+    "category": "clubs",
+    "price": 449.99,
+    "originalPrice": 599.99,
+    "description": "Premium 460cc titanium driver with adjustable loft hosel (8.5°–12°). Ultra-thin crown reduces weight for maximum swing speed. Includes matching headcover.",
+    "features": ["Adjustable loft 8.5°–12°", "460cc titanium head", "Low-spin technology", "48\" premium graphite shaft"],
+    "variants": [
+      {"type": "flex", "options": ["Regular", "Stiff", "X-Stiff"]}
+    ],
+    "image": "https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=600&q=80",
+    "badge": "Sale",
+    "rating": 4.8,
+    "reviews": 142,
+    "inStock": true
+  },
+  {
+    "id": "p002",
+    "name": "Precision Blade Iron Set (4–PW)",
+    "category": "clubs",
+    "price": 899.99,
+    "description": "Forged carbon steel iron set with progressive offset for consistent distance and feel. Muscle-back design preferred by low-handicap players.",
+    "features": ["Forged carbon steel", "Progressive CG placement", "7 clubs included (4–PW)", "True Temper Dynamic Gold S300 shafts"],
+    "variants": [
+      {"type": "flex", "options": ["Regular", "Stiff"]},
+      {"type": "lie", "options": ["Standard", "+1°", "+2°"]}
+    ],
+    "image": "https://images.unsplash.com/photo-1593111774240-d529f12cf4d1?w=600&q=80",
+    "badge": "Best Seller",
+    "rating": 4.9,
+    "reviews": 87,
+    "inStock": true
+  },
+  {
+    "id": "p003",
+    "name": "Augusta Mallet Putter 34\"",
+    "category": "clubs",
+    "price": 249.99,
+    "description": "High-MOI mallet putter with face-balanced design for straight-back straight-through strokes. Alignment aid and soft face insert.",
+    "features": ["High-MOI mallet head", "Face-balanced design", "Soft insert face", "34\" standard length"],
+    "variants": [
+      {"type": "length", "options": ["33\"", "34\"", "35\""]}
+    ],
+    "image": "https://images.unsplash.com/photo-1572012607533-fa1d16375e3b?w=600&q=80",
+    "badge": null,
+    "rating": 4.7,
+    "reviews": 203,
+    "inStock": true
+  },
+  {
+    "id": "p004",
+    "name": "60° Lob Wedge — Tour Grind",
+    "category": "clubs",
+    "price": 159.99,
+    "description": "High-bounce lob wedge designed for soft conditions. Full-face groove coverage for max spin from any lie. Heat-treated finish resists corrosion.",
+    "features": ["60° loft / 10° bounce", "Full-face grooves", "Tour-preferred C-grind sole", "Available in chrome or tour black"],
+    "variants": [
+      {"type": "finish", "options": ["Chrome", "Tour Black"]}
+    ],
+    "image": "https://images.unsplash.com/photo-1633478062482-790e3b5dd810?w=600&q=80",
+    "badge": null,
+    "rating": 4.6,
+    "reviews": 56,
+    "inStock": true
+  },
+  {
+    "id": "p005",
+    "name": "Rescue Hybrid 3-Wood 19°",
+    "category": "clubs",
+    "price": 199.99,
+    "description": "Versatile hybrid iron replacement combining fairway wood distance with iron accuracy. Ideal for long par 4s and par 5s. Ultra-low CG.",
+    "features": ["19° loft (3-hybrid)", "Low and deep CG", "Wide sole for turf interaction", "Lightweight graphite shaft"],
+    "variants": [
+      {"type": "flex", "options": ["Ladies", "Regular", "Stiff"]}
+    ],
+    "image": "https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=600&q=80",
+    "badge": "New",
+    "rating": 4.5,
+    "reviews": 34,
+    "inStock": true
+  },
+  {
+    "id": "p006",
+    "name": "Merino Wool Golf Polo",
+    "category": "apparel",
+    "price": 89.99,
+    "description": "Luxurious merino wool blend polo with moisture-wicking finish. UV50+ protection. Machine washable. Club-approved collar.",
+    "features": ["70% merino / 30% polyester", "UV50+ protection", "Moisture-wicking", "Machine washable"],
+    "variants": [
+      {"type": "size", "options": ["XS", "S", "M", "L", "XL", "XXL"]},
+      {"type": "color", "options": ["White", "Navy", "Sage Green", "Charcoal"]}
+    ],
+    "image": "https://images.unsplash.com/photo-1512484776495-a09d92e87c3b?w=600&q=80",
+    "badge": null,
+    "rating": 4.7,
+    "reviews": 118,
+    "inStock": true
+  },
+  {
+    "id": "p007",
+    "name": "Stretch Performance Golf Trouser",
+    "category": "apparel",
+    "price": 114.99,
+    "description": "4-way stretch woven trousers with a tailored fit. Flat-front design. Anti-wrinkle treatment. Ideal for both on and off the course.",
+    "features": ["4-way stretch", "Anti-wrinkle treatment", "Secure back pocket", "28–38\" waist"],
+    "variants": [
+      {"type": "size", "options": ["28x30", "30x30", "32x30", "32x32", "34x30", "34x32", "36x32", "38x32"]},
+      {"type": "color", "options": ["Stone", "Navy", "Charcoal", "Black"]}
+    ],
+    "image": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80",
+    "badge": null,
+    "rating": 4.6,
+    "reviews": 74,
+    "inStock": true
+  },
+  {
+    "id": "p008",
+    "name": "Waterproof Golf Rain Jacket",
+    "category": "apparel",
+    "price": 169.99,
+    "description": "Packable waterproof golf jacket with Gore-Tex membrane. Full zip with storm placket. Stretch side panels for unrestricted swing motion.",
+    "features": ["Gore-Tex waterproof membrane", "Packable into chest pocket", "Stretch side panels", "Underarm ventilation zips"],
+    "variants": [
+      {"type": "size", "options": ["S", "M", "L", "XL", "XXL"]},
+      {"type": "color", "options": ["Navy", "Black", "Forest Green"]}
+    ],
+    "image": "https://images.unsplash.com/photo-1544923246-77307dd654cb?w=600&q=80",
+    "badge": "Waterproof",
+    "rating": 4.8,
+    "reviews": 92,
+    "inStock": true
+  },
+  {
+    "id": "p009",
+    "name": "Tour Structured Cap",
+    "category": "apparel",
+    "price": 39.99,
+    "description": "Structured 6-panel cap with curved brim. Moisture-wicking sweatband. Adjustable snapback. Embroidered GolfVault logo.",
+    "features": ["Moisture-wicking sweatband", "UV30+ protection", "Structured 6-panel", "Adjustable snapback"],
+    "variants": [
+      {"type": "color", "options": ["White", "Black", "Navy", "Forest Green"]}
+    ],
+    "image": "https://images.unsplash.com/photo-1521369909029-2afed882baee?w=600&q=80",
+    "badge": null,
+    "rating": 4.4,
+    "reviews": 167,
+    "inStock": true
+  },
+  {
+    "id": "p010",
+    "name": "Premium Leather Golf Glove",
+    "category": "apparel",
+    "price": 29.99,
+    "description": "Cabretta leather glove for superior feel and durability. Velcro closure for secure fit. Perforated panels for breathability. Ideal for warm conditions.",
+    "features": ["Cabretta leather palm", "Perforated back for ventilation", "Secure velcro closure", "Machine washable"],
+    "variants": [
+      {"type": "hand", "options": ["Left (Right-handed)", "Right (Left-handed)"]},
+      {"type": "size", "options": ["S", "M", "ML", "L", "XL"]}
+    ],
+    "image": "https://images.unsplash.com/photo-1580793523892-e01a432fcaf9?w=600&q=80",
+    "badge": null,
+    "rating": 4.5,
+    "reviews": 213,
+    "inStock": true
+  },
+  {
+    "id": "p011",
+    "name": "Premium Cart Golf Bag",
+    "category": "accessories",
+    "price": 319.99,
+    "description": "14-way divider cart bag with individual slot per club. 10 pockets including insulated cooler pocket. Cart strap pass-through. Waterproof base.",
+    "features": ["14-way full-length dividers", "10 storage pockets", "Insulated cooler pocket", "Waterproof base"],
+    "variants": [
+      {"type": "color", "options": ["Forest Green/Gold", "Black/Silver", "Navy/White"]}
+    ],
+    "image": "https://images.unsplash.com/photo-1632922267756-9b71242b1592?w=600&q=80",
+    "badge": "Best Seller",
+    "rating": 4.9,
+    "reviews": 54,
+    "inStock": true
+  },
+  {
+    "id": "p012",
+    "name": "Laser Rangefinder 800 Pro",
+    "category": "accessories",
+    "price": 249.99,
+    "description": "Tournament-legal laser rangefinder with ±0.5yd accuracy to 800 yards. Slope compensation with toggle. Vibration confirmation. 6x magnification.",
+    "features": ["±0.5yd accuracy to 800yds", "Slope compensation (USGA legal)", "Pin-Seeker technology", "6x magnification"],
+    "variants": [],
+    "image": "https://images.unsplash.com/photo-1551524559-8af4e6624178?w=600&q=80",
+    "badge": "Tournament Legal",
+    "rating": 4.8,
+    "reviews": 89,
+    "inStock": true
+  },
+  {
+    "id": "p013",
+    "name": "Bamboo Tee Value Pack (100)",
+    "category": "accessories",
+    "price": 12.99,
+    "description": "Eco-friendly bamboo golf tees in a mixed height pack. Stronger than wood, lighter than plastic. Biodegradable and sustainably sourced.",
+    "features": ["100 tees per pack", "Mixed heights: 2.75\" & 3.25\"", "Biodegradable bamboo", "Sustainably sourced"],
+    "variants": [
+      {"type": "height", "options": ["2.75\"", "3.25\"", "Mixed"]}
+    ],
+    "image": "https://images.unsplash.com/photo-1591491719565-9f6c71a1cf0f?w=600&q=80",
+    "badge": "Eco",
+    "rating": 4.3,
+    "reviews": 312,
+    "inStock": true
+  },
+  {
+    "id": "p014",
+    "name": "Magnetic Hat Clip Ball Marker Set",
+    "category": "accessories",
+    "price": 24.99,
+    "description": "Stainless steel magnetic hat clip with 3 interchangeable ball markers. Premium enamel finish. Never lose your marker again.",
+    "features": ["Magnetic attachment", "3 ball markers included", "Premium enamel finish", "Stainless steel clip"],
+    "variants": [
+      {"type": "color", "options": ["Gold", "Silver", "Rose Gold"]}
+    ],
+    "image": "https://images.unsplash.com/photo-1631726284099-42be0f21a50b?w=600&q=80",
+    "badge": null,
+    "rating": 4.6,
+    "reviews": 147,
+    "inStock": true
+  },
+  {
+    "id": "p015",
+    "name": "Microfibre Club Towel 16\"×24\"",
+    "category": "accessories",
+    "price": 19.99,
+    "description": "Premium waffle-weave microfibre towel with carabiner clip. Dual-zone design — one side for clubs, one side for ball cleaning.",
+    "features": ["Dual-zone waffle weave", "Carabiner included", "16\"×24\" size", "Machine washable"],
+    "variants": [
+      {"type": "color", "options": ["White", "Black", "Forest Green", "Navy"]}
+    ],
+    "image": "https://images.unsplash.com/photo-1544427920-c49ccfb85579?w=600&q=80",
+    "badge": null,
+    "rating": 4.4,
+    "reviews": 198,
+    "inStock": true
+  },
+  {
+    "id": "p016",
+    "name": "FlightScope Mevo+ Launch Monitor",
+    "category": "equipment",
+    "price": 1999.99,
+    "originalPrice": 2199.99,
+    "description": "Portable launch monitor with Fusion Tracking technology. 16 data parameters including spin rate, apex, and carry. Works indoors with net.",
+    "features": ["16 performance parameters", "Spin rate & apex tracking", "Indoor/outdoor use", "Bluetooth to app"],
+    "variants": [],
+    "image": "https://images.unsplash.com/photo-1611095561427-23a8a24c7979?w=600&q=80",
+    "badge": "Sale",
+    "rating": 4.7,
+    "reviews": 43,
+    "inStock": true
+  },
+  {
+    "id": "p017",
+    "name": "Premium Putting Green Mat 9ft",
+    "category": "equipment",
+    "price": 149.99,
+    "description": "True-speed indoor putting mat with alignment guides and multiple cup positions. Compact roll-up storage. Suitable for home office or garage.",
+    "features": ["9ft × 2ft putting surface", "True-roll nap surface", "3 cup positions", "Roll-up for storage"],
+    "variants": [
+      {"type": "size", "options": ["9ft", "12ft", "15ft"]}
+    ],
+    "image": "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=600&q=80",
+    "badge": null,
+    "rating": 4.5,
+    "reviews": 76,
+    "inStock": true
+  },
+  {
+    "id": "p018",
+    "name": "Heavy-Duty Practice Net & Frame",
+    "category": "equipment",
+    "price": 199.99,
+    "description": "Pro-grade practice hitting net with 10×7ft opening. Double-net construction stops full-power shots. Sets up in 5 minutes — no tools required.",
+    "features": ["10ft × 7ft opening", "Double-net barrier", "Tool-free 5-min setup", "UV-resistant netting"],
+    "variants": [],
+    "image": "https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=600&q=80",
+    "badge": null,
+    "rating": 4.4,
+    "reviews": 61,
+    "inStock": true
+  },
+  {
+    "id": "p019",
+    "name": "SwingPath Training Aid Kit",
+    "category": "equipment",
+    "price": 79.99,
+    "description": "Complete swing path training system with alignment sticks, impact bag, and tempo trainer. Used by Tour instructors worldwide. Suitable for all levels.",
+    "features": ["3× alignment sticks", "Impact training bag", "Tempo trainer wristband", "Drill instruction booklet"],
+    "variants": [],
+    "image": "https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=600&q=80",
+    "badge": "Best Value",
+    "rating": 4.6,
+    "reviews": 134,
+    "inStock": true
+  },
+  {
+    "id": "p020",
+    "name": "Electric Push Cart Pro",
+    "category": "equipment",
+    "price": 699.99,
+    "description": "Motorised electric push cart with remote control and 18-hole battery. Folds flat in under 30 seconds. USB charging port and phone holder included.",
+    "features": ["18-hole battery life", "Remote control", "USB charging port", "Folds flat in 30s"],
+    "variants": [
+      {"type": "color", "options": ["Black", "Forest Green"]}
+    ],
+    "image": "https://images.unsplash.com/photo-1611095561427-23a8a24c7979?w=600&q=80",
+    "badge": "New",
+    "rating": 4.8,
+    "reviews": 28,
+    "inStock": true
+  }
+]

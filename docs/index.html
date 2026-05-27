@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Viewport WITHOUT viewport-fit=cover — MixologyVault bottom-gap fix -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>GolfVault — Golf Gear, Coaching & Swing Analysis</title>
+  <meta name="description" content="Premium golf accessories, expert coaching sessions, video lessons, and AI-powered swing analysis — all in one app.">
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#1B4332">
+
+  <!-- iOS PWA Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="GolfVault">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+  <!-- Android / Chrome -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="GolfVault">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="GolfVault">
+  <meta property="og:description" content="Premium golf accessories, coaching & swing analysis.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="icons/icon-512.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://images.unsplash.com">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Inline critical CSS: prevent white flash & bottom gap on iOS -->
+  <style>
+    html { background: #1C1C1E; }
+    body { background: #f2f2f7; }
+    #app { background: #f2f2f7; }
+    /* Show skeleton while JS loads */
+    #bottom-nav { background: #1C1C1E; }
+  </style>
+</head>
+<body>
+
+  <!-- ── Offline Banner ─────────────────────────────────────── -->
+  <div id="offline-banner" role="alert" aria-live="polite">
+    📡 You are offline — showing cached content
+  </div>
+
+  <!-- ── Main App Shell ─────────────────────────────────────── -->
+  <div id="app">
+
+    <!-- iOS install instruction banner -->
+    <div id="ios-banner" role="banner">
+      <strong>Install GolfVault</strong> for the best experience.<br>
+      Tap <strong>Share ↑</strong> then <strong>"Add to Home Screen"</strong> in Safari.
+      <br><button class="btn btn-ghost btn-sm" id="ios-banner-dismiss" style="margin-top:8px;color:var(--gold-500)">Dismiss</button>
+    </div>
+
+    <!-- ── Main Content ──────────────────────────────────────── -->
+    <main id="main-content" role="main">
+
+      <!-- ── Tab 1: Shop ─────────────────────────────────────── -->
+      <section id="tab-shop" class="tab-panel" role="tabpanel" aria-label="Shop">
+        <!-- Rendered by app.js -->
+        <div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--gray-400)">
+          <span style="font-size:32px">🛍</span>
+        </div>
+      </section>
+
+      <!-- ── Tab 2: Book a Session ───────────────────────────── -->
+      <section id="tab-book" class="tab-panel" role="tabpanel" aria-label="Book a Session">
+        <div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--gray-400)">
+          <span style="font-size:32px">📅</span>
+        </div>
+      </section>
+
+      <!-- ── Tab 3: Video Lessons ────────────────────────────── -->
+      <section id="tab-lessons" class="tab-panel" role="tabpanel" aria-label="Video Lessons">
+        <div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--gray-400)">
+          <span style="font-size:32px">🎬</span>
+        </div>
+      </section>
+
+      <!-- ── Tab 4: Swing Analysis ───────────────────────────── -->
+      <section id="tab-swing" class="tab-panel" role="tabpanel" aria-label="Swing Analysis">
+        <div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--gray-400)">
+          <span style="font-size:32px">🏌</span>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ── Bottom Navigation ──────────────────────────────────── -->
+    <nav id="bottom-nav" role="navigation" aria-label="Main navigation">
+
+      <button class="nav-btn" data-tab="shop" role="tab" aria-label="Shop">
+        <span class="nav-icon">🛍</span>
+        <span>Shop</span>
+        <span class="cart-badge" id="cart-badge" aria-label="Cart items">0</span>
+      </button>
+
+      <button class="nav-btn" data-tab="book" role="tab" aria-label="Book a Session">
+        <span class="nav-icon">📅</span>
+        <span>Book</span>
+      </button>
+
+      <button class="nav-btn" data-tab="lessons" role="tab" aria-label="Video Lessons">
+        <span class="nav-icon">🎬</span>
+        <span>Lessons</span>
+      </button>
+
+      <button class="nav-btn" data-tab="swing" role="tab" aria-label="Swing Analysis">
+        <span class="nav-icon">🏌</span>
+        <span>Swing</span>
+      </button>
+
+    </nav>
+  </div>
+
+  <!-- ── AI Chat FAB ─────────────────────────────────────────── -->
+  <button id="chat-fab" aria-label="Open Golf AI Assistant" title="Golf AI Assistant">
+    🤖
+  </button>
+
+  <!-- ── AI Chat Modal ───────────────────────────────────────── -->
+  <div id="chat-modal" role="dialog" aria-label="Golf AI Assistant" aria-modal="true">
+    <div class="chat-header">
+      <div class="chat-header-avatar">⛳</div>
+      <div class="chat-header-info">
+        <div class="chat-header-name">Golf AI Assistant</div>
+        <div class="chat-header-status">Powered by Claude · Expert Coaching Advisor</div>
+      </div>
+      <button class="chat-settings-btn" aria-label="Settings">⚙️</button>
+      <button class="chat-close" aria-label="Close chat">✕</button>
+    </div>
+
+    <div class="chat-messages" id="chat-messages" role="log" aria-live="polite">
+      <!-- Rendered by app.js -->
+    </div>
+
+    <div class="chat-input-area">
+      <textarea class="chat-input" id="chat-input" rows="1"
+        placeholder="Ask about clubs, swing tips, course strategy…"
+        aria-label="Type your golf question"></textarea>
+      <button class="chat-send" id="chat-send" aria-label="Send message" disabled>
+        ➤
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Settings Modal ─────────────────────────────────────── -->
+  <div id="settings-modal" role="dialog" aria-label="Settings" aria-modal="true">
+    <div class="settings-sheet">
+      <!-- Rendered by app.js -->
+    </div>
+  </div>
+
+  <!-- ── Global Cart Modal (accessible from all tabs) ─────────── -->
+  <div class="modal-overlay" id="cart-modal" role="dialog" aria-label="Shopping Cart" aria-modal="true">
+    <div class="modal-sheet cart-modal" id="cart-sheet"></div>
+  </div>
+
+  <!-- ── Android Install Prompt ─────────────────────────────── -->
+  <div id="install-prompt" role="dialog" aria-label="Install GolfVault">
+    <div style="font-size:36px;flex-shrink:0">⛳</div>
+    <div class="prompt-text">
+      <div class="prompt-title">Install GolfVault</div>
+      <div class="prompt-desc">Add to your home screen for the full app experience — offline access, fast loading, no browser bar.</div>
+      <div class="prompt-actions">
+        <button class="btn btn-accent btn-sm" id="install-btn">Install</button>
+        <button class="btn btn-ghost btn-sm" id="dismiss-install-btn">Not now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Application Script ─────────────────────────────────── -->
+  <script src="app.js"></script>
+
+</body>
+</html>

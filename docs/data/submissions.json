@@ -1,0 +1,92 @@
+[
+  {
+    "id": "s001",
+    "title": "Driver Swing — Slice Problem",
+    "submittedAt": "2026-05-24T10:30:00Z",
+    "status": "pending",
+    "club": "Driver",
+    "notes": "Really struggling with a bad slice off the tee. It looks like my face is open at impact. I can hit it straight on the range but on the course it always goes right. Any help would be amazing!",
+    "videoUrl": "https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=600&q=80",
+    "coach": null,
+    "feedback": null,
+    "annotations": [],
+    "turnaround": "24–48 hours"
+  },
+  {
+    "id": "s002",
+    "title": "7-Iron Approach — Topping the Ball",
+    "submittedAt": "2026-05-20T14:15:00Z",
+    "status": "reviewed",
+    "club": "7-Iron",
+    "notes": "I keep topping my irons especially when I'm nervous on the course. I've watched a few videos but I can't figure out what I'm doing wrong. Please help!",
+    "videoUrl": "https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1593111774240-d529f12cf4d1?w=600&q=80",
+    "coach": {
+      "id": "c001",
+      "name": "James Whitmore",
+      "photo": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80"
+    },
+    "feedback": {
+      "videoUrl": "https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4",
+      "text": "Great swing submission! I can clearly see what's happening here. You have early extension — your hips are thrusting toward the ball through impact, which causes your club to rise and top the ball. Here are your three key fixes:\n\n1. **Feel your knees stay flexed** through impact — don't straighten up\n2. **Keep your head behind the ball** at impact (note how you lift early in the video)\n3. **Drill:** Hit chip shots with a foam pool noodle placed 6 inches in front of the ball — it stops you from swinging up too early\n\nPractice 20 slow-motion swings daily focusing on maintaining your spine angle. You'll see improvement within a week.",
+      "receivedAt": "2026-05-22T09:30:00Z"
+    },
+    "annotations": [
+      { "time": 1.2, "text": "Early extension begins here — note hips thrusting forward", "type": "warning" },
+      { "time": 2.8, "text": "Club rising — this is the topping point", "type": "error" },
+      { "time": 3.5, "text": "Good follow through despite the miss", "type": "info" }
+    ]
+  },
+  {
+    "id": "s003",
+    "title": "Putting Stroke — Breaking Left",
+    "submittedAt": "2026-05-15T16:45:00Z",
+    "status": "reviewed",
+    "club": "Putter",
+    "notes": "All my putts seem to break left even on flat greens. I've had my putter fitted and it's face-balanced so it should be for straight putting. My friends say my stroke looks fine but I'm missing loads of short putts.",
+    "videoUrl": "https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1572012607533-fa1d16375e3b?w=600&q=80",
+    "coach": {
+      "id": "c002",
+      "name": "Priya Nair",
+      "photo": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&q=80"
+    },
+    "feedback": {
+      "videoUrl": "https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4",
+      "text": "Excellent video quality — I can see the issue clearly! Your putter face is actually closed at address by about 2–3 degrees, not open as you might expect. This closed face is what's sending putts left. There's also a subtle arc to your stroke path that's amplifying this.\n\n**What to fix:**\n1. **Address position**: Place an alignment stick on the green pointing at your target, and aim your putter face precisely perpendicular to it — you'll likely feel it's too open\n2. **Gate drill**: Place two tees just wider than your putter head and practice keeping the putter inside the gate on both back and through stroke\n3. **Face awareness**: Use a mirror on the floor during practice to see your face angle at impact\n\nYour stroke tempo is actually very good — once the face is square you'll see an immediate improvement. Report back in 2 weeks!",
+      "receivedAt": "2026-05-17T11:00:00Z"
+    },
+    "annotations": [
+      { "time": 0.5, "text": "Face angle: 2–3° closed at address", "type": "warning" },
+      { "time": 1.8, "text": "Slight arc in path — manageable", "type": "info" },
+      { "time": 2.2, "text": "Good tempo and rhythm here", "type": "success" },
+      { "time": 2.9, "text": "Face closed at impact — ball starts left from here", "type": "error" }
+    ]
+  },
+  {
+    "id": "s004",
+    "title": "Pitching — Distance Control Issue",
+    "submittedAt": "2026-05-10T08:00:00Z",
+    "status": "reviewed",
+    "club": "52° Wedge",
+    "notes": "I can't control how far my pitch shots go. Sometimes the same swing goes 40 yards, sometimes 60 yards. I have no consistency from 30–70 yards. It's costing me loads of shots.",
+    "videoUrl": "https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1633478062482-790e3b5dd810?w=600&q=80",
+    "coach": {
+      "id": "c002",
+      "name": "Priya Nair",
+      "photo": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&q=80"
+    },
+    "feedback": {
+      "videoUrl": "https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4",
+      "text": "This is a very common problem and there's a clear solution! Your backswing length is inconsistent — on some shots it's to hip height, on others past parallel. This is the primary cause of your distance variation.\n\n**The Clock System:**\nI teach all my students a clock-face reference for wedge distance:\n- **8 o'clock backswing** (hip high) = ~30 yards with your 52°\n- **9 o'clock backswing** (waist high) = ~50 yards\n- **10 o'clock backswing** (shoulder high) = ~70 yards\n\nAlways accelerate through the ball — never decelerate. Your follow through should mirror your backswing length.\n\n**Practice Drill:** Hit 10 shots each at 8, 9, and 10 o'clock and note your exact carry distances. Write them on a sticker on your bag. Trust the system on the course.",
+      "receivedAt": "2026-05-12T14:30:00Z"
+    },
+    "annotations": [
+      { "time": 0.8, "text": "Backswing goes to 10 o'clock here", "type": "info" },
+      { "time": 3.2, "text": "This swing only reaches 8 o'clock — note distance difference", "type": "warning" },
+      { "time": 4.5, "text": "Good acceleration through the ball on this shot", "type": "success" }
+    ]
+  }
+]

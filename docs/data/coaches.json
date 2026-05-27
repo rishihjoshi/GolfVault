@@ -1,0 +1,91 @@
+[
+  {
+    "id": "c001",
+    "name": "James Whitmore",
+    "title": "Head Golf Professional",
+    "photo": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80",
+    "bio": "James brings 22 years of PGA Tour caddie and coaching experience to GolfVault. Formerly on staff at Augusta National Golf Club, he now dedicates his career to developing low-handicap players and junior talent. Known for his biomechanically-precise teaching method and data-driven approach using TrackMan technology.",
+    "specialties": ["Full Swing", "Driver Distance", "Course Management", "Mental Game"],
+    "certifications": ["PGA Class A", "TPI Level 3", "TrackMan Certified"],
+    "rating": 4.9,
+    "reviews": 134,
+    "location": "Scottsdale, AZ",
+    "sessionTypes": ["in-person", "virtual"],
+    "languages": ["English"],
+    "experience": "22 years",
+    "availability": {
+      "monday": ["09:00", "10:30", "13:00", "14:30", "16:00"],
+      "tuesday": ["08:00", "09:30", "11:00", "14:00"],
+      "wednesday": ["10:00", "11:30", "13:00", "15:00", "16:30"],
+      "thursday": ["09:00", "10:30", "13:00", "14:30"],
+      "friday": ["08:00", "09:30", "11:00", "13:30"],
+      "saturday": ["09:00", "10:30", "12:00"],
+      "sunday": []
+    },
+    "sessions": [
+      { "type": "in-person", "duration": 60, "price": 199, "label": "60-min In-Person Lesson" },
+      { "type": "in-person", "duration": 90, "price": 279, "label": "90-min In-Person Lesson" },
+      { "type": "virtual", "duration": 45, "price": 129, "label": "45-min Virtual Swing Review" },
+      { "type": "virtual", "duration": 90, "price": 229, "label": "90-min Virtual Deep Dive" }
+    ]
+  },
+  {
+    "id": "c002",
+    "name": "Priya Nair",
+    "title": "Short Game Specialist",
+    "photo": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&q=80",
+    "bio": "Priya is widely regarded as one of the finest short game coaches in the country. With a background as a LPGA Tour competitor for 8 seasons, she understands the precision and feel required around the greens. Her students consistently report dropping 4–8 strokes within 90 days. Specialises in bunker play, chipping, pitching and putting alignment.",
+    "specialties": ["Putting", "Chipping", "Bunker Play", "Pitching", "Wedge Game"],
+    "certifications": ["LPGA Teaching & Club Pro", "SAM PuttLab Certified", "PGA of America"],
+    "rating": 4.8,
+    "reviews": 98,
+    "location": "Orlando, FL",
+    "sessionTypes": ["in-person", "virtual", "group"],
+    "languages": ["English", "Hindi"],
+    "experience": "12 years",
+    "availability": {
+      "monday": ["11:00", "12:30", "14:00", "15:30"],
+      "tuesday": ["09:00", "10:30", "13:00", "14:30", "16:00"],
+      "wednesday": ["11:00", "12:30", "15:00"],
+      "thursday": ["09:00", "10:30", "13:00", "14:30", "16:00"],
+      "friday": ["10:00", "11:30", "13:00"],
+      "saturday": ["10:00", "11:30", "13:00", "14:30"],
+      "sunday": ["10:00", "11:30"]
+    },
+    "sessions": [
+      { "type": "in-person", "duration": 60, "price": 169, "label": "60-min In-Person Lesson" },
+      { "type": "in-person", "duration": 90, "price": 239, "label": "90-min In-Person Lesson" },
+      { "type": "virtual", "duration": 45, "price": 109, "label": "45-min Virtual Session" },
+      { "type": "group", "duration": 90, "price": 79, "label": "90-min Group Clinic (max 6)" }
+    ]
+  },
+  {
+    "id": "c003",
+    "name": "Marcus Webb",
+    "title": "Online Golf Coach & Beginner Specialist",
+    "photo": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80",
+    "bio": "Marcus has built a global online coaching following of over 50,000 students across 40 countries. His clear, jargon-free teaching style makes golf accessible to total beginners while his deep technical knowledge keeps improving intermediate players. Specialises in online video analysis and building long-term practice plans.",
+    "specialties": ["Beginner Fundamentals", "Swing Analysis", "Practice Planning", "Junior Golf"],
+    "certifications": ["PGA Associate", "US Kids Golf Certified", "V1 Golf Certified Analyst"],
+    "rating": 4.7,
+    "reviews": 267,
+    "location": "Austin, TX (Online)",
+    "sessionTypes": ["virtual"],
+    "languages": ["English", "Spanish"],
+    "experience": "9 years",
+    "availability": {
+      "monday": ["08:00", "09:00", "10:00", "18:00", "19:00", "20:00"],
+      "tuesday": ["08:00", "09:00", "10:00", "18:00", "19:00"],
+      "wednesday": ["08:00", "09:00", "18:00", "19:00", "20:00"],
+      "thursday": ["08:00", "09:00", "10:00", "18:00", "19:00"],
+      "friday": ["08:00", "09:00", "10:00"],
+      "saturday": ["09:00", "10:00", "11:00", "12:00", "13:00"],
+      "sunday": ["10:00", "11:00", "12:00"]
+    },
+    "sessions": [
+      { "type": "virtual", "duration": 30, "price": 59, "label": "30-min Intro Session" },
+      { "type": "virtual", "duration": 60, "price": 99, "label": "60-min Full Session" },
+      { "type": "virtual", "duration": 90, "price": 149, "label": "90-min Deep Dive + Plan" }
+    ]
+  }
+]
