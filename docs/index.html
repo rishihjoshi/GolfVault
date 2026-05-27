@@ -5,34 +5,40 @@
   <!-- Viewport WITHOUT viewport-fit=cover — MixologyVault bottom-gap fix -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <title>GolfVault — Golf Gear, Coaching & Swing Analysis</title>
-  <meta name="description" content="Premium golf accessories, expert coaching sessions, video lessons, and AI-powered swing analysis — all in one app.">
+  <title>GolfVault — Your Complete Golf Companion.</title>
+  <meta name="description" content="Your Complete Golf Companion. Premium golf accessories, expert coaching sessions, video lessons, and AI-powered swing analysis — all in one app.">
 
   <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json">
 
-  <!-- Theme Color -->
-  <meta name="theme-color" content="#1B4332">
+  <!-- Theme Color — Golf Green -->
+  <meta name="theme-color" content="#0E4B36">
 
   <!-- iOS PWA Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="GolfVault">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <!-- High-res brand icon for iOS home screen -->
+  <link rel="apple-touch-icon" href="icons/GolfVault_AppIcon.png">
 
   <!-- Android / Chrome -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="application-name" content="GolfVault">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="GolfVault">
+  <meta property="og:title" content="GolfVault — Your Complete Golf Companion.">
   <meta property="og:description" content="Premium golf accessories, coaching & swing analysis.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="icons/icon-512.png">
+  <meta property="og:image" content="icons/GolfVault_AppHeroImage.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/GolfVault_AppIcon.png">
+
+  <!-- Google Fonts: Montserrat (headings) + Inter (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
 
   <!-- Preconnect for performance -->
   <link rel="preconnect" href="https://images.unsplash.com">
@@ -41,12 +47,14 @@
   <link rel="stylesheet" href="styles.css">
 
   <!-- Inline critical CSS: prevent white flash & bottom gap on iOS -->
+  <!-- html background = nav colour (Slate Gray #404040) — MixologyVault bottom-gap fix -->
   <style>
-    html { background: #1C1C1E; }
-    body { background: #f2f2f7; }
-    #app { background: #f2f2f7; }
-    /* Show skeleton while JS loads */
-    #bottom-nav { background: #1C1C1E; }
+    html { background: #404040; }
+    body { background: #f3f3f0; }   /* Cloud White warm background */
+    #app { background: #f3f3f0; }
+    #bottom-nav { background: #404040; }
+    /* Montserrat loading fallback — system-ui has similar geometry */
+    h1,h2,h3,h4 { font-family: 'Montserrat', system-ui, sans-serif; }
   </style>
 </head>
 <body>

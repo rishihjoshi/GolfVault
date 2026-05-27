@@ -1,5 +1,5 @@
 // GolfVault Service Worker — Cache-First Strategy
-const CACHE_NAME = 'golfvault-v1';
+const CACHE_NAME = 'golfvault-v2';  // bumped: brand identity update
 const STATIC_ASSETS = [
   '/GolfVault/',
   '/GolfVault/index.html',
@@ -11,8 +11,11 @@ const STATIC_ASSETS = [
   '/GolfVault/data/courses.json',
   '/GolfVault/data/submissions.json',
   '/GolfVault/icons/icon.svg',
+  '/GolfVault/icons/icon-maskable.svg',
   '/GolfVault/icons/icon-192.png',
-  '/GolfVault/icons/icon-512.png'
+  '/GolfVault/icons/icon-512.png',
+  '/GolfVault/icons/GolfVault_AppIcon.png',
+  '/GolfVault/icons/GolfVault_AppHeroImage.png'
 ];
 
 // ── Install: pre-cache static shell ──────────────────────────────────────────

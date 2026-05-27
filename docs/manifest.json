@@ -1,16 +1,22 @@
 {
   "name": "GolfVault",
   "short_name": "GolfVault",
-  "description": "Golf accessories, coaching sessions, video lessons & swing analysis — all in one app.",
+  "description": "Your Complete Golf Companion. Golf accessories, coaching sessions, video lessons & swing analysis.",
   "start_url": "/GolfVault/",
   "scope": "/GolfVault/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#1B4332",
-  "theme_color": "#1B4332",
+  "background_color": "#0E4B36",
+  "theme_color": "#0E4B36",
   "lang": "en",
   "categories": ["sports", "education", "shopping"],
   "icons": [
+    {
+      "src": "icons/GolfVault_AppIcon.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "icons/icon.svg",
       "sizes": "any",
@@ -36,21 +42,43 @@
       "purpose": "any"
     }
   ],
-  "screenshots": [],
+  "screenshots": [
+    {
+      "src": "icons/GolfVault_AppHeroImage.png",
+      "sizes": "874x1024",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "GolfVault — Your Complete Golf Companion"
+    }
+  ],
   "shortcuts": [
     {
       "name": "Shop",
       "short_name": "Shop",
-      "description": "Browse golf accessories",
+      "description": "Browse premium golf accessories",
       "url": "/GolfVault/#shop",
-      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+      "icons": [{ "src": "icons/GolfVault_AppIcon.png", "sizes": "1254x1254" }]
     },
     {
       "name": "Book a Lesson",
       "short_name": "Book",
       "description": "Book a coaching session",
       "url": "/GolfVault/#book",
-      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+      "icons": [{ "src": "icons/GolfVault_AppIcon.png", "sizes": "1254x1254" }]
+    },
+    {
+      "name": "Video Lessons",
+      "short_name": "Lessons",
+      "description": "Browse video coaching library",
+      "url": "/GolfVault/#lessons",
+      "icons": [{ "src": "icons/GolfVault_AppIcon.png", "sizes": "1254x1254" }]
+    },
+    {
+      "name": "Swing Analysis",
+      "short_name": "Swing",
+      "description": "Submit your swing for expert feedback",
+      "url": "/GolfVault/#swing",
+      "icons": [{ "src": "icons/GolfVault_AppIcon.png", "sizes": "1254x1254" }]
     }
   ]
 }

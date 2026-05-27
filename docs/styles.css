@@ -1,48 +1,60 @@
 /* ============================================================
-   GolfVault Design System
-   Premium golf brand aesthetic — Augusta National meets modern PWA
+   GolfVault Design System v2
+   Finalized Brand Identity — "Your Complete Golf Companion."
+   Montserrat (headings) · Inter (body) · Golf Green + Championship Gold
    ============================================================ */
 
 /* ── 1. Design Tokens ───────────────────────────────────────── */
 :root {
-  /* Brand Colours */
-  --green-900: #0d2218;
-  --green-800: #1B4332;   /* Primary */
-  --green-700: #2d6a4f;
-  --green-600: #40916c;
-  --green-200: #b7e4c7;
-  --green-100: #d8f3dc;
-  --gold-600:  #a07830;
-  --gold-500:  #C9A84C;   /* Accent */
-  --gold-300:  #e8cb81;
-  --gold-100:  #f7ead0;
+  /* ── Brand Palette (Finalized) ────────────────────────────── */
+  /* Primary */
+  --golf-green:        #0E4B36;   /* Golf Green — primary brand */
+  --fairway-green:     #123524;   /* Deep Fairway Green — darkest */
+  --championship-gold: #C79A2B;   /* Championship Gold — accent */
+
+  /* Secondary */
+  --sand-beige:   #E7D9B7;        /* Sand Beige */
+  --cloud-white:  #F8F8F5;        /* Cloud White */
+  --slate-gray:   #404040;        /* Slate Gray — text / nav */
+
+  /* Tints & shades (derived) */
+  --green-900: var(--fairway-green);
+  --green-800: var(--golf-green);
+  --green-700: #1a6647;
+  --green-600: #22835c;
+  --green-200: #b8ddc9;
+  --green-100: #dff0e7;
+  --gold-600:  #a07322;
+  --gold-500:  var(--championship-gold);
+  --gold-300:  #deb95f;
+  --gold-100:  #f5e9c5;
   --white:     #ffffff;
-  --off-white: #f8f6f1;
-  --charcoal:  #1C1C1E;   /* Nav / Dark surfaces */
-  --gray-800:  #2c2c2e;
-  --gray-700:  #3a3a3c;
-  --gray-500:  #636366;
-  --gray-400:  #8e8e93;
-  --gray-200:  #d1d1d6;
-  --gray-100:  #f2f2f7;
+  --off-white: var(--cloud-white);
+  --charcoal:  var(--slate-gray);   /* Nav / Dark surfaces */
+  --gray-800:  #2c2c2c;
+  --gray-700:  #383838;
+  --gray-500:  #6b6b6b;
+  --gray-400:  #909090;
+  --gray-200:  #d4d4d4;
+  --gray-100:  #f3f3f0;            /* Warm near-white background */
 
   /* Semantic */
-  --color-primary:      var(--green-800);
-  --color-accent:       var(--gold-500);
+  --color-primary:      var(--golf-green);
+  --color-accent:       var(--championship-gold);
   --color-surface:      var(--white);
   --color-surface-alt:  var(--gray-100);
-  --color-nav:          var(--charcoal);
-  --color-text:         var(--charcoal);
+  --color-nav:          var(--slate-gray);
+  --color-text:         var(--slate-gray);
   --color-text-muted:   var(--gray-500);
   --color-border:       var(--gray-200);
-  --color-success:      #34c759;
-  --color-warning:      #ff9f0a;
-  --color-error:        #ff3b30;
+  --color-success:      #2d8a4e;
+  --color-warning:      #d4841a;
+  --color-error:        #c0392b;
 
   /* Layout */
   --nav-height:    62px;
   --header-height: 56px;
-  --safe-bottom:   0px;           /* patched by JS if needed */
+  --safe-bottom:   0px;
   --content-pad:   16px;
   --radius-sm:     8px;
   --radius-md:     12px;
@@ -56,10 +68,22 @@
   --shadow-lg:  0 12px 32px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.08);
   --shadow-xl:  0 24px 64px rgba(0,0,0,.20);
 
-  /* Typography */
-  --font-serif:  Georgia, 'Times New Roman', serif;
-  --font-sans:   -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono:   'SF Mono', Menlo, Monaco, Consolas, monospace;
+  /* ── Typography System ────────────────────────────────────── */
+  /* Primary — Montserrat: headings, nav, CTAs, marketing */
+  --font-heading: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Secondary — Inter: body copy, forms, dashboards, data */
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono:    'SF Mono', Menlo, Monaco, Consolas, monospace;
+
+  /* Legacy aliases (keep for compat) */
+  --font-serif: var(--font-heading);
+  --font-sans:  var(--font-body);
+
+  /* Heading weights */
+  --fw-hero:    700;   /* Hero Headlines */
+  --fw-section: 600;   /* Section Headers */
+  --fw-nav:     500;   /* Navigation */
+  --fw-cta:     600;   /* Buttons / CTAs */
 
   /* Motion */
   --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
@@ -83,7 +107,7 @@ html {
 
 body {
   height: 100%;
-  font-family: var(--font-sans);
+  font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.5;
   color: var(--color-text);
@@ -146,17 +170,19 @@ ul, ol { list-style: none; }
   z-index: 10;
 }
 .tab-header h1 {
-  font-family: var(--font-serif);
+  font-family: var(--font-heading);
   font-size: 22px;
-  font-weight: bold;
-  letter-spacing: 0.3px;
+  font-weight: var(--fw-hero);
+  letter-spacing: -0.2px;
 }
 .tab-header .subtitle {
-  font-size: 12px;
+  font-family: var(--font-heading);
+  font-size: 10px;
   color: var(--gold-300);
-  letter-spacing: 0.5px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  margin-top: 2px;
+  margin-top: 3px;
+  font-weight: var(--fw-nav);
 }
 
 /* ── 7. Bottom Navigation ───────────────────────────────────── */
@@ -179,9 +205,11 @@ ul, ol { list-style: none; }
   gap: 3px;
   padding: 6px 4px 8px;
   color: var(--gray-500);
+  font-family: var(--font-heading);
   font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.3px;
+  font-weight: var(--fw-nav);
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
   transition: color var(--dur-fast) ease;
   position: relative;
   -webkit-tap-highlight-color: transparent;
@@ -286,11 +314,12 @@ ul, ol { list-style: none; }
 }
 
 /* ── 10. Typography ─────────────────────────────────────────── */
-h1 { font-size: 24px; font-weight: 700; }
-h2 { font-size: 20px; font-weight: 700; }
-h3 { font-size: 17px; font-weight: 600; }
-h4 { font-size: 15px; font-weight: 600; }
-.serif { font-family: var(--font-serif); }
+h1 { font-size: 24px; font-weight: var(--fw-hero); font-family: var(--font-heading); letter-spacing: -0.3px; }
+h2 { font-size: 20px; font-weight: var(--fw-section); font-family: var(--font-heading); }
+h3 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-heading); }
+h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-heading); }
+/* .serif kept for legacy — now maps to Montserrat */
+.serif { font-family: var(--font-heading); font-weight: var(--fw-section); }
 .muted { color: var(--color-text-muted); }
 .gold  { color: var(--gold-500); }
 
@@ -302,9 +331,10 @@ h4 { font-size: 15px; font-weight: 600; }
   gap: 8px;
   padding: 12px 20px;
   border-radius: var(--radius-md);
+  font-family: var(--font-heading);
   font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.2px;
+  font-weight: var(--fw-cta);
+  letter-spacing: 0.3px;
   transition: all var(--dur-fast) ease;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
@@ -1548,7 +1578,58 @@ h4 { font-size: 15px; font-weight: 600; }
 .empty-state h3 { font-size: 16px; font-weight: 600; color: var(--gray-500); margin-bottom: 8px; }
 .empty-state p { font-size: 13px; line-height: 1.6; }
 
-/* ── 26. Desktop Layout ─────────────────────────────────────── */
+/* ── 26. Hero Banner ────────────────────────────────────────── */
+.shop-hero {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  background: var(--fairway-green);
+}
+.shop-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+}
+.shop-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(18, 53, 36, 0.72) 0%,
+    rgba(14, 75, 54, 0.40) 50%,
+    rgba(14, 75, 54, 0.20) 100%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px var(--content-pad);
+}
+.shop-hero-tagline {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: var(--fw-nav);
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--championship-gold);
+  margin-bottom: 6px;
+}
+.shop-hero-title {
+  font-family: var(--font-heading);
+  font-size: 26px;
+  font-weight: var(--fw-hero);
+  color: var(--white);
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  text-shadow: 0 1px 8px rgba(0,0,0,.3);
+}
+.shop-hero-title span {
+  color: var(--championship-gold);
+}
+
+/* ── 27. Desktop Layout ─────────────────────────────────────── */
 @media (min-width: 481px) {
   #app {
     border-radius: var(--radius-xl);
@@ -1557,7 +1638,7 @@ h4 { font-size: 15px; font-weight: 600; }
     margin: 20px auto;
   }
   body {
-    background: var(--green-900);
+    background: var(--fairway-green);
     display: flex;
     align-items: center;
     justify-content: center;

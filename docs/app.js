@@ -200,16 +200,26 @@ function renderShop() {
   }
   panel.dataset.rendered = '1';
   panel.innerHTML = `
-    <div class="tab-header">
-      <div class="search-wrap">
-        <div class="search-container">
-          <span class="search-icon">🔍</span>
-          <input class="search-input" id="shop-search" type="search"
-            placeholder="Search clubs, apparel, accessories…"
-            value="${escHtml(state.searchQuery)}" autocomplete="off">
-        </div>
+    <!-- Hero Banner -->
+    <div class="shop-hero">
+      <img class="shop-hero-img" src="icons/GolfVault_AppHeroImage.png"
+           alt="GolfVault — Your Complete Golf Companion" loading="eager" fetchpriority="high">
+      <div class="shop-hero-overlay">
+        <div class="shop-hero-tagline">Your Complete Golf Companion.</div>
+        <div class="shop-hero-title">Premium Gear,<br><span>Championship Results.</span></div>
       </div>
     </div>
+
+    <!-- Search bar (below hero) -->
+    <div style="background:var(--golf-green);padding:12px var(--content-pad) 14px">
+      <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" id="shop-search" type="search"
+          placeholder="Search clubs, apparel, accessories…"
+          value="${escHtml(state.searchQuery)}" autocomplete="off">
+      </div>
+    </div>
+
     <div class="filter-row" id="shop-filters">
       ${['all','clubs','apparel','accessories','equipment'].map(cat =>
         `<button class="filter-chip${state.activeCategory === cat ? ' active' : ''}"
@@ -1351,7 +1361,7 @@ function renderChatMessages() {
     container.innerHTML = `
       <div class="chat-empty">
         <div class="chat-empty-logo">⛳</div>
-        <div class="chat-empty-title serif">Golf AI Assistant</div>
+        <div class="chat-empty-title">Golf AI Assistant</div>
         <div class="chat-empty-text">Ask me anything about golf — club selection, swing tips, course strategy, or equipment recommendations.</div>
         <div class="chat-suggestions">
           ${['What driver should I buy for a 15 handicap?',

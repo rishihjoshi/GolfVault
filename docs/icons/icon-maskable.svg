@@ -1,32 +1,39 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- Full bleed background for maskable (safe zone: inner 80%) -->
-  <rect width="512" height="512" fill="#1B4332"/>
-  <!-- Content within safe zone (centered, 80% = 410x410, offset 51px each side) -->
+  <!-- Full bleed Golf Green background for maskable — safe zone: inner 80% -->
+  <rect width="512" height="512" fill="#0E4B36"/>
+  <!-- Deep Fairway Green subtle gradient effect -->
+  <radialGradient id="rg" cx="30%" cy="30%" r="70%">
+    <stop offset="0%" stop-color="#1a6647" stop-opacity="0.4"/>
+    <stop offset="100%" stop-color="#123524" stop-opacity="0.6"/>
+  </radialGradient>
+  <rect width="512" height="512" fill="url(#rg)"/>
+  <!-- Content within safe zone (51px padding each side) -->
   <!-- Golf flag pole -->
-  <line x1="290" y1="130" x2="290" y2="290" stroke="#C9A84C" stroke-width="10" stroke-linecap="round"/>
+  <line x1="290" y1="130" x2="290" y2="290" stroke="#C79A2B" stroke-width="10" stroke-linecap="round"/>
   <!-- Golf flag -->
-  <polygon points="290,130 345,158 290,186" fill="#C9A84C"/>
-  <!-- "GV" monogram -->
+  <polygon points="290,130 345,158 290,186" fill="#C79A2B"/>
+  <!-- "G" -->
   <text x="100" y="285"
-    font-family="Georgia, 'Times New Roman', serif"
+    font-family="Montserrat, 'Arial Black', sans-serif"
     font-size="150"
-    font-weight="bold"
-    fill="#FFFFFF"
+    font-weight="700"
+    fill="#F8F8F5"
     letter-spacing="-6">G</text>
+  <!-- "V" -->
   <text x="205" y="285"
-    font-family="Georgia, 'Times New Roman', serif"
+    font-family="Montserrat, 'Arial Black', sans-serif"
     font-size="150"
-    font-weight="bold"
-    fill="#C9A84C"
+    font-weight="700"
+    fill="#C79A2B"
     letter-spacing="-6">V</text>
-  <!-- Divider -->
-  <line x1="80" y1="325" x2="432" y2="325" stroke="#C9A84C" stroke-width="3" opacity="0.5"/>
+  <!-- Gold divider -->
+  <line x1="80" y1="325" x2="432" y2="325" stroke="#C79A2B" stroke-width="3" opacity="0.5"/>
   <!-- Wordmark -->
   <text x="256" y="390"
-    font-family="Georgia, 'Times New Roman', serif"
-    font-size="32"
-    font-weight="bold"
-    fill="#C9A84C"
+    font-family="Montserrat, 'Arial Black', sans-serif"
+    font-size="30"
+    font-weight="700"
+    fill="#C79A2B"
     text-anchor="middle"
-    letter-spacing="4">GOLFVAULT</text>
+    letter-spacing="5">GOLFVAULT</text>
 </svg>
