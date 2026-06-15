@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GolfVault STL — Order Processing Workflow</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:         #0D1B1E;
+  --bg-card:    #121F22;
+  --bg-lift:    #1A2D31;
+  --bg-actor:   #162428;
+  --border:     rgba(255,255,255,0.07);
+  --border-md:  rgba(255,255,255,0.13);
+  --text:       #EEE9E0;
+  --text-dim:   rgba(238,233,224,0.55);
+  --text-faint: rgba(238,233,224,0.28);
+  --green:      #2A6B3F;
+  --green-mid:  #3D8F58;
+  --green-glow: rgba(61,143,88,0.18);
+  --amber:      #C9952A;
+  --amber-dim:  rgba(201,149,42,0.18);
+  --amber-glow: rgba(201,149,42,0.10);
+  --red:        #B83232;
+  --red-dim:    rgba(184,50,50,0.15);
+  --blue:       #3A7FC1;
+  --blue-dim:   rgba(58,127,193,0.15);
+  --purple:     #7B5EA7;
+  --purple-dim: rgba(123,94,167,0.15);
+  --font-b: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-m: 'IBM Plex Mono', monospace;
+  --font-d: 'Cormorant Garamond', Georgia, serif;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-b);
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+  padding: 40px 48px 32px;
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: flex-end;
+  flex-wrap: wrap; gap: 16px;
+}
+.header-left {}
+.eyebrow {
+  font-family: var(--font-m); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--amber);
+  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+}
+.eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--amber); display: block; }
+.page-title {
+  font-family: var(--font-d); font-size: 36px; font-weight: 600;
+  letter-spacing: -0.5px; line-height: 1.1; color: var(--text);
+}
+.page-sub { font-size: 13px; color: var(--text-dim); margin-top: 6px; max-width: 560px; line-height: 1.6; }
+.legend-row {
+  display: flex; gap: 16px; flex-wrap: wrap; align-items: center;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; font-family: var(--font-m); color: var(--text-faint); letter-spacing: 0.04em;
+}
+.leg-dot { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; }
+.leg-auto   { background: var(--green-mid); }
+.leg-manual { background: var(--amber); }
+.leg-system { background: var(--blue); }
+.leg-wait   { background: var(--purple); }
+
+/* ── MAIN DIAGRAM CONTAINER ── */
+.diagram-wrap {
+  padding: 0 0 48px;
+  overflow-x: auto;
+}
+.diagram {
+  min-width: 960px;
+  position: relative;
+}
+
+/* ── SWIMLANE HEADER ── */
+.lanes-header {
+  display: grid;
+  grid-template-columns: 60px repeat(5, 1fr);
+  position: sticky; top: 0; z-index: 20;
+  background: var(--bg-card);
+  border-bottom: 2px solid var(--border-md);
+}
+.lane-head {
+  padding: 18px 14px;
+  text-align: center;
+  border-right: 1px solid var(--border);
+}
+.lane-head:last-child { border-right: none; }
+.lane-icon { font-size: 20px; display: block; margin-bottom: 5px; }
+.lane-name {
+  font-size: 11px; font-weight: 600; font-family: var(--font-m);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  display: block; line-height: 1.3;
+}
+.lane-sub { font-size: 10px; color: var(--text-faint); display: block; margin-top: 2px; }
+.lane-customer  .lane-name { color: var(--blue); }
+.lane-website   .lane-name { color: var(--green-mid); }
+.lane-manager   .lane-name { color: var(--amber); }
+.lane-supplier  .lane-name { color: var(--purple); }
+.lane-delivery  .lane-name { color: #5DADE2; }
+
+/* ── TIMELINE BODY ── */
+.timeline-body {
+  position: relative;
+}
+
+/* Phase dividers */
+.phase-divider {
+  display: grid;
+  grid-template-columns: 60px repeat(5, 1fr);
+  position: relative;
+}
+.phase-label {
+  grid-column: 1 / -1;
+  padding: 10px 14px 6px 24px;
+  font-family: var(--font-m); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; font-weight: 500;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.phase-label .phase-bar {
+  width: 28px; height: 2px; border-radius: 1px;
+}
+.phase-order   .phase-label { color: var(--blue); background: rgba(58,127,193,0.04); }
+.phase-order   .phase-bar   { background: var(--blue); }
+.phase-ops     .phase-label { color: var(--amber); background: rgba(201,149,42,0.04); }
+.phase-ops     .phase-bar   { background: var(--amber); }
+.phase-custom  .phase-label { color: var(--purple); background: rgba(123,94,167,0.04); }
+.phase-custom  .phase-bar   { background: var(--purple); }
+.phase-fulfil  .phase-label { color: #5DADE2; background: rgba(93,173,226,0.04); }
+.phase-fulfil  .phase-bar   { background: #5DADE2; }
+.phase-close   .phase-label { color: var(--green-mid); background: rgba(61,143,88,0.04); }
+.phase-close   .phase-bar   { background: var(--green-mid); }
+
+/* Step row */
+.step-row {
+  display: grid;
+  grid-template-columns: 60px repeat(5, 1fr);
+  min-height: 90px;
+  position: relative;
+  border-top: 1px solid var(--border);
+  transition: background 0.15s;
+}
+.step-row:hover { background: rgba(255,255,255,0.015); }
+
+/* Step number column */
+.step-num {
+  display: flex; align-items: flex-start; justify-content: center;
+  padding-top: 24px;
+  font-family: var(--font-m); font-size: 10px; color: var(--text-faint);
+  letter-spacing: 0.06em; border-right: 1px solid var(--border);
+}
+
+/* Lane cell */
+.lane-cell {
+  padding: 14px 12px;
+  border-right: 1px solid var(--border);
+  position: relative;
+  display: flex; flex-direction: column; justify-content: flex-start;
+  align-items: center;
+}
+.lane-cell:last-child { border-right: none; }
+
+/* Empty cell — just the lane line */
+.lane-cell.empty {
+  background: repeating-linear-gradient(
+    180deg,
+    transparent 0px, transparent 20px,
+    rgba(255,255,255,0.015) 20px, rgba(255,255,255,0.015) 21px
+  );
+}
+
+/* Step node */
+.node {
+  border-radius: 8px; padding: 10px 12px;
+  width: 100%; position: relative;
+  cursor: default;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.node:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+.node-icon { font-size: 16px; display: block; margin-bottom: 5px; }
+.node-title { font-size: 12px; font-weight: 600; line-height: 1.3; display: block; margin-bottom: 3px; }
+.node-desc { font-size: 11px; opacity: 0.7; line-height: 1.4; }
+.node-tag {
+  display: inline-block; margin-top: 6px;
+  font-family: var(--font-m); font-size: 9px; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 2px 7px; border-radius: 2px;
+}
+
+/* Node variants */
+.node-auto {
+  background: var(--green-glow);
+  border: 1px solid rgba(61,143,88,0.35);
+  color: #9DEBB4;
+}
+.node-auto .node-title { color: #B8F0C8; }
+.node-auto .node-tag { background: rgba(61,143,88,0.25); color: var(--green-mid); }
+
+.node-manual {
+  background: var(--amber-dim);
+  border: 1px solid rgba(201,149,42,0.35);
+  color: #E8C87A;
+}
+.node-manual .node-title { color: #F5D98A; }
+.node-manual .node-tag { background: rgba(201,149,42,0.2); color: var(--amber); }
+
+.node-system {
+  background: var(--blue-dim);
+  border: 1px solid rgba(58,127,193,0.35);
+  color: #94C8F0;
+}
+.node-system .node-title { color: #ACD8F8; }
+.node-system .node-tag { background: rgba(58,127,193,0.2); color: var(--blue); }
+
+.node-wait {
+  background: var(--purple-dim);
+  border: 1px solid rgba(123,94,167,0.35);
+  color: #C4ACEA;
+}
+.node-wait .node-title { color: #D6BEF8; }
+.node-wait .node-tag { background: rgba(123,94,167,0.2); color: var(--purple); }
+
+.node-decision {
+  background: rgba(184,50,50,0.12);
+  border: 1px solid rgba(184,50,50,0.35);
+  color: #F0A0A0;
+}
+.node-decision .node-title { color: #F8B8B8; }
+.node-decision .node-tag { background: rgba(184,50,50,0.2); color: #D06060; }
+
+/* Arrows — horizontal connector between lanes */
+.arrow-h {
+  position: absolute; top: 50%; left: 0; right: 0;
+  height: 1px; pointer-events: none;
+}
+.arrow-h svg { position: absolute; top: -8px; right: 0; }
+
+/* Connector lines between rows (vertical) */
+.connector-v {
+  position: absolute; bottom: -1px; left: 50%;
+  width: 2px; height: 14px;
+  background: var(--border-md);
+  transform: translateX(-50%);
+  z-index: 5;
+}
+.connector-v::after {
+  content: ''; position: absolute; bottom: -5px; left: 50%;
+  transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid rgba(255,255,255,0.2);
+}
+
+/* Cross-lane arrow */
+.cross-arrow {
+  position: relative; display: flex; align-items: center;
+  padding: 0 8px; margin-top: 4px; width: 100%;
+}
+.arrow-line {
+  flex: 1; height: 1px; border-top: 1.5px dashed;
+  position: relative;
+}
+.arrow-line.to-right::after {
+  content: '▶'; position: absolute; right: -6px; top: -7px;
+  font-size: 9px;
+}
+.arrow-line.to-left::after {
+  content: '◀'; position: absolute; left: -6px; top: -7px;
+  font-size: 9px;
+}
+.arrow-line.green { border-color: var(--green-mid); color: var(--green-mid); }
+.arrow-line.amber { border-color: var(--amber); color: var(--amber); }
+.arrow-line.blue  { border-color: var(--blue); color: var(--blue); }
+.arrow-line.purple{ border-color: var(--purple); color: var(--purple); }
+.arrow-label {
+  font-size: 9px; font-family: var(--font-m); letter-spacing: 0.06em;
+  white-space: nowrap; padding: 0 6px; opacity: 0.6;
+}
+
+/* ── FLOW ARROWS (SVG-based connecting lines) ── */
+.flow-arrows {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none; z-index: 10;
+}
+
+/* ── MANUAL TOUCHPOINT FLAGS ── */
+.manual-flag {
+  position: absolute; right: 8px; top: 8px;
+  font-family: var(--font-m); font-size: 8px; letter-spacing: 0.06em;
+  text-transform: uppercase; background: rgba(201,149,42,0.2);
+  color: var(--amber); padding: 2px 6px; border-radius: 2px;
+  border: 1px solid rgba(201,149,42,0.3);
+}
+
+/* ── DELAY INDICATOR ── */
+.delay-badge {
+  display: flex; align-items: center; gap: 5px;
+  font-family: var(--font-m); font-size: 9px; color: var(--text-faint);
+  padding: 3px 8px; background: rgba(255,255,255,0.04);
+  border-radius: 3px; margin-top: 5px; width: fit-content;
+}
+.delay-badge::before { content: '⏱'; font-size: 10px; }
+
+/* ── RISK CALLOUT SIDEBAR ── */
+.risk-row {
+  background: rgba(184,50,50,0.06);
+  border-left: 3px solid rgba(184,50,50,0.4);
+}
+.risk-label {
+  position: absolute; left: -3px; top: 50%;
+  transform: translateY(-50%);
+  width: 3px; background: var(--red);
+}
+
+/* ── SUMMARY FOOTER ── */
+.summary-section {
+  margin: 0 48px 48px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+.summary-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 20px 22px;
+}
+.sc-num {
+  font-family: var(--font-d); font-size: 36px; font-weight: 700;
+  line-height: 1; margin-bottom: 4px;
+}
+.sc-label { font-size: 12px; color: var(--text-dim); line-height: 1.4; }
+.sc-sub { font-size: 11px; color: var(--text-faint); margin-top: 6px; }
+
+.risk-section {
+  margin: 0 48px 48px;
+  background: rgba(184,50,50,0.06); border: 1px solid rgba(184,50,50,0.2);
+  border-radius: 12px; padding: 24px 28px;
+}
+.risk-title {
+  font-family: var(--font-m); font-size: 11px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: #E07070; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.risk-title::before { content: ''; width: 18px; height: 1px; background: #E07070; display: block; }
+.risk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.risk-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 12px; color: var(--text-dim); line-height: 1.5;
+}
+.risk-item::before { content: '⚠'; color: var(--amber); flex-shrink: 0; margin-top: 1px; font-size: 11px; }
+
+/* Animations */
+.node { opacity: 0; transform: translateY(8px); }
+.node.visible { opacity: 1; transform: translateY(0); transition: opacity 0.4s ease, transform 0.4s ease; }
+
+@media (max-width: 768px) {
+  .page-header { padding: 24px; }
+  .summary-section, .risk-section { margin: 0 24px 32px; }
+  .summary-section { grid-template-columns: 1fr; }
+  .risk-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <div class="header-left">
+    <div class="eyebrow">GolfVault STL · Operations</div>
+    <h1 class="page-title">Order Processing Workflow</h1>
+    <p class="page-sub">End-to-end sequence for golf accessories orders — from customer purchase through personalisation, fulfilment, and delivery confirmation. Current state: manual operator-driven process.</p>
+  </div>
+  <div class="legend-row">
+    <div class="legend-item"><div class="leg-dot leg-auto"></div>Automated</div>
+    <div class="legend-item"><div class="leg-dot leg-manual"></div>Manual / operator</div>
+    <div class="legend-item"><div class="leg-dot leg-system"></div>System event</div>
+    <div class="legend-item"><div class="leg-dot leg-wait"></div>Supplier / wait state</div>
+  </div>
+</div>
+
+<!-- ── DIAGRAM ── -->
+<div class="diagram-wrap">
+<div class="diagram">
+
+  <!-- ── SWIMLANE HEADERS ── -->
+  <div class="lanes-header">
+    <div class="lane-head" style="border-right:1px solid var(--border)">
+      <span class="lane-icon" style="font-size:11px;opacity:0.4">#</span>
+      <span class="lane-name" style="color:var(--text-faint);font-size:9px">STEP</span>
+    </div>
+    <div class="lane-head lane-customer">
+      <span class="lane-icon">🏌️</span>
+      <span class="lane-name">Customer</span>
+      <span class="lane-sub">Weekend golfer / corporate client</span>
+    </div>
+    <div class="lane-head lane-website">
+      <span class="lane-icon">🖥️</span>
+      <span class="lane-name">Ecommerce Platform</span>
+      <span class="lane-sub">GolfVault STL website</span>
+    </div>
+    <div class="lane-head lane-manager">
+      <span class="lane-icon">👤</span>
+      <span class="lane-name">Business Manager</span>
+      <span class="lane-sub">Operator — Marcus / admin</span>
+    </div>
+    <div class="lane-head lane-supplier">
+      <span class="lane-icon">📦</span>
+      <span class="lane-name">Supplier / Workshop</span>
+      <span class="lane-sub">Accessories · Personalisation vendor</span>
+    </div>
+    <div class="lane-head lane-delivery">
+      <span class="lane-icon">🚚</span>
+      <span class="lane-name">Delivery / Fulfilment</span>
+      <span class="lane-sub">USPS · UPS · Manual local delivery</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- PHASE 1 — CUSTOMER PLACES ORDER -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="phase-divider phase-order">
+    <div class="phase-label"><span class="phase-bar"></span>Phase 1 — Customer Places Order</div>
+  </div>
+
+  <!-- Step 1 -->
+  <div class="step-row">
+    <div class="step-num">01</div>
+    <div class="lane-cell">
+      <div class="node node-system">
+        <span class="node-icon">🛒</span>
+        <span class="node-title">Browses catalogue & adds to cart</span>
+        <span class="node-desc">Selects golf accessories, selects personalisation option (logo/text), enters corporate details if B2B</span>
+        <span class="node-tag">Customer action</span>
+        <div class="delay-badge">5–15 mins browsing</div>
+      </div>
+    </div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell empty"></div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="step-row">
+    <div class="step-num">02</div>
+    <div class="lane-cell">
+      <div class="node node-system">
+        <span class="node-icon">💳</span>
+        <span class="node-title">Completes checkout & payment</span>
+        <span class="node-desc">Enters shipping address, pays via Stripe. Receives order confirmation email</span>
+        <span class="node-tag">Customer action</span>
+      </div>
+    </div>
+    <div class="lane-cell">
+      <div class="node node-auto">
+        <span class="node-icon">⚡</span>
+        <span class="node-title">Order created in system</span>
+        <span class="node-desc">Supabase: order record written, status → <strong>Pending</strong>. Stripe payment captured. Confirmation email sent via Resend</span>
+        <span class="node-tag">Automated</span>
+      </div>
+    </div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell empty"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- PHASE 2 — MANAGER REVIEWS ORDER -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="phase-divider phase-ops">
+    <div class="phase-label"><span class="phase-bar"></span>Phase 2 — Business Manager Reviews &amp; Processes</div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="step-row risk-row">
+    <div class="step-num">03</div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell">
+      <div class="node node-auto">
+        <span class="node-icon">🔔</span>
+        <span class="node-title">New order notification sent</span>
+        <span class="node-desc">Admin portal shows new order. Email + SMS alert fired to business manager</span>
+        <span class="node-tag">Automated</span>
+      </div>
+    </div>
+    <div class="lane-cell">
+      <div class="node node-manual">
+        <span class="node-icon">👀</span>
+        <span class="node-title">Manager reviews new order</span>
+        <span class="node-desc">Opens admin portal. Reviews items ordered, personalisation requirements, delivery preference (ship vs local deliver), and customer notes</span>
+        <span class="node-tag">Manual — operator</span>
+        <div class="delay-badge">Typically same day — risk if missed</div>
+      </div>
+      <div class="manual-flag">⚠ Manual</div>
+    </div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell empty"></div>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="step-row">
+    <div class="step-num">04</div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell">
+      <div class="node node-manual" style="background:rgba(184,50,50,0.1);border-color:rgba(184,50,50,0.3)">
+        <span class="node-icon">🔄</span>
+        <span class="node-title">Manager updates order status</span>
+        <span class="node-desc">Manually changes status: <strong style="color:#F8B8B8">Pending → Processing</strong>. This is a manual step — customer is not yet notified</span>
+        <span class="node-tag" style="background:rgba(184,50,50,0.2);color:#D06060">Manual status update</span>
+      </div>
+    </div>
+    <div class="lane-cell">
+      <div class="node node-manual">
+        <span class="node-icon">📋</span>
+        <span class="node-title">Confirms stock availability</span>
+        <span class="node-desc">Physically checks warehouse / existing stock for ordered accessories. If out of stock, manually contacts supplier</span>
+        <span class="node-tag">Manual — operator</span>
+        <div class="delay-badge">15–30 mins</div>
+      </div>
+      <div class="manual-flag">⚠ Manual</div>
+    </div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell empty"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- PHASE 3 — SOURCING & PERSONALISATION -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="phase-divider phase-custom">
+    <div class="phase-label"><span class="phase-bar"></span>Phase 3 — Sourcing &amp; Personalisation</div>
+  </div>
+
+  <!-- Step 5 -->
+  <div class="step-row risk-row">
+    <div class="step-num">05</div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell">
+      <div class="node node-manual">
+        <span class="node-icon">🏪</span>
+        <span class="node-title">Sources accessories from supplier</span>
+        <span class="node-desc">Contacts supplier via phone/email. Places order for stock items. For standard accessories: direct from warehouse. For branded/custom: sourced from vendor</span>
+        <span class="node-tag">Manual — operator</span>
+        <div class="delay-badge">1–2 business days</div>
+      </div>
+      <div class="manual-flag">⚠ Manual</div>
+    </div>
+    <div class="lane-cell">
+      <div class="node node-wait">
+        <span class="node-icon">📬</span>
+        <span class="node-title">Receives order from manager</span>
+        <span class="node-desc">Supplier processes pick-pack for standard items. For personalised orders: routes to workshop</span>
+        <span class="node-tag">Supplier action</span>
+        <div class="delay-badge">1–3 days lead time</div>
+      </div>
+    </div>
+    <div class="lane-cell empty"></div>
+  </div>
+
+  <!-- Step 6 — Personalisation decision -->
+  <div class="step-row">
+    <div class="step-num">06</div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell">
+      <div class="node node-decision">
+        <span class="node-icon">🔀</span>
+        <span class="node-title">Personalisation required?</span>
+        <span class="node-desc">Reviews order for logo, engraving, or custom text requirements</span>
+        <span class="node-tag">Decision gate</span>
+      </div>
+    </div>
+    <div class="lane-cell">
+      <div class="node node-wait">
+        <span class="node-icon">✏️</span>
+        <span class="node-title">Personalisation workshop</span>
+        <span class="node-desc"><strong style="color:#C4ACEA">If required:</strong> Logo embroidery, laser engraving, or print applied to accessories. Quality checked before dispatch</span>
+        <span class="node-tag">Workshop — 2–5 days</span>
+        <div class="delay-badge">Adds 2–5 business days</div>
+      </div>
+    </div>
+    <div class="lane-cell empty"></div>
+  </div>
+
+  <!-- Step 7 -->
+  <div class="step-row risk-row">
+    <div class="step-num">07</div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell">
+      <div class="node node-manual">
+        <span class="node-icon">📥</span>
+        <span class="node-title">Receives personalised items</span>
+        <span class="node-desc">Accessories arrive from supplier/workshop. Manager physically inspects quality — checks logo accuracy, item condition, quantity</span>
+        <span class="node-tag">Manual — operator</span>
+        <div class="delay-badge">Quality check: 15–30 mins</div>
+      </div>
+      <div class="manual-flag">⚠ Manual</div>
+    </div>
+    <div class="lane-cell">
+      <div class="node node-wait">
+        <span class="node-icon">📤</span>
+        <span class="node-title">Dispatches to manager</span>
+        <span class="node-desc">Supplier ships personalised items to GolfVault STL ops location. Tracking number generated</span>
+        <span class="node-tag">Supplier action</span>
+      </div>
+    </div>
+    <div class="lane-cell empty"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- PHASE 4 — FULFILMENT DECISION -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="phase-divider phase-fulfil">
+    <div class="phase-label"><span class="phase-bar"></span>Phase 4 — Fulfilment &amp; Delivery</div>
+  </div>
+
+  <!-- Step 8 — Decision -->
+  <div class="step-row">
+    <div class="step-num">08</div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell">
+      <div class="node node-decision">
+        <span class="node-icon">🔀</span>
+        <span class="node-title">Ship or local deliver?</span>
+        <span class="node-desc">Checks customer's delivery preference: <strong style="color:#F8B8B8">Ship (USPS/UPS)</strong> for out-of-area customers, <strong style="color:#F8B8B8">manual local delivery</strong> for St. Louis area</span>
+        <span class="node-tag">Decision gate</span>
+      </div>
+    </div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell empty"></div>
+  </div>
+
+  <!-- Step 9A — Ship -->
+  <div class="step-row">
+    <div class="step-num">09A</div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell">
+      <div class="node node-manual">
+        <span class="node-icon">📦</span>
+        <span class="node-title">Packs &amp; prepares shipment</span>
+        <span class="node-desc">Manager packs order with branded GolfVault packaging, includes invoice and care card. Manually generates USPS/UPS label (currently: external website)</span>
+        <span class="node-tag">Manual — operator</span>
+        <div class="delay-badge">20–40 mins per order</div>
+      </div>
+      <div class="manual-flag">⚠ Manual</div>
+    </div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell">
+      <div class="node node-wait">
+        <span class="node-icon">🚚</span>
+        <span class="node-title">Carrier picks up / drop-off</span>
+        <span class="node-desc">USPS or UPS collects package. Tracking number active. In transit to customer address</span>
+        <span class="node-tag">Carrier — 2–5 days</span>
+        <div class="delay-badge">2–5 business days transit</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 9B — Local Deliver -->
+  <div class="step-row">
+    <div class="step-num">09B</div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell">
+      <div class="node node-manual">
+        <span class="node-icon">🚗</span>
+        <span class="node-title">Plans local delivery route</span>
+        <span class="node-desc">For St. Louis area customers: manager schedules delivery window, contacts customer via phone/text to confirm time slot</span>
+        <span class="node-tag">Manual — operator</span>
+        <div class="delay-badge">Scheduling: 1–2 days</div>
+      </div>
+      <div class="manual-flag">⚠ Manual</div>
+    </div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell">
+      <div class="node node-manual">
+        <span class="node-icon">🤝</span>
+        <span class="node-title">Hand-delivers to customer</span>
+        <span class="node-desc">Manager personally delivers to customer address or agreed meet point (e.g. golf course). Customer inspects on delivery</span>
+        <span class="node-tag">Manual delivery</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- PHASE 5 — CLOSE & CONFIRM -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="phase-divider phase-close">
+    <div class="phase-label"><span class="phase-bar"></span>Phase 5 — Order Closure &amp; Status Update</div>
+  </div>
+
+  <!-- Step 10 -->
+  <div class="step-row risk-row">
+    <div class="step-num">10</div>
+    <div class="lane-cell">
+      <div class="node node-system">
+        <span class="node-icon">📧</span>
+        <span class="node-title">Receives delivery confirmation</span>
+        <span class="node-desc">Customer receives email with tracking number (shipped) or delivery notification (local). Marks receipt</span>
+        <span class="node-tag">Customer</span>
+      </div>
+    </div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell">
+      <div class="node node-manual">
+        <span class="node-icon">✏️</span>
+        <span class="node-title">Manually updates order status</span>
+        <span class="node-desc">Returns to admin portal. Manually changes status: <strong style="color:#F5D98A">Processing → Shipped</strong> or <strong style="color:#F5D98A">Processing → Delivered</strong>. Enters tracking number manually if shipped</span>
+        <span class="node-tag">Manual — operator</span>
+        <div class="delay-badge">⚠ Often delayed 1–24 hrs</div>
+      </div>
+      <div class="manual-flag">⚠ Manual</div>
+    </div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell">
+      <div class="node node-wait">
+        <span class="node-icon">✅</span>
+        <span class="node-title">Delivery confirmed / POD</span>
+        <span class="node-desc">Carrier scans delivered or manager confirms hand-off. Proof of delivery recorded</span>
+        <span class="node-tag">Confirmation</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 11 -->
+  <div class="step-row">
+    <div class="step-num">11</div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell">
+      <div class="node node-auto">
+        <span class="node-icon">📩</span>
+        <span class="node-title">Delivery notification email sent</span>
+        <span class="node-desc">Triggered on status update: customer receives "Your order has been delivered" email with care instructions and review request</span>
+        <span class="node-tag">Automated on status change</span>
+      </div>
+    </div>
+    <div class="lane-cell">
+      <div class="node node-manual">
+        <span class="node-icon">📊</span>
+        <span class="node-title">Updates sales report manually</span>
+        <span class="node-desc">Reconciles completed order in reporting dashboard. Notes any issues (personalisation errors, damage, late delivery)</span>
+        <span class="node-tag">Manual — operator</span>
+      </div>
+    </div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell empty"></div>
+  </div>
+
+  <!-- Step 12 -->
+  <div class="step-row">
+    <div class="step-num">12</div>
+    <div class="lane-cell">
+      <div class="node node-system">
+        <span class="node-icon">⭐</span>
+        <span class="node-title">Reviews experience (optional)</span>
+        <span class="node-desc">Receives review request email 3 days post-delivery. Leaves product and service review on platform</span>
+        <span class="node-tag">Customer — optional</span>
+      </div>
+    </div>
+    <div class="lane-cell">
+      <div class="node node-auto">
+        <span class="node-icon">🔒</span>
+        <span class="node-title">Order closed in system</span>
+        <span class="node-desc">Status finalised as <strong style="color:#B8F0C8">Completed</strong>. Order enters reporting. Inventory decremented. Customer LTV updated</span>
+        <span class="node-tag">Automated</span>
+      </div>
+    </div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell empty"></div>
+    <div class="lane-cell empty"></div>
+  </div>
+
+</div><!-- /diagram -->
+</div><!-- /diagram-wrap -->
+
+<!-- ── SUMMARY METRICS ── -->
+<div class="summary-section">
+  <div class="summary-card">
+    <div class="sc-num" style="color:var(--amber)">8</div>
+    <div class="sc-label">Manual operator touchpoints in the current process</div>
+    <div class="sc-sub">Steps 3, 4, 5, 7, 8, 9A, 9B, 10 — each requiring active manager attention</div>
+  </div>
+  <div class="summary-card">
+    <div class="sc-num" style="color:var(--purple)">7–12</div>
+    <div class="sc-label">Business days end-to-end for personalised orders</div>
+    <div class="sc-sub">Standard accessories: 3–5 days · Personalised + shipped: 7–12 days</div>
+  </div>
+  <div class="summary-card">
+    <div class="sc-num" style="color:var(--green-mid)">3</div>
+    <div class="sc-label">Automated steps that trigger without manager action</div>
+    <div class="sc-sub">Order creation, new order notification, delivery email on status change</div>
+  </div>
+</div>
+
+<!-- ── RISK CALLOUT ── -->
+<div class="risk-section">
+  <div class="risk-title">Process risks in the current workflow</div>
+  <div class="risk-grid">
+    <div class="risk-item">Status updates lag 1–24 hours after actual fulfilment — customer has no real-time visibility between "Processing" and "Delivered"</div>
+    <div class="risk-item">No structured supplier communication — phone/email sourcing creates no audit trail and can't be tracked in the admin portal</div>
+    <div class="risk-item">Shipping label generation is done outside the platform (separate website) — tracking numbers entered manually, error-prone</div>
+    <div class="risk-item">Local delivery scheduling is entirely ad-hoc — no confirmation system, no fallback if manager is unavailable</div>
+    <div class="risk-item">Personalisation lead time not communicated to customer at checkout — they expect standard delivery, receive 7–12 day timelines</div>
+    <div class="risk-item">Sales reporting requires manual reconciliation after every order close — not automatic on status change</div>
+  </div>
+</div>
+
+<script>
+// Animate nodes on scroll
+const nodes = document.querySelectorAll('.node');
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), 60);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15 });
+nodes.forEach(n => obs.observe(n));
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+GolfVault — Finalized Core Brand Identity
+Primary Tagline
+“Your Complete Golf Companion.”
+
+Use the following - PNG files for the App Icon and App Hero Image - 
+
+C:\Vinayak\Personal\Developement\AI\GIT_Repo\GolfVault\docs\icons
+
+1. GolfVault_AppIcon.png - App Icon 
+2. GolfVault_AppHeroImage.png
+
+
+Color Palette
+Primary Colors
+Golf Green
+HEX: #0E4B36
+RGB: 14, 75, 54
+Deep Fairway Green
+HEX: #123524
+RGB: 18, 53, 36
+Championship Gold
+HEX: #C79A2B
+RGB: 199, 154, 43
+Secondary Colors
+Sand Beige
+HEX: #E7D9B7
+Cloud White
+HEX: #F8F8F5
+Slate Gray
+HEX: #404040
+
+
+Typography System
+Primary Font — Headings
+Montserrat
+Usage
+Hero headlines
+Section titles
+CTA buttons
+Navigation labels
+Marketing banners
+Why it fits GolfVault
+
+Montserrat gives:
+
+strong modern geometry
+premium sports-tech feel
+excellent readability
+clean app-store presence
+high-end athletic branding energy
+Recommended Weights
+Use Case	Weight
+Hero Headlines	700 Bold
+Section Headers	600 SemiBold
+Navigation	500 Medium
+Buttons	600 SemiBold
+Secondary Font — Body Copy
+Inter
+Usage
+Paragraphs
+Product descriptions
+Lesson descriptions
+Booking details
+Dashboard data
+Forms
+Analytics
+Why it fits GolfVault
+
+Inter is:
+
+optimized for digital interfaces
+extremely readable on mobile
+clean and neutral
+excellent for SaaS dashboards
+scalable across web and app
+
+This pairing is very strong because:
+
+Montserrat provides brand personality
+Inter provides UI clarity
+
+Together they create:
+
+premium athletic technology aesthetics
