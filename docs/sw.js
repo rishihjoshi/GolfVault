@@ -1,5 +1,5 @@
 // GolfVault Service Worker — Cache-First Strategy
-const CACHE_NAME = 'golfvault-v2';  // bumped: brand identity update
+const CACHE_NAME = 'golfvault-v3';  // bumped: 5-tab nav + Docs tab
 const STATIC_ASSETS = [
   '/GolfVault/',
   '/GolfVault/index.html',
