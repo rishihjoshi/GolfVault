@@ -1652,6 +1652,67 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
   #chat-fab { bottom: calc(var(--nav-height) + 20px + 16px); }
 }
 
+/* ── 27a. Project Docs Panel ────────────────────────────────── */
+#project-docs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px var(--content-pad) 32px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.docs-panel-title {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  padding: 0 4px;
+}
+.docs-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--gray-700);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.docs-link:hover {
+  border-color: var(--green-600);
+  transform: translateY(-1px);
+}
+.docs-link-icon { font-size: 22px; flex-shrink: 0; }
+.docs-link-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.docs-link-text strong { font-size: 14px; font-weight: 600; }
+.docs-link-text small { font-size: 12px; color: var(--gray-500); }
+
+/* On laptop/desktop, dock the docs panel beside the phone frame */
+@media (min-width: 901px) {
+  #project-docs {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 260px;
+    max-width: 260px;
+    margin: 0;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+  }
+  .docs-panel-title { color: rgba(255, 255, 255, 0.65); }
+  .docs-link { background: rgba(255, 255, 255, 0.92); }
+}
+
+/* On narrower desktop/tablet widths, keep docs panel below the app */
+@media (min-width: 481px) and (max-width: 900px) {
+  #project-docs { padding-top: 20px; }
+}
+
 /* ── 27. Accessibility ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
