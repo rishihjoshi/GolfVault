@@ -14,7 +14,7 @@ const BASE = (() => {
 })();
 const DATA_BASE = `${BASE}/data`;
 
-const TABS = ['shop', 'book', 'lessons', 'swing'];
+const TABS = ['shop', 'book', 'lessons', 'swing', 'docs'];
 const DEFAULT_TAB = 'shop';
 const CLAUDE_API = 'https://api.anthropic.com/v1/messages';
 const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
@@ -186,6 +186,7 @@ function renderTab(tab) {
     case 'book':    renderBooking(); break;
     case 'lessons': renderLessons(); break;
     case 'swing':   renderSwing(); break;
+    case 'docs':    renderDocs();  break;
   }
 }
 
@@ -1491,7 +1492,53 @@ async function fetchClaudeWithRetry(body, attempt = 0) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// 12. SETTINGS
+// 12. PROJECT DOCS TAB
+// ─────────────────────────────────────────────────────────────
+function renderDocs() {
+  const panel = document.getElementById('tab-docs');
+  if (panel.dataset.rendered) return;
+  panel.dataset.rendered = '1';
+
+  const docs = [
+    {
+      href: 'GolfVault_OrderProcessing_Workflow.html',
+      icon: '📦',
+      title: 'Order Processing Workflow',
+      desc: 'End-to-end fulfillment flow — from cart checkout through warehouse pick/pack to last-mile delivery and returns.',
+      tag: 'Operations',
+    },
+    {
+      href: 'GolfVault_CustomVsShopify_Comparison.html',
+      icon: '⚖️',
+      title: 'Custom vs Shopify',
+      desc: 'Side-by-side platform comparison covering cost, flexibility, time-to-market, and long-term scalability.',
+      tag: 'Strategy',
+    },
+  ];
+
+  panel.innerHTML = `
+    <div class="tab-header">
+      <h1 class="serif">Project Docs</h1>
+      <div class="subtitle">INTERNAL REFERENCE</div>
+    </div>
+    <div class="docs-tab-list">
+      ${docs.map(d => `
+        <a class="doc-card" href="${d.href}">
+          <div class="doc-card-icon">${d.icon}</div>
+          <div class="doc-card-body">
+            <div class="doc-card-tag">${d.tag}</div>
+            <div class="doc-card-title">${d.title}</div>
+            <div class="doc-card-desc">${d.desc}</div>
+          </div>
+          <div class="doc-card-arrow">→</div>
+        </a>
+      `).join('')}
+    </div>
+  `;
+}
+
+// ─────────────────────────────────────────────────────────────
+// 13. SETTINGS
 // ─────────────────────────────────────────────────────────────
 function setupSettings() {
   const modal = document.getElementById('settings-modal');
