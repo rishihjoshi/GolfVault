@@ -14,6 +14,13 @@ const BASE = (() => {
 })();
 const DATA_BASE = `${BASE}/data`;
 
+// App version — MUST be bumped on every deploy (keep in sync with
+// docs/version.json and the service-worker CACHE_NAME). The running app
+// compares this baked-in value against the live version.json to detect a
+// newer deploy and offer a one-tap "pull latest" refresh.
+const APP_VERSION = '1.0.0';
+const VERSION_URL = `${BASE}/version.json`;
+
 const TABS = ['shop', 'book', 'lessons', 'swing', 'profile', 'docs'];
 const DEFAULT_TAB = 'shop';
 const CLAUDE_API = 'https://api.anthropic.com/v1/messages';
@@ -48,6 +55,11 @@ const state = {
   courses: [],
   submissions: [],
   profile: null,
+
+  // PWA update / "pull latest code" from GitHub Pages
+  latestVersion: null,
+  updateAvailable: false,
+  updating: false,
 
   // Shop
   activeCategory: 'all',
@@ -118,6 +130,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   activateTab(tab, true);
 
   updateCartBadge();
+
+  // Check whether a newer version has been deployed to GitHub Pages.
+  checkForUpdate();
+  // Re-check when the app returns to the foreground (e.g. mobile tab switch).
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') checkForUpdate();
+  });
 });
 
 // ─────────────────────────────────────────────────────────────
@@ -133,6 +152,75 @@ function setupImageFallback() {
       el.src = IMG_PLACEHOLDER;
     }
   }, true);
+}
+
+// ─────────────────────────────────────────────────────────────
+// 3c. PWA UPDATE — pull the latest deployed code from GitHub Pages
+// ─────────────────────────────────────────────────────────────
+// The running bundle carries APP_VERSION (baked into this cached app.js).
+// version.json is fetched fresh from the network on every check, so when a
+// newer build is deployed the two differ and we flag an update. The Shop
+// refresh button then clears caches + refreshes the service worker so the
+// device downloads the latest HTML/CSS/JS/data.
+
+async function checkForUpdate() {
+  try {
+    // cache: 'no-store' bypasses the HTTP cache; the SW also serves
+    // version.json network-first, so this reflects the live deploy.
+    const res = await fetch(`${VERSION_URL}?t=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) return;
+    const data = await res.json();
+    state.latestVersion = data.version || null;
+    state.updateAvailable = !!state.latestVersion && state.latestVersion !== APP_VERSION;
+  } catch (_) {
+    // Offline or fetch blocked — leave current state untouched.
+  }
+  reflectUpdateState();
+}
+
+function reflectUpdateState() {
+  const btn = document.getElementById('shop-refresh');
+  if (!btn) return;
+  btn.classList.toggle('has-update', state.updateAvailable && !state.updating);
+  btn.setAttribute('title', state.updateAvailable
+    ? `Update available (v${state.latestVersion}) — tap to refresh`
+    : 'Check for updates');
+  const label = btn.querySelector('.shop-refresh-label');
+  if (label) label.textContent = state.updateAvailable ? 'Update' : '';
+}
+
+async function onShopRefresh() {
+  if (state.updating) return;
+  const btn = document.getElementById('shop-refresh');
+  btn?.classList.add('spinning');
+  await checkForUpdate();
+  if (state.updateAvailable) {
+    await applyUpdate();               // clears caches + reloads with latest code
+  } else {
+    btn?.classList.remove('spinning');
+    showToast("You're on the latest version ✓");
+  }
+}
+
+async function applyUpdate() {
+  state.updating = true;
+  showToast('Updating to the latest version…');
+  try {
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      // Fetch the new service worker; tell any waiting worker to take over.
+      await Promise.all(regs.map(async r => {
+        try { await r.update(); } catch (_) {}
+        if (r.waiting) r.waiting.postMessage({ type: 'SKIP_WAITING' });
+      }));
+    }
+    if (window.caches) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k => caches.delete(k)));
+    }
+  } catch (_) { /* best-effort — reload anyway */ }
+  // Reload from the network; with caches cleared the SW refetches everything.
+  window.location.reload();
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -230,6 +318,11 @@ function renderShop() {
           <div class="shop-hero-title">Premium Gear,<br><span>Championship Results.</span></div>
         </div>
       </div>
+      <button class="shop-refresh" id="shop-refresh" type="button"
+        aria-label="Check for updates" title="Check for updates">
+        <span class="shop-refresh-icon" aria-hidden="true">⟳</span>
+        <span class="shop-refresh-label"></span>
+      </button>
     </div>
 
     <!-- Search bar (below hero) -->
@@ -274,6 +367,10 @@ function renderShop() {
   panel.querySelector('#product-modal').addEventListener('click', e => {
     if (e.target === e.currentTarget) closeProductModal();
   });
+
+  // Pull-latest / update refresh button
+  panel.querySelector('#shop-refresh').addEventListener('click', onShopRefresh);
+  reflectUpdateState();   // highlight if an update was already detected
 
   filterProducts();
 }
