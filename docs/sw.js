@@ -1,5 +1,5 @@
 // GolfVault Service Worker — Cache-First Strategy
-const CACHE_NAME = 'golfvault-v3';  // bumped: 5-tab nav + Docs tab
+const CACHE_NAME = 'golfvault-v5';  // bumped: clean shop hero + customer profile tab
 const STATIC_ASSETS = [
   '/GolfVault/',
   '/GolfVault/index.html',
@@ -10,12 +10,14 @@ const STATIC_ASSETS = [
   '/GolfVault/data/coaches.json',
   '/GolfVault/data/courses.json',
   '/GolfVault/data/submissions.json',
+  '/GolfVault/data/profile.json',
   '/GolfVault/icons/icon.svg',
   '/GolfVault/icons/icon-maskable.svg',
   '/GolfVault/icons/icon-192.png',
   '/GolfVault/icons/icon-512.png',
   '/GolfVault/icons/GolfVault_AppIcon.png',
-  '/GolfVault/icons/GolfVault_AppHeroImage.png'
+  '/GolfVault/icons/GolfVault_AppHeroImage.png',
+  '/GolfVault/icons/product-placeholder.svg'
 ];
 
 // ── Install: pre-cache static shell ──────────────────────────────────────────
@@ -58,13 +60,10 @@ self.addEventListener('fetch', event => {
   // Skip cross-origin image requests (Unsplash, etc.) — let browser handle
   if (url.hostname.includes('unsplash.com') || url.hostname.includes('images.unsplash.com')) {
     event.respondWith(
-      fetch(event.request).catch(() => {
-        // Return a transparent 1px PNG as fallback for failed images
-        return new Response(
-          atob('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='),
-          { headers: { 'Content-Type': 'image/png' } }
-        );
-      })
+      fetch(event.request).catch(() =>
+        // On failure, serve the branded placeholder instead of a blank pixel
+        caches.match('/GolfVault/icons/product-placeholder.svg')
+      )
     );
     return;
   }
