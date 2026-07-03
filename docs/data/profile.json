@@ -1,0 +1,72 @@
+{
+  "name": "Rishi Joshi",
+  "email": "rishi.joshi@example.com",
+  "memberSince": "2024-03-12",
+  "loyalty": {
+    "points": 3450,
+    "tier": "Gold",
+    "nextTier": "Platinum",
+    "pointsToNext": 1550,
+    "tierFloor": 2500,
+    "tierCeiling": 5000
+  },
+  "orders": [
+    {
+      "id": "GV-100482",
+      "date": "2026-06-18",
+      "status": "Delivered",
+      "items": [
+        { "name": "TourEdge Pro Driver 460cc", "qty": 1, "price": 449.99 },
+        { "name": "Bamboo Tee Value Pack (100)", "qty": 2, "price": 12.99 }
+      ],
+      "total": 475.97
+    },
+    {
+      "id": "GV-100455",
+      "date": "2026-05-29",
+      "status": "Delivered",
+      "items": [
+        { "name": "Laser Rangefinder 800 Pro", "qty": 1, "price": 249.99 }
+      ],
+      "total": 249.99
+    },
+    {
+      "id": "GV-100501",
+      "date": "2026-06-27",
+      "status": "Shipped",
+      "items": [
+        { "name": "Merino Wool Golf Polo", "qty": 2, "price": 89.99 },
+        { "name": "60° Lob Wedge — Tour Grind", "qty": 1, "price": 159.99 }
+      ],
+      "total": 339.97
+    }
+  ],
+  "paymentMethods": [
+    { "brand": "Visa", "last4": "4242", "expiry": "08/27", "default": true },
+    { "brand": "Mastercard", "last4": "5588", "expiry": "11/26", "default": false }
+  ],
+  "addresses": [
+    {
+      "label": "Home",
+      "recipient": "Rishi Joshi",
+      "line1": "142 Fairway Drive",
+      "line2": "Apt 5B",
+      "city": "Scottsdale",
+      "state": "AZ",
+      "zip": "85251",
+      "country": "United States",
+      "default": true
+    },
+    {
+      "label": "Work",
+      "recipient": "Rishi Joshi",
+      "line1": "900 Corporate Center Way",
+      "line2": "Suite 300",
+      "city": "Phoenix",
+      "state": "AZ",
+      "zip": "85004",
+      "country": "United States",
+      "default": false
+    }
+  ]
+}

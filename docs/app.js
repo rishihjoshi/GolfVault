@@ -14,7 +14,7 @@ const BASE = (() => {
 })();
 const DATA_BASE = `${BASE}/data`;
 
-const TABS = ['shop', 'book', 'lessons', 'swing', 'docs'];
+const TABS = ['shop', 'book', 'lessons', 'swing', 'profile', 'docs'];
 const DEFAULT_TAB = 'shop';
 const CLAUDE_API = 'https://api.anthropic.com/v1/messages';
 const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
@@ -47,6 +47,7 @@ const state = {
   coaches: [],
   courses: [],
   submissions: [],
+  profile: null,
 
   // Shop
   activeCategory: 'all',
@@ -108,6 +109,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadJSON(`${DATA_BASE}/coaches.json`).then(d => { state.coaches = d; }),
     loadJSON(`${DATA_BASE}/courses.json`).then(d => { state.courses = d; }),
     loadJSON(`${DATA_BASE}/submissions.json`).then(d => { state.submissions = d; }),
+    loadJSON(`${DATA_BASE}/profile.json`).then(d => { state.profile = d; }),
   ]).catch(err => console.warn('[GV] Data load partial failure:', err));
 
   // Route to initial tab
@@ -202,6 +204,7 @@ function renderTab(tab) {
     case 'book':    renderBooking(); break;
     case 'lessons': renderLessons(); break;
     case 'swing':   renderSwing(); break;
+    case 'profile': renderProfile(); break;
     case 'docs':    renderDocs();  break;
   }
 }
@@ -219,11 +222,13 @@ function renderShop() {
   panel.innerHTML = `
     <!-- Hero Banner -->
     <div class="shop-hero">
-      <img class="shop-hero-img" src="icons/GolfVault_AppHeroImage.png"
-           alt="GolfVault — Your Complete Golf Companion" loading="eager" fetchpriority="high">
-      <div class="shop-hero-overlay">
-        <div class="shop-hero-tagline">Your Complete Golf Companion.</div>
-        <div class="shop-hero-title">Premium Gear,<br><span>Championship Results.</span></div>
+      <div class="shop-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1592937238247-cd0090e02f65?w=1200&q=80')"></div>
+      <div class="shop-hero-content">
+        <img class="shop-hero-logo" src="icons/icon.svg" alt="GolfVault logo" width="72" height="72">
+        <div class="shop-hero-text">
+          <div class="shop-hero-tagline">Your Complete Golf Companion.</div>
+          <div class="shop-hero-title">Premium Gear,<br><span>Championship Results.</span></div>
+        </div>
       </div>
     </div>
 
@@ -1505,6 +1510,119 @@ async function fetchClaudeWithRetry(body, attempt = 0) {
   }
 
   return res.json();
+}
+
+// ─────────────────────────────────────────────────────────────
+// 11b. CUSTOMER PROFILE TAB
+// ─────────────────────────────────────────────────────────────
+function renderProfile() {
+  const panel = document.getElementById('tab-profile');
+  panel.dataset.rendered = '1';
+  const p = state.profile;
+
+  if (!p) {
+    panel.innerHTML = `
+      <div class="tab-header"><h1 class="serif">My Profile</h1><div class="subtitle">ACCOUNT</div></div>
+      <div class="empty-state"><div class="empty-icon">👤</div><h3>Profile unavailable</h3>
+      <p>We couldn't load your account details. Please try again.</p></div>`;
+    return;
+  }
+
+  // Parse an ISO yyyy-mm-dd as a LOCAL date (avoids UTC off-by-one).
+  const localDate = iso => { const [y, m, d] = iso.split('-').map(Number); return new Date(y, m - 1, d); };
+  const initials = p.name.split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  const memberSince = localDate(p.memberSince).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const L = p.loyalty;
+  const pct = Math.max(0, Math.min(100, Math.round(((L.points - L.tierFloor) / (L.tierCeiling - L.tierFloor)) * 100)));
+
+  const brandGlyph = b => ({ visa: '💳', mastercard: '💳', amex: '💳' }[b.toLowerCase()] || '💳');
+
+  const ordersHtml = p.orders.map(o => `
+    <div class="profile-order">
+      <div class="profile-order-top">
+        <div>
+          <div class="profile-order-id">${escHtml(o.id)}</div>
+          <div class="profile-order-date">${localDate(o.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+        </div>
+        <span class="order-status order-status-${o.status.toLowerCase()}">${escHtml(o.status)}</span>
+      </div>
+      <div class="profile-order-items">
+        ${o.items.map(i => `<div class="profile-order-item"><span>${i.qty}× ${escHtml(i.name)}</span><span>$${(i.price * i.qty).toFixed(2)}</span></div>`).join('')}
+      </div>
+      <div class="profile-order-total"><span>Total</span><span class="serif">$${o.total.toFixed(2)}</span></div>
+    </div>`).join('');
+
+  const paymentsHtml = p.paymentMethods.map(m => `
+    <div class="profile-card-row">
+      <span class="profile-card-glyph">${brandGlyph(m.brand)}</span>
+      <div class="profile-card-main">
+        <div class="profile-card-title">${escHtml(m.brand)} •••• ${escHtml(m.last4)}${m.default ? ' <span class="profile-default">Default</span>' : ''}</div>
+        <div class="profile-card-sub">Expires ${escHtml(m.expiry)}</div>
+      </div>
+    </div>`).join('');
+
+  const addressesHtml = p.addresses.map(a => `
+    <div class="profile-card-row">
+      <span class="profile-card-glyph">${a.label === 'Work' ? '🏢' : '🏠'}</span>
+      <div class="profile-card-main">
+        <div class="profile-card-title">${escHtml(a.label)}${a.default ? ' <span class="profile-default">Default</span>' : ''}</div>
+        <div class="profile-card-sub">
+          ${escHtml(a.recipient)}<br>
+          ${escHtml(a.line1)}${a.line2 ? ', ' + escHtml(a.line2) : ''}<br>
+          ${escHtml(a.city)}, ${escHtml(a.state)} ${escHtml(a.zip)} · ${escHtml(a.country)}
+        </div>
+      </div>
+    </div>`).join('');
+
+  panel.innerHTML = `
+    <div class="tab-header"><h1 class="serif">My Profile</h1><div class="subtitle">ACCOUNT</div></div>
+
+    <div class="profile-identity">
+      <div class="profile-avatar">${escHtml(initials)}</div>
+      <div class="profile-identity-info">
+        <div class="profile-name">${escHtml(p.name)}</div>
+        <div class="profile-email">${escHtml(p.email)}</div>
+        <div class="profile-member">Member since ${memberSince}</div>
+      </div>
+      <span class="profile-tier-chip">${escHtml(L.tier)}</span>
+    </div>
+
+    <div class="loyalty-card">
+      <div class="loyalty-top">
+        <div>
+          <div class="loyalty-label">Loyalty Points</div>
+          <div class="loyalty-points">${L.points.toLocaleString()}</div>
+        </div>
+        <div class="loyalty-tier">⛳ ${escHtml(L.tier)} Tier</div>
+      </div>
+      <div class="loyalty-bar-wrap"><div class="loyalty-bar" style="width:${pct}%"></div></div>
+      <div class="loyalty-next">${L.pointsToNext.toLocaleString()} points to <strong>${escHtml(L.nextTier)}</strong></div>
+    </div>
+
+    <div class="profile-section">
+      <div class="profile-section-head"><h2>Previous Orders</h2><span class="profile-count">${p.orders.length}</span></div>
+      ${ordersHtml}
+    </div>
+
+    <div class="profile-section">
+      <div class="profile-section-head"><h2>Payment Methods</h2>
+        <button class="profile-add-btn" data-add="payment">+ Add</button></div>
+      ${paymentsHtml}
+    </div>
+
+    <div class="profile-section">
+      <div class="profile-section-head"><h2>Address Details</h2>
+        <button class="profile-add-btn" data-add="address">+ Add</button></div>
+      ${addressesHtml}
+    </div>
+
+    <button class="btn btn-ghost btn-full" id="profile-signout" style="margin:8px 0 24px">Sign Out</button>
+  `;
+
+  panel.querySelectorAll('[data-add]').forEach(b =>
+    b.addEventListener('click', () => showToast('Account management coming soon ✓')));
+  panel.querySelector('#profile-signout')
+    .addEventListener('click', () => showToast('Sign out coming soon ✓'));
 }
 
 // ─────────────────────────────────────────────────────────────

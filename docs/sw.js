@@ -1,5 +1,5 @@
 // GolfVault Service Worker — Cache-First Strategy
-const CACHE_NAME = 'golfvault-v4';  // bumped: verified catalog images + branded image placeholder
+const CACHE_NAME = 'golfvault-v5';  // bumped: clean shop hero + customer profile tab
 const STATIC_ASSETS = [
   '/GolfVault/',
   '/GolfVault/index.html',
@@ -10,6 +10,7 @@ const STATIC_ASSETS = [
   '/GolfVault/data/coaches.json',
   '/GolfVault/data/courses.json',
   '/GolfVault/data/submissions.json',
+  '/GolfVault/data/profile.json',
   '/GolfVault/icons/icon.svg',
   '/GolfVault/icons/icon-maskable.svg',
   '/GolfVault/icons/icon-192.png',
