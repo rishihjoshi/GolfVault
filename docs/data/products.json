@@ -6,11 +6,11 @@
     "price": 449.99,
     "originalPrice": 599.99,
     "description": "Premium 460cc titanium driver with adjustable loft hosel (8.5°–12°). Ultra-thin crown reduces weight for maximum swing speed. Includes matching headcover.",
-    "features": ["Adjustable loft 8.5°–12°", "460cc titanium head", "Low-spin technology", "48\" premium graphite shaft"],
+    "features": ["Adjustable loft 8.5°–12°", "460cc titanium head", "Low-spin technology", "45.5\" premium graphite shaft"],
     "variants": [
       {"type": "flex", "options": ["Regular", "Stiff", "X-Stiff"]}
     ],
-    "image": "https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=600&q=80",
+    "image": "https://images.unsplash.com/photo-1697448525562-6e30fc333bf3?w=600&q=80",
     "badge": "Sale",
     "rating": 4.8,
     "reviews": 142,
@@ -27,7 +27,7 @@
       {"type": "flex", "options": ["Regular", "Stiff"]},
       {"type": "lie", "options": ["Standard", "+1°", "+2°"]}
     ],
-    "image": "https://images.unsplash.com/photo-1593111774240-d529f12cf4d1?w=600&q=80",
+    "image": "https://images.unsplash.com/photo-1530028828-25e8270793c5?w=600&q=80",
     "badge": "Best Seller",
     "rating": 4.9,
     "reviews": 87,
@@ -43,7 +43,7 @@
     "variants": [
       {"type": "length", "options": ["33\"", "34\"", "35\""]}
     ],
-    "image": "https://images.unsplash.com/photo-1572012607533-fa1d16375e3b?w=600&q=80",
+    "image": "https://images.unsplash.com/photo-1722849899776-3c6abb5a46c7?w=600&q=80",
     "badge": null,
     "rating": 4.7,
     "reviews": 203,
@@ -54,12 +54,12 @@
     "name": "60° Lob Wedge — Tour Grind",
     "category": "clubs",
     "price": 159.99,
-    "description": "High-bounce lob wedge designed for soft conditions. Full-face groove coverage for max spin from any lie. Heat-treated finish resists corrosion.",
+    "description": "Versatile 60° lob wedge with a tour C-grind sole for shotmaking and firm-to-medium conditions. Full-face groove coverage for max spin from any lie. Heat-treated finish resists corrosion.",
     "features": ["60° loft / 10° bounce", "Full-face grooves", "Tour-preferred C-grind sole", "Available in chrome or tour black"],
     "variants": [
       {"type": "finish", "options": ["Chrome", "Tour Black"]}
     ],
-    "image": "https://images.unsplash.com/photo-1633478062482-790e3b5dd810?w=600&q=80",
+    "image": "https://images.unsplash.com/photo-1627307886970-04e0d82d17b6?w=600&q=80",
     "badge": null,
     "rating": 4.6,
     "reviews": 56,
@@ -75,7 +75,7 @@
     "variants": [
       {"type": "flex", "options": ["Ladies", "Regular", "Stiff"]}
     ],
-    "image": "https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=600&q=80",
+    "image": "https://images.unsplash.com/photo-1777554060049-0d26da211afe?w=600&q=80",
     "badge": "New",
     "rating": 4.5,
     "reviews": 34,
@@ -92,7 +92,7 @@
       {"type": "size", "options": ["XS", "S", "M", "L", "XL", "XXL"]},
       {"type": "color", "options": ["White", "Navy", "Sage Green", "Charcoal"]}
     ],
-    "image": "https://images.unsplash.com/photo-1512484776495-a09d92e87c3b?w=600&q=80",
+    "image": "https://images.unsplash.com/photo-1714317438040-0e8584215699?w=600&q=80",
     "badge": null,
     "rating": 4.7,
     "reviews": 118,
@@ -109,7 +109,7 @@
       {"type": "size", "options": ["28x30", "30x30", "32x30", "32x32", "34x30", "34x32", "36x32", "38x32"]},
       {"type": "color", "options": ["Stone", "Navy", "Charcoal", "Black"]}
     ],
-    "image": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80",
+    "image": "https://images.unsplash.com/photo-1604025883950-0493831dc398?w=600&q=80",
     "badge": null,
     "rating": 4.6,
     "reviews": 74,
@@ -126,7 +126,7 @@
       {"type": "size", "options": ["S", "M", "L", "XL", "XXL"]},
       {"type": "color", "options": ["Navy", "Black", "Forest Green"]}
     ],
-    "image": "https://images.unsplash.com/photo-1544923246-77307dd654cb?w=600&q=80",
+    "image": "https://images.unsplash.com/photo-1611308724917-d69270e94482?w=600&q=80",
     "badge": "Waterproof",
     "rating": 4.8,
     "reviews": 92,
@@ -159,7 +159,7 @@
       {"type": "hand", "options": ["Left (Right-handed)", "Right (Left-handed)"]},
       {"type": "size", "options": ["S", "M", "ML", "L", "XL"]}
     ],
-    "image": "https://images.unsplash.com/photo-1580793523892-e01a432fcaf9?w=600&q=80",
+    "image": "https://images.unsplash.com/photo-1689323473750-75520243edcb?w=600&q=80",
     "badge": null,
     "rating": 4.5,
     "reviews": 213,
@@ -175,7 +175,7 @@
     "variants": [
       {"type": "color", "options": ["Forest Green/Gold", "Black/Silver", "Navy/White"]}
     ],
-    "image": "https://images.unsplash.com/photo-1632922267756-9b71242b1592?w=600&q=80",
+    "image": "https://images.unsplash.com/photo-1675106643681-da7ad12e926f?w=600&q=80",
     "badge": "Best Seller",
     "rating": 4.9,
     "reviews": 54,
@@ -187,9 +187,9 @@
     "category": "accessories",
     "price": 249.99,
     "description": "Tournament-legal laser rangefinder with ±0.5yd accuracy to 800 yards. Slope compensation with toggle. Vibration confirmation. 6x magnification.",
-    "features": ["±0.5yd accuracy to 800yds", "Slope compensation (USGA legal)", "Pin-Seeker technology", "6x magnification"],
+    "features": ["±0.5yd accuracy to 800yds", "Slope toggle (tournament-legal with slope off)", "Pin-Seeker technology", "6x magnification"],
     "variants": [],
-    "image": "https://images.unsplash.com/photo-1551524559-8af4e6624178?w=600&q=80",
+    "image": "https://images.unsplash.com/photo-1691130715976-6e27b93576fc?w=600&q=80",
     "badge": "Tournament Legal",
     "rating": 4.8,
     "reviews": 89,
@@ -205,7 +205,7 @@
     "variants": [
       {"type": "height", "options": ["2.75\"", "3.25\"", "Mixed"]}
     ],
-    "image": "https://images.unsplash.com/photo-1591491719565-9f6c71a1cf0f?w=600&q=80",
+    "image": "https://images.unsplash.com/photo-1592459844445-567c2c9b7a2e?w=600&q=80",
     "badge": "Eco",
     "rating": 4.3,
     "reviews": 312,
@@ -221,7 +221,7 @@
     "variants": [
       {"type": "color", "options": ["Gold", "Silver", "Rose Gold"]}
     ],
-    "image": "https://images.unsplash.com/photo-1631726284099-42be0f21a50b?w=600&q=80",
+    "image": "https://images.unsplash.com/photo-1745340987807-a0a7132f020a?w=600&q=80",
     "badge": null,
     "rating": 4.6,
     "reviews": 147,
@@ -237,7 +237,7 @@
     "variants": [
       {"type": "color", "options": ["White", "Black", "Forest Green", "Navy"]}
     ],
-    "image": "https://images.unsplash.com/photo-1544427920-c49ccfb85579?w=600&q=80",
+    "image": "icons/product-placeholder.svg",
     "badge": null,
     "rating": 4.4,
     "reviews": 198,
@@ -252,7 +252,7 @@
     "description": "Portable launch monitor with Fusion Tracking technology. 16 data parameters including spin rate, apex, and carry. Works indoors with net.",
     "features": ["16 performance parameters", "Spin rate & apex tracking", "Indoor/outdoor use", "Bluetooth to app"],
     "variants": [],
-    "image": "https://images.unsplash.com/photo-1611095561427-23a8a24c7979?w=600&q=80",
+    "image": "https://images.unsplash.com/photo-1578510933691-7e3ac75257c1?w=600&q=80",
     "badge": "Sale",
     "rating": 4.7,
     "reviews": 43,
@@ -268,7 +268,7 @@
     "variants": [
       {"type": "size", "options": ["9ft", "12ft", "15ft"]}
     ],
-    "image": "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=600&q=80",
+    "image": "https://images.unsplash.com/photo-1763004089623-6b485aa2f253?w=600&q=80",
     "badge": null,
     "rating": 4.5,
     "reviews": 76,
@@ -282,7 +282,7 @@
     "description": "Pro-grade practice hitting net with 10×7ft opening. Double-net construction stops full-power shots. Sets up in 5 minutes — no tools required.",
     "features": ["10ft × 7ft opening", "Double-net barrier", "Tool-free 5-min setup", "UV-resistant netting"],
     "variants": [],
-    "image": "https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=600&q=80",
+    "image": "https://images.unsplash.com/photo-1656799273164-3e499b47cded?w=600&q=80",
     "badge": null,
     "rating": 4.4,
     "reviews": 61,
@@ -296,7 +296,7 @@
     "description": "Complete swing path training system with alignment sticks, impact bag, and tempo trainer. Used by Tour instructors worldwide. Suitable for all levels.",
     "features": ["3× alignment sticks", "Impact training bag", "Tempo trainer wristband", "Drill instruction booklet"],
     "variants": [],
-    "image": "https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=600&q=80",
+    "image": "https://images.unsplash.com/photo-1686351074532-525a5eb8ae56?w=600&q=80",
     "badge": "Best Value",
     "rating": 4.6,
     "reviews": 134,
@@ -312,7 +312,7 @@
     "variants": [
       {"type": "color", "options": ["Black", "Forest Green"]}
     ],
-    "image": "https://images.unsplash.com/photo-1611095561427-23a8a24c7979?w=600&q=80",
+    "image": "https://images.unsplash.com/photo-1687250393059-a883b4103dcc?w=600&q=80",
     "badge": "New",
     "rating": 4.8,
     "reviews": 28,

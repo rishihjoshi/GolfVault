@@ -93,6 +93,7 @@ const state = {
 // ─────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
   loadPersistedState();
+  setupImageFallback();
   setupOfflineDetection();
   setupInstallPrompt();
   registerServiceWorker();
@@ -116,6 +117,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   updateCartBadge();
 });
+
+// ─────────────────────────────────────────────────────────────
+// 3b. IMAGE FALLBACK — swap any broken image to a branded placeholder
+// ─────────────────────────────────────────────────────────────
+const IMG_PLACEHOLDER = `${BASE}/icons/product-placeholder.svg`;
+function setupImageFallback() {
+  // 'error' does not bubble, so listen in the capture phase to catch every <img>.
+  document.addEventListener('error', (e) => {
+    const el = e.target;
+    if (el && el.tagName === 'IMG' && !el.dataset.fallbackApplied) {
+      el.dataset.fallbackApplied = '1';
+      el.src = IMG_PLACEHOLDER;
+    }
+  }, true);
+}
 
 // ─────────────────────────────────────────────────────────────
 // 4. DATA LOADING
