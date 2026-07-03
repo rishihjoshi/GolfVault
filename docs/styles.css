@@ -1647,6 +1647,64 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
   color: var(--championship-gold);
 }
 
+/* Pull-latest / update refresh button (top-right of hero) */
+.shop-refresh {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: var(--radius-full);
+  background: rgba(18, 53, 36, 0.45);
+  backdrop-filter: blur(4px);
+  color: var(--white);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background var(--dur-fast) ease, border-color var(--dur-fast) ease;
+}
+.shop-refresh:hover { background: rgba(18, 53, 36, 0.65); }
+.shop-refresh-icon { font-size: 18px; line-height: 1; display: inline-block; }
+.shop-refresh-label {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.shop-refresh-label:empty { display: none; }
+/* Update-available emphasis: gold pill + pulsing dot */
+.shop-refresh.has-update {
+  background: var(--championship-gold);
+  border-color: var(--championship-gold);
+  color: var(--fairway-green);
+}
+.shop-refresh.has-update::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-error);
+  box-shadow: 0 0 0 2px var(--fairway-green);
+  animation: gv-pulse 1.6s ease-in-out infinite;
+}
+@keyframes gv-pulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.35); opacity: .7; } }
+/* Spinner while checking / updating */
+.shop-refresh.spinning .shop-refresh-icon { animation: gv-spin .8s linear infinite; }
+@keyframes gv-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .shop-refresh.spinning .shop-refresh-icon,
+  .shop-refresh.has-update::after { animation: none; }
+}
+
 /* ── 26b. Customer Profile Tab ──────────────────────────────── */
 .profile-identity {
   display: flex;

@@ -1,5 +1,5 @@
 // GolfVault Service Worker — Cache-First Strategy
-const CACHE_NAME = 'golfvault-v5';  // bumped: clean shop hero + customer profile tab
+const CACHE_NAME = 'golfvault-v6';  // bumped: PWA update-refresh (version.json) on Shop tab
 const STATIC_ASSETS = [
   '/GolfVault/',
   '/GolfVault/index.html',
@@ -33,6 +33,11 @@ self.addEventListener('install', event => {
   );
 });
 
+// ── Allow the page to activate a waiting worker immediately ──────────────────
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
+});
+
 // ── Activate: purge old caches ────────────────────────────────────────────────
 self.addEventListener('activate', event => {
   event.waitUntil(
@@ -56,6 +61,12 @@ self.addEventListener('fetch', event => {
 
   // Skip non-GET requests
   if (event.request.method !== 'GET') return;
+
+  // version.json — always network-first so update checks see the live deploy
+  if (url.pathname.endsWith('/version.json')) {
+    event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
+    return;
+  }
 
   // Skip cross-origin image requests (Unsplash, etc.) — let browser handle
   if (url.hostname.includes('unsplash.com') || url.hostname.includes('images.unsplash.com')) {
