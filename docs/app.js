@@ -1,5 +1,5 @@
 /* ============================================================
-   GolfVault — Main Application
+   Clubhouse Golf — Main Application
    PWA for Golf Accessories, Coaching, Video Lessons & Swing Analysis
    ============================================================ */
 
@@ -18,7 +18,7 @@ const DATA_BASE = `${BASE}/data`;
 // docs/version.json and the service-worker CACHE_NAME). The running app
 // compares this baked-in value against the live version.json to detect a
 // newer deploy and offer a one-tap "pull latest" refresh.
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '1.1.0';
 const VERSION_URL = `${BASE}/version.json`;
 
 const TABS = ['shop', 'book', 'lessons', 'swing', 'profile', 'docs'];
@@ -29,7 +29,7 @@ const MODELS = [
   { id: 'claude-haiku-4-5-20251001',  label: 'Haiku 4.5 (fast & affordable)' },
   { id: 'claude-sonnet-4-6',           label: 'Sonnet 4.6 (balanced)' },
 ];
-const SYSTEM_PROMPT = `You are an expert golf coach and premium golf equipment advisor for GolfVault, a high-end golf platform.
+const SYSTEM_PROMPT = `You are an expert golf coach and premium golf equipment advisor for Clubhouse Golf, a high-end golf platform.
 
 You help golfers with:
 • Club selection and fitting advice based on their swing characteristics and handicap
@@ -312,7 +312,7 @@ function renderShop() {
     <div class="shop-hero">
       <div class="shop-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1592937238247-cd0090e02f65?w=1200&q=80')"></div>
       <div class="shop-hero-content">
-        <img class="shop-hero-logo" src="icons/icon.svg" alt="GolfVault logo" width="72" height="72">
+        <img class="shop-hero-logo" src="icons/icon.svg" alt="Clubhouse Golf logo" width="72" height="72">
         <div class="shop-hero-text">
           <div class="shop-hero-tagline">Your Complete Golf Companion.</div>
           <div class="shop-hero-title">Premium Gear,<br><span>Championship Results.</span></div>
@@ -1135,7 +1135,7 @@ function videoDetailHtml(course) {
       ${isLocked ? `
         <div class="sub-prompt" style="margin:0 0 16px">
           <h3 class="serif">Unlock This Course</h3>
-          <p>Get full access with a GolfVault subscription.</p>
+          <p>Get full access with a Clubhouse Golf subscription.</p>
           <div class="sub-prompt-price">$29.99<span style="font-size:14px;color:rgba(255,255,255,.6)">/mo</span></div>
           <button class="btn btn-accent btn-full sub-modal-btn">Start Free Trial →</button>
         </div>` : ''}
@@ -1732,14 +1732,14 @@ function renderDocs() {
 
   const docs = [
     {
-      href: 'GolfVault_OrderProcessing_Workflow.html',
+      href: 'clubhouse-golf-order-processing-workflow.html',
       icon: '📦',
       title: 'Order Processing Workflow',
       desc: 'End-to-end fulfillment flow — from cart checkout through warehouse pick/pack to last-mile delivery and returns.',
       tag: 'Operations',
     },
     {
-      href: 'GolfVault_CustomVsShopify_Comparison.html',
+      href: 'clubhouse-golf-custom-vs-shopify-comparison.html',
       icon: '⚖️',
       title: 'Custom vs Shopify',
       desc: 'Side-by-side platform comparison covering cost, flexibility, time-to-market, and long-term scalability.',
@@ -1902,7 +1902,7 @@ function setupInstallPrompt() {
     state.deferredInstallPrompt.prompt();
     const { outcome } = await state.deferredInstallPrompt.userChoice;
     state.deferredInstallPrompt = null;
-    if (outcome === 'accepted') showToast('GolfVault installed! ⛳');
+    if (outcome === 'accepted') showToast('Clubhouse Golf installed! ⛳');
   });
 
   dismissBtn?.addEventListener('click', () => {

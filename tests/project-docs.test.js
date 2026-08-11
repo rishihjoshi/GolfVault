@@ -63,8 +63,8 @@ describe('Docs tab — app.js behaviour', () => {
 
 describe('Docs tab — linked files exist', () => {
   const EXPECTED_FILES = [
-    'GolfVault_OrderProcessing_Workflow.html',
-    'GolfVault_CustomVsShopify_Comparison.html',
+    'clubhouse-golf-order-processing-workflow.html',
+    'clubhouse-golf-custom-vs-shopify-comparison.html',
   ];
 
   EXPECTED_FILES.forEach(file => {

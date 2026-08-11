@@ -137,7 +137,7 @@
     "name": "Tour Structured Cap",
     "category": "apparel",
     "price": 39.99,
-    "description": "Structured 6-panel cap with curved brim. Moisture-wicking sweatband. Adjustable snapback. Embroidered GolfVault logo.",
+    "description": "Structured 6-panel cap with curved brim. Moisture-wicking sweatband. Adjustable snapback. Embroidered Clubhouse Golf logo.",
     "features": ["Moisture-wicking sweatband", "UV30+ protection", "Structured 6-panel", "Adjustable snapback"],
     "variants": [
       {"type": "color", "options": ["White", "Black", "Navy", "Forest Green"]}

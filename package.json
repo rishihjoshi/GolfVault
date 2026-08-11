@@ -1,8 +1,8 @@
 {
-  "name": "golfvault",
+  "name": "clubhouse-golf",
   "version": "1.0.0",
   "private": true,
-  "description": "GolfVault PWA",
+  "description": "Clubhouse Golf PWA",
   "scripts": {
     "test": "jest"
   },
