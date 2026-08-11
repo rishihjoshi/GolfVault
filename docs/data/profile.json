@@ -12,7 +12,7 @@
   },
   "orders": [
     {
-      "id": "GV-100482",
+      "id": "CG-100482",
       "date": "2026-06-18",
       "status": "Delivered",
       "items": [
@@ -22,7 +22,7 @@
       "total": 475.97
     },
     {
-      "id": "GV-100455",
+      "id": "CG-100455",
       "date": "2026-05-29",
       "status": "Delivered",
       "items": [
@@ -31,7 +31,7 @@
       "total": 249.99
     },
     {
-      "id": "GV-100501",
+      "id": "CG-100501",
       "date": "2026-06-27",
       "status": "Shipped",
       "items": [

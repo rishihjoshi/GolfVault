@@ -18,7 +18,7 @@ const DATA_BASE = `${BASE}/data`;
 // docs/version.json and the service-worker CACHE_NAME). The running app
 // compares this baked-in value against the live version.json to detect a
 // newer deploy and offer a one-tap "pull latest" refresh.
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.2.0';
 const VERSION_URL = `${BASE}/version.json`;
 
 const TABS = ['shop', 'book', 'lessons', 'swing', 'profile', 'docs'];
@@ -957,7 +957,7 @@ function bookingConfirmHtml() {
 }
 
 function bookingConfirmedHtml() {
-  const ref = 'GV-' + Math.random().toString(36).slice(2,8).toUpperCase();
+  const ref = 'CG-' + Math.random().toString(36).slice(2,8).toUpperCase();
   return `
     <div class="tab-header">
       <h1 class="serif">Booking Confirmed</h1>

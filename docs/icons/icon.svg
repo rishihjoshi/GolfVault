@@ -1,41 +1,41 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- Background — Golf Green #0E4B36 -->
-  <rect width="512" height="512" rx="96" fill="#0E4B36"/>
+  <!-- Background — Golf Green #0A0B0B -->
+  <rect width="512" height="512" rx="96" fill="#0A0B0B"/>
   <!-- Outer Championship Gold accent ring -->
-  <rect x="24" y="24" width="464" height="464" rx="72" fill="none" stroke="#C79A2B" stroke-width="8" opacity="0.6"/>
+  <rect x="24" y="24" width="464" height="464" rx="72" fill="none" stroke="#B69571" stroke-width="8" opacity="0.6"/>
   <!-- Golf flag pole -->
-  <line x1="300" y1="110" x2="300" y2="310" stroke="#C79A2B" stroke-width="10" stroke-linecap="round"/>
+  <line x1="300" y1="110" x2="300" y2="310" stroke="#B69571" stroke-width="10" stroke-linecap="round"/>
   <!-- Golf flag -->
-  <polygon points="300,110 360,140 300,170" fill="#C79A2B"/>
+  <polygon points="300,110 360,140 300,170" fill="#B69571"/>
   <!-- "G" letter — Cloud White -->
   <text x="110" y="290"
-    font-family="Montserrat, 'Arial Black', sans-serif"
+    font-family="'Bebas Neue', 'Arial Narrow', sans-serif"
     font-size="160"
     font-weight="700"
-    fill="#F8F8F5"
+    fill="#FFFFFF"
     letter-spacing="-8">G</text>
   <!-- "V" letter — Championship Gold -->
   <text x="215" y="290"
-    font-family="Montserrat, 'Arial Black', sans-serif"
+    font-family="'Bebas Neue', 'Arial Narrow', sans-serif"
     font-size="160"
     font-weight="700"
-    fill="#C79A2B"
+    fill="#B69571"
     letter-spacing="-8">V</text>
   <!-- Gold divider line -->
-  <line x1="64" y1="340" x2="448" y2="340" stroke="#C79A2B" stroke-width="4" opacity="0.5"/>
+  <line x1="64" y1="340" x2="448" y2="340" stroke="#B69571" stroke-width="4" opacity="0.5"/>
   <!-- Golf ball -->
-  <circle cx="128" cy="390" r="28" fill="#F8F8F5"/>
-  <circle cx="118" cy="383" r="3" fill="#E0DDD5"/>
-  <circle cx="130" cy="378" r="3" fill="#E0DDD5"/>
-  <circle cx="142" cy="384" r="3" fill="#E0DDD5"/>
-  <circle cx="122" cy="395" r="3" fill="#E0DDD5"/>
-  <circle cx="135" cy="399" r="3" fill="#E0DDD5"/>
+  <circle cx="128" cy="390" r="28" fill="#FFFFFF"/>
+  <circle cx="118" cy="383" r="3" fill="#D2D1D2"/>
+  <circle cx="130" cy="378" r="3" fill="#D2D1D2"/>
+  <circle cx="142" cy="384" r="3" fill="#D2D1D2"/>
+  <circle cx="122" cy="395" r="3" fill="#D2D1D2"/>
+  <circle cx="135" cy="399" r="3" fill="#D2D1D2"/>
   <!-- CLUBHOUSE GOLF wordmark -->
   <text x="256" y="408"
-    font-family="Montserrat, 'Arial Black', sans-serif"
+    font-family="'Bebas Neue', 'Arial Narrow', sans-serif"
     font-size="34"
     font-weight="700"
-    fill="#C79A2B"
+    fill="#B69571"
     text-anchor="middle"
     letter-spacing="2.5">CLUBHOUSE GOLF</text>
 </svg>

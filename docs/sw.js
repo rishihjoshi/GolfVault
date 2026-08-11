@@ -4,7 +4,7 @@
 // GitHub Pages base path, which is derived from the repository name. The repo
 // is still called `GolfVault` even though the app is branded Clubhouse Golf.
 // Only change these if the repo is renamed or a custom domain is attached.
-const CACHE_NAME = 'clubhouse-golf-v7';  // bumped: Clubhouse Golf rebrand — forces cache refresh on existing installs
+const CACHE_NAME = 'clubhouse-golf-v8';  // bumped: chgolfco palette + Bebas/Bricolage type
 const STATIC_ASSETS = [
   '/GolfVault/',
   '/GolfVault/index.html',

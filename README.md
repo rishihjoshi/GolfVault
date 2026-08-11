@@ -97,12 +97,23 @@ Your key is stored in `localStorage` — never sent to our servers.
 
 ## 🎨 Design System
 
-| Token | Value |
-|-------|-------|
-| Primary Green | `#1B4332` |
-| Accent Gold | `#C9A84C` |
-| Charcoal (Nav) | `#1C1C1E` |
-| Background | `#f2f2f7` |
+Palette extracted from the brand reference site, [chgolfco.com](https://chgolfco.com/).
+
+| Token | Value | Role |
+|-------|-------|------|
+| Ink | `#0A0B0B` | Primary brand surface |
+| Black | `#000000` | Nav, buttons, deepest surface |
+| Tan | `#B69571` | Brand accent — CTAs, taglines |
+| Sand | `#EEDAB8` | Accent light — badges |
+| Surface | `#F5F5F5` | Secondary background |
+| Border | `#E5E5E5` | Hairlines |
+| Subtext | `#4D4D4D` | Muted copy |
+
+**Type:** Bebas Neue (headings, subheadings, CTAs) · Bricolage Grotesque (body, nav, forms).
+
+> The earlier table here documented `#1B4332 / #C9A84C / #1C1C1E / #f2f2f7`. Those
+> values were never in `styles.css` — the doc had drifted from the code. Every
+> colour now lives in the `:root` block of `docs/styles.css`; change it there.
 
 ---
 

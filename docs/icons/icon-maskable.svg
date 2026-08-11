@@ -1,39 +1,39 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <!-- Full bleed Golf Green background for maskable — safe zone: inner 80% -->
-  <rect width="512" height="512" fill="#0E4B36"/>
+  <rect width="512" height="512" fill="#0A0B0B"/>
   <!-- Deep Fairway Green subtle gradient effect -->
   <radialGradient id="rg" cx="30%" cy="30%" r="70%">
-    <stop offset="0%" stop-color="#1a6647" stop-opacity="0.4"/>
-    <stop offset="100%" stop-color="#123524" stop-opacity="0.6"/>
+    <stop offset="0%" stop-color="#2E2E2E" stop-opacity="0.4"/>
+    <stop offset="100%" stop-color="#000000" stop-opacity="0.6"/>
   </radialGradient>
   <rect width="512" height="512" fill="url(#rg)"/>
   <!-- Content within safe zone (51px padding each side) -->
   <!-- Golf flag pole -->
-  <line x1="290" y1="130" x2="290" y2="290" stroke="#C79A2B" stroke-width="10" stroke-linecap="round"/>
+  <line x1="290" y1="130" x2="290" y2="290" stroke="#B69571" stroke-width="10" stroke-linecap="round"/>
   <!-- Golf flag -->
-  <polygon points="290,130 345,158 290,186" fill="#C79A2B"/>
+  <polygon points="290,130 345,158 290,186" fill="#B69571"/>
   <!-- "G" -->
   <text x="100" y="285"
-    font-family="Montserrat, 'Arial Black', sans-serif"
+    font-family="'Bebas Neue', 'Arial Narrow', sans-serif"
     font-size="150"
     font-weight="700"
-    fill="#F8F8F5"
+    fill="#FFFFFF"
     letter-spacing="-6">G</text>
   <!-- "V" -->
   <text x="205" y="285"
-    font-family="Montserrat, 'Arial Black', sans-serif"
+    font-family="'Bebas Neue', 'Arial Narrow', sans-serif"
     font-size="150"
     font-weight="700"
-    fill="#C79A2B"
+    fill="#B69571"
     letter-spacing="-6">V</text>
   <!-- Gold divider -->
-  <line x1="80" y1="325" x2="432" y2="325" stroke="#C79A2B" stroke-width="3" opacity="0.5"/>
+  <line x1="80" y1="325" x2="432" y2="325" stroke="#B69571" stroke-width="3" opacity="0.5"/>
   <!-- Wordmark -->
   <text x="256" y="390"
-    font-family="Montserrat, 'Arial Black', sans-serif"
+    font-family="'Bebas Neue', 'Arial Narrow', sans-serif"
     font-size="30"
     font-weight="700"
-    fill="#C79A2B"
+    fill="#B69571"
     text-anchor="middle"
     letter-spacing="2">CLUBHOUSE GOLF</text>
 </svg>
