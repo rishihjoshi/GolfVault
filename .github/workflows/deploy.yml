@@ -1,4 +1,4 @@
-name: Deploy GolfVault PWA to GitHub Pages
+name: Deploy Clubhouse Golf PWA to GitHub Pages
 
 on:
   push:

@@ -1,4 +1,4 @@
-# ⛳ GolfVault PWA
+# ⛳ Clubhouse Golf PWA
 
 **Premium Golf Accessories, Coaching, Video Lessons & AI Swing Analysis**
 
@@ -11,6 +11,12 @@ A mobile-first Progressive Web App built for iOS and Android, deployable to GitH
 ## 🚀 Live Demo
 
 After deploying to GitHub Pages: `https://<your-username>.github.io/GolfVault/`
+
+> **Branding vs. URL:** the app is branded **Clubhouse Golf**, but the GitHub
+> repository is still named `GolfVault`, so the public Pages URL keeps the
+> `/GolfVault/` path. `start_url`/`scope` in `manifest.json` and the pre-cache
+> URLs in `sw.js` are deliberately left on `/GolfVault/` to match. Rename the
+> repo (or attach a custom domain) to change this, then update those paths.
 
 ---
 

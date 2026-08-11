@@ -1,5 +1,10 @@
-// GolfVault Service Worker — Cache-First Strategy
-const CACHE_NAME = 'golfvault-v6';  // bumped: PWA update-refresh (version.json) on Shop tab
+// Clubhouse Golf Service Worker — Cache-First Strategy
+//
+// NOTE: the '/GolfVault/' path prefix below is NOT stale branding — it is the
+// GitHub Pages base path, which is derived from the repository name. The repo
+// is still called `GolfVault` even though the app is branded Clubhouse Golf.
+// Only change these if the repo is renamed or a custom domain is attached.
+const CACHE_NAME = 'clubhouse-golf-v7';  // bumped: Clubhouse Golf rebrand — forces cache refresh on existing installs
 const STATIC_ASSETS = [
   '/GolfVault/',
   '/GolfVault/index.html',
@@ -15,8 +20,8 @@ const STATIC_ASSETS = [
   '/GolfVault/icons/icon-maskable.svg',
   '/GolfVault/icons/icon-192.png',
   '/GolfVault/icons/icon-512.png',
-  '/GolfVault/icons/GolfVault_AppIcon.png',
-  '/GolfVault/icons/GolfVault_AppHeroImage.png',
+  '/GolfVault/icons/clubhouse-golf-app-icon.png',
+  '/GolfVault/icons/clubhouse-golf-app-hero.png',
   '/GolfVault/icons/product-placeholder.svg'
 ];
 

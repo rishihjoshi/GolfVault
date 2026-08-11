@@ -30,12 +30,12 @@
   <circle cx="142" cy="384" r="3" fill="#E0DDD5"/>
   <circle cx="122" cy="395" r="3" fill="#E0DDD5"/>
   <circle cx="135" cy="399" r="3" fill="#E0DDD5"/>
-  <!-- GOLFVAULT wordmark -->
+  <!-- CLUBHOUSE GOLF wordmark -->
   <text x="256" y="408"
     font-family="Montserrat, 'Arial Black', sans-serif"
     font-size="34"
     font-weight="700"
     fill="#C79A2B"
     text-anchor="middle"
-    letter-spacing="5">GOLFVAULT</text>
+    letter-spacing="2.5">CLUBHOUSE GOLF</text>
 </svg>
