@@ -18,7 +18,7 @@ const DATA_BASE = `${BASE}/data`;
 // docs/version.json and the service-worker CACHE_NAME). The running app
 // compares this baked-in value against the live version.json to detect a
 // newer deploy and offer a one-tap "pull latest" refresh.
-const APP_VERSION = '1.7.0';
+const APP_VERSION = '1.8.0';
 const VERSION_URL = `${BASE}/version.json`;
 
 const TABS = ['shop', 'book', 'lessons', 'swing', 'profile', 'docs'];
@@ -308,19 +308,24 @@ function renderShop() {
   }
   panel.dataset.rendered = '1';
   panel.innerHTML = `
-    <!-- Hero — the mark on ink, then the brand statement. One identity:
-         the Clubhouse Golf logo and the chgolfco.com palette. -->
-    <header class="shop-hero">
-      <img class="shop-hero-logo" src="assets/clubhouse-logo.png"
-        alt="Clubhouse Golf" width="204" height="135">
-      <div class="brand-eyebrow">Modern Golf. Made Simple.</div>
-      <h1 class="brand-headline">Everything Golf.</h1>
-      <p class="brand-lede">Shop apparel, discover new gear, improve your game, and join the community changing golf.</p>
+    <!-- Hero banner. The artwork carries its own headline and CTA, so nothing
+         is overlaid on it; the brand statement follows in real copy. -->
+    <div class="shop-banner">
+      <img class="shop-banner-img" src="assets/clubhouse-hero.png"
+        alt="Clubhouse Golf — elevate your game" width="900" height="600">
       <button class="shop-refresh" id="shop-refresh" type="button"
         aria-label="Check for updates" title="Check for updates">
         <span class="shop-refresh-icon" aria-hidden="true">⟳</span>
         <span class="shop-refresh-label"></span>
       </button>
+    </div>
+
+    <header class="shop-hero">
+      <img class="shop-hero-logo" src="assets/clubhouse-logo.png"
+        alt="Clubhouse Golf" width="176" height="117">
+      <div class="brand-eyebrow">Modern Golf. Made Simple.</div>
+      <h1 class="brand-headline">Everything Golf.</h1>
+      <p class="brand-lede">Shop apparel, discover new gear, improve your game, and join the community changing golf.</p>
     </header>
 
     <!-- Search bar (below hero) -->
