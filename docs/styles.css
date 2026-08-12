@@ -72,7 +72,15 @@
   /* Layout */
   --nav-height:    62px;
   --header-height: 56px;
-  --safe-bottom:   0px;
+  /* Safe-area insets. No viewport-fit=cover, so these are 0 in the browser
+     and small-but-correct in standalone PWA mode; the 0px fallback means no
+     gap on plain web. --safe-t clears the Dynamic Island / status bar, which
+     black-translucent lets content slide under. */
+  --safe-t: env(safe-area-inset-top,    0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left,   0px);
+  --safe-r: env(safe-area-inset-right,  0px);
+  --safe-bottom:   var(--safe-b);   /* legacy alias */
   --content-pad:   16px;
   --radius-sm:     8px;
   --radius-md:     12px;
@@ -119,6 +127,8 @@
 
 html {
   height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
   /* MixologyVault bottom-gap fix:
      Root background matches nav colour — fills iOS safe-area gap without viewport-fit=cover */
   background: var(--color-nav);
@@ -128,11 +138,12 @@ html {
 
 body {
   height: 100%;
+  overflow: hidden;
   font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.5;
   color: var(--color-text);
-  background: var(--color-surface-alt);
+  background: var(--ch-ink);
   overscroll-behavior: none;
   -webkit-overflow-scrolling: touch;
 }
@@ -148,6 +159,9 @@ ul, ol { list-style: none; }
   display: flex;
   flex-direction: column;
   height: 100%;
+  padding-top: var(--safe-t);
+  padding-left: var(--safe-l);
+  padding-right: var(--safe-r);
   max-width: 480px;
   margin: 0 auto;
   background: var(--color-surface-alt);
@@ -164,8 +178,17 @@ ul, ol { list-style: none; }
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
   /* Enough bottom padding so content clears the nav bar */
-  padding-bottom: calc(var(--nav-height) + 16px);
+  padding-bottom: calc(var(--nav-height) + var(--safe-b) + 16px);
   position: relative;
+}
+
+/* Native-app feel on chrome only. The blueprint puts user-select:none on
+   body, but this app has content worth copying — AI chat answers, product
+   names, order refs — so selection is disabled on controls and kept on copy. */
+#bottom-nav, .tab-header, .filter-chip, .btn, .nav-btn,
+.shop-refresh, .modal-handle, .cart-badge, .story-list li {
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* ── 5. Tab Panels ──────────────────────────────────────────── */
@@ -216,6 +239,17 @@ ul, ol { list-style: none; }
   border-top: 1px solid rgba(255,255,255,.08);
   height: var(--nav-height);
   flex-shrink: 0;
+}
+/* Extend the nav colour through the home-indicator strip so no light band
+   shows below it in standalone mode. */
+#bottom-nav::after {
+  content: '';
+  position: absolute;
+  bottom: calc(-1 * var(--safe-b));
+  left: 0;
+  right: 0;
+  height: var(--safe-b);
+  background: var(--color-nav);
 }
 
 .nav-btn {
@@ -295,7 +329,7 @@ ul, ol { list-style: none; }
 #install-prompt {
   display: none;
   position: fixed;
-  bottom: calc(var(--nav-height) + 16px);
+  bottom: calc(var(--nav-height) + var(--safe-b) + 16px);
   left: 16px;
   right: 16px;
   max-width: calc(480px - 32px);
@@ -577,7 +611,7 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   animation: sheetUp var(--dur-slow) var(--ease-out);
-  padding-bottom: calc(var(--nav-height) + 24px);
+  padding-bottom: calc(var(--nav-height) + var(--safe-b) + 24px);
 }
 @keyframes sheetUp {
   from { transform: translateY(100%); }
@@ -1258,7 +1292,7 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
 /* ── 22. AI Chat ────────────────────────────────────────────── */
 #chat-fab {
   position: fixed;
-  bottom: calc(var(--nav-height) + 16px);
+  bottom: calc(var(--nav-height) + var(--safe-b) + 16px);
   right: 16px;
   width: 52px;
   height: 52px;
@@ -1546,7 +1580,7 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
 /* ── 24. Toast Notifications ────────────────────────────────── */
 .toast {
   position: fixed;
-  bottom: calc(var(--nav-height) + 80px);
+  bottom: calc(var(--nav-height) + var(--safe-b) + 80px);
   left: 50%;
   transform: translateX(-50%) translateY(8px);
   background: var(--charcoal);
@@ -1616,6 +1650,19 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
   display: block;
   width: 100%;
   height: auto;
+}
+/* The banner is a bright, green-lit photograph and the brand statement below
+   it is ink. Fading the last tenth into ink removes the hard seam; it covers
+   grass only, so no artwork content is obscured. */
+.shop-hero::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 10%;
+  background: linear-gradient(to bottom, rgba(10,11,11,0), var(--ch-ink));
+  pointer-events: none;
 }
 
 /* ── Brand statement ─────────────────────────────────────────── */
