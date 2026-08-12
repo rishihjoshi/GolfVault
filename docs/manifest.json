@@ -2,7 +2,7 @@
   "id": "./",
   "name": "Clubhouse Golf",
   "short_name": "Clubhouse Golf",
-  "description": "Clubhouse Golf \u2014 Your Complete Golf Companion. Golf accessories, coaching sessions, video lessons & swing analysis.",
+  "description": "Modern Golf. Made Simple. Shop apparel and gear, improve your game with Caddy AI, and join the community changing golf.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -57,7 +57,7 @@
       "sizes": "874x1024",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Clubhouse Golf \u2014 Your Complete Golf Companion"
+      "label": "Clubhouse Golf — Your Complete Golf Companion"
     }
   ],
   "shortcuts": [
@@ -77,31 +77,7 @@
       "name": "Book a Lesson",
       "short_name": "Book",
       "description": "Book a coaching session",
-      "url": "./#book",
-      "icons": [
-        {
-          "src": "icons/clubhouse-golf-app-icon.png",
-          "sizes": "1024x1024"
-        }
-      ]
-    },
-    {
-      "name": "Video Lessons",
-      "short_name": "Lessons",
-      "description": "Browse video coaching library",
-      "url": "./#lessons",
-      "icons": [
-        {
-          "src": "icons/clubhouse-golf-app-icon.png",
-          "sizes": "1024x1024"
-        }
-      ]
-    },
-    {
-      "name": "Swing Analysis",
-      "short_name": "Swing",
-      "description": "Submit your swing for expert feedback",
-      "url": "./#swing",
+      "url": "./#performance",
       "icons": [
         {
           "src": "icons/clubhouse-golf-app-icon.png",

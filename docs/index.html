@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
   <title>Clubhouse Golf — Your Complete Golf Companion.</title>
-  <meta name="description" content="Your Complete Golf Companion. Premium golf accessories, expert coaching sessions, video lessons, and AI-powered swing analysis — all in one app.">
+  <meta name="description" content="Modern Golf. Made Simple. Shop apparel and gear, improve your game with Caddy AI, and join the community changing golf.">
 
   <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json">
@@ -27,7 +27,7 @@
 
   <!-- Open Graph -->
   <meta property="og:title" content="Clubhouse Golf — Your Complete Golf Companion.">
-  <meta property="og:description" content="Premium golf accessories, coaching & swing analysis.">
+  <meta property="og:description" content="Modern Golf. Made Simple. Everything Golf.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="icons/clubhouse-golf-app-hero.png">
 
@@ -85,26 +85,32 @@
         </div>
       </section>
 
-      <!-- ── Tab 2: Book a Session ───────────────────────────── -->
-      <section id="tab-book" class="tab-panel" role="tabpanel" aria-label="Book a Session">
-        <div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--gray-400)">
-          <span style="font-size:32px">📅</span>
-        </div>
-      </section>
-
-      <!-- ── Tab 3: Video Lessons ────────────────────────────── -->
-      <section id="tab-lessons" class="tab-panel" role="tabpanel" aria-label="Video Lessons">
-        <div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--gray-400)">
-          <span style="font-size:32px">🎬</span>
-        </div>
-      </section>
-
-      <!-- ── Tab 4: Swing Analysis ───────────────────────────── -->
-      <section id="tab-swing" class="tab-panel" role="tabpanel" aria-label="Swing Analysis">
+      <!-- ── Tab 2: Performance ──────────────────────────────── -->
+      <section id="tab-performance" class="tab-panel" role="tabpanel" aria-label="Performance">
         <div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--gray-400)">
           <span style="font-size:32px">🏌</span>
         </div>
       </section>
+
+      <!-- ── Tab 3: Caddy AI ─────────────────────────────────── -->
+      <section id="tab-caddy" class="tab-panel" role="tabpanel" aria-label="Caddy AI">
+        <div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--gray-400)">
+          <span style="font-size:32px">🤖</span>
+        </div>
+      </section>
+
+      <!-- ── Tab 4: Vision ───────────────────────────────────── -->
+      <section id="tab-vision" class="tab-panel" role="tabpanel" aria-label="Vision">
+        <div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--gray-400)">
+          <span style="font-size:32px">✦</span>
+        </div>
+      </section>
+
+      <!-- Inert hosts: Book / Lessons / Swing now render inside Performance.
+           Kept so the renderers' default container arguments still resolve. -->
+      <section id="tab-book" class="tab-panel" hidden aria-hidden="true"></section>
+      <section id="tab-lessons" class="tab-panel" hidden aria-hidden="true"></section>
+      <section id="tab-swing" class="tab-panel" hidden aria-hidden="true"></section>
 
       <!-- ── Tab 5: Customer Profile ─────────────────────────── -->
       <section id="tab-profile" class="tab-panel" role="tabpanel" aria-label="My Profile">
@@ -128,19 +134,19 @@
         <span class="cart-badge" id="cart-badge" aria-label="Cart items">0</span>
       </button>
 
-      <button class="nav-btn" data-tab="book" role="tab" aria-label="Book a Session">
-        <span class="nav-icon">📅</span>
-        <span>Book</span>
-      </button>
-
-      <button class="nav-btn" data-tab="lessons" role="tab" aria-label="Video Lessons">
-        <span class="nav-icon">🎬</span>
-        <span>Lessons</span>
-      </button>
-
-      <button class="nav-btn" data-tab="swing" role="tab" aria-label="Swing Analysis">
+      <button class="nav-btn" data-tab="performance" role="tab" aria-label="Performance">
         <span class="nav-icon">🏌</span>
-        <span>Swing</span>
+        <span>Perform</span>
+      </button>
+
+      <button class="nav-btn" data-tab="caddy" role="tab" aria-label="Caddy AI">
+        <span class="nav-icon">🤖</span>
+        <span>Caddy</span>
+      </button>
+
+      <button class="nav-btn" data-tab="vision" role="tab" aria-label="Vision">
+        <span class="nav-icon">✦</span>
+        <span>Vision</span>
       </button>
 
       <button class="nav-btn" data-tab="profile" role="tab" aria-label="My Profile">
@@ -148,26 +154,24 @@
         <span>Profile</span>
       </button>
 
-      <button class="nav-btn" data-tab="docs" role="tab" aria-label="Project Docs">
-        <span class="nav-icon">📋</span>
-        <span>Docs</span>
-      </button>
+      <!-- Docs is hidden from the nav but still reachable at #docs.
+           Restore by re-adding this button. -->
 
     </nav>
   </div>
 
   <!-- ── AI Chat FAB ─────────────────────────────────────────── -->
-  <button id="chat-fab" aria-label="Open Golf AI Assistant" title="Golf AI Assistant">
+  <button id="chat-fab" aria-label="Open Caddy AI" title="Caddy AI">
     🤖
   </button>
 
   <!-- ── AI Chat Modal ───────────────────────────────────────── -->
-  <div id="chat-modal" role="dialog" aria-label="Golf AI Assistant" aria-modal="true">
+  <div id="chat-modal" role="dialog" aria-label="Caddy AI" aria-modal="true">
     <div class="chat-header">
       <div class="chat-header-avatar">⛳</div>
       <div class="chat-header-info">
-        <div class="chat-header-name">Golf AI Assistant</div>
-        <div class="chat-header-status">Powered by Claude · Expert Coaching Advisor</div>
+        <div class="chat-header-name">Caddy AI</div>
+        <div class="chat-header-status">Powered by Claude · Beta</div>
       </div>
       <button class="chat-settings-btn" aria-label="Settings">⚙️</button>
       <button class="chat-close" aria-label="Close chat">✕</button>

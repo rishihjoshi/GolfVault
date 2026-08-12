@@ -21,21 +21,16 @@ describe('Docs tab — HTML shell', () => {
     expect(panel.classList.contains('tab-panel')).toBe(true);
   });
 
-  test('has a Docs nav button with data-tab="docs"', () => {
-    const btn = document.querySelector('[data-tab="docs"]');
-    expect(btn).not.toBeNull();
-    expect(btn.tagName).toBe('BUTTON');
+  // Docs is hidden from the nav but still reachable at #docs. The panel and
+  // renderer stay so it can be restored by re-adding one button.
+  test('has NO Docs nav button — hidden from customers', () => {
+    expect(document.querySelector('[data-tab="docs"]')).toBeNull();
   });
 
-  test('#tab-docs comes after #tab-swing in document order', () => {
-    const swing = document.getElementById('tab-swing');
-    const docs  = document.getElementById('tab-docs');
-    const { JSDOM: JSDOMClass } = require('jsdom');
-    const win = new JSDOMClass(INDEX_HTML).window;
-    const Node = win.Node;
-    expect(swing).not.toBeNull();
-    expect(docs).not.toBeNull();
-    expect(swing.compareDocumentPosition(docs) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  test('#tab-docs is the last tab-panel in document order', () => {
+    const panels = [...document.querySelectorAll('.tab-panel')];
+    expect(panels.length).toBeGreaterThan(0);
+    expect(panels[panels.length - 1].id).toBe('tab-docs');
   });
 });
 
