@@ -186,7 +186,7 @@ ul, ol { list-style: none; }
    body, but this app has content worth copying — AI chat answers, product
    names, order refs — so selection is disabled on controls and kept on copy. */
 #bottom-nav, .tab-header, .filter-chip, .btn, .nav-btn,
-.shop-refresh, .modal-handle, .cart-badge, .story-list li,
+.app-refresh, .modal-handle, .cart-badge, .story-list li,
 .topic-tab, .pillar-card, .caddy-key, .status-badge {
   -webkit-user-select: none;
   user-select: none;
@@ -1657,14 +1657,14 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
 
 /* ── 26. Hero Banner ────────────────────────────────────────── */
 /* Hero banner — shown whole, since the artwork is a finished composition. */
-.shop-banner {
+.brand-banner {
   position: relative;
   width: 100%;
   overflow: hidden;
   background: var(--ch-ink);
   line-height: 0;
 }
-.shop-banner-img {
+.brand-banner-img {
   display: block;
   width: 100%;
   height: auto;
@@ -1672,7 +1672,7 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
 /* The banner is a bright, green-lit photograph and the section below it is
    ink. Fade the last tenth into ink so there is no hard seam; it covers grass
    only, so no artwork content is obscured. */
-.shop-banner::after {
+.brand-banner::after {
   content: '';
   position: absolute;
   left: 0;
@@ -1683,13 +1683,13 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
   pointer-events: none;
 }
 
-.shop-hero {
+.brand-hero {
   position: relative;
   background: var(--ch-ink);
   padding: 22px var(--content-pad) 26px;
   text-align: center;
 }
-.shop-hero-logo {
+.brand-hero-logo {
   display: block;
   width: 176px;
   height: auto;
@@ -1904,7 +1904,7 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
 }
 
 /* Pull-latest / update refresh button (top-right of hero) */
-.shop-refresh {
+.app-refresh {
   position: absolute;
   top: 12px;
   right: 12px;
@@ -1923,9 +1923,9 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
   -webkit-tap-highlight-color: transparent;
   transition: background var(--dur-fast) ease, border-color var(--dur-fast) ease;
 }
-.shop-refresh:hover { background: rgba(18, 53, 36, 0.65); }
-.shop-refresh-icon { font-size: 18px; line-height: 1; display: inline-block; }
-.shop-refresh-label {
+.app-refresh:hover { background: rgba(18, 53, 36, 0.65); }
+.app-refresh-icon { font-size: 18px; line-height: 1; display: inline-block; }
+.app-refresh-label {
   font-family: var(--font-heading);
   font-size: 11px;
   font-weight: 400;
@@ -1933,14 +1933,14 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
   text-transform: uppercase;
   white-space: nowrap;
 }
-.shop-refresh-label:empty { display: none; }
+.app-refresh-label:empty { display: none; }
 /* Update-available emphasis: gold pill + pulsing dot */
-.shop-refresh.has-update {
+.app-refresh.has-update {
   background: var(--championship-gold);
   border-color: var(--championship-gold);
   color: var(--fairway-green);
 }
-.shop-refresh.has-update::after {
+.app-refresh.has-update::after {
   content: "";
   position: absolute;
   top: -3px;
@@ -1954,11 +1954,11 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
 }
 @keyframes gv-pulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.35); opacity: .7; } }
 /* Spinner while checking / updating */
-.shop-refresh.spinning .shop-refresh-icon { animation: gv-spin .8s linear infinite; }
+.app-refresh.spinning .app-refresh-icon { animation: gv-spin .8s linear infinite; }
 @keyframes gv-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) {
-  .shop-refresh.spinning .shop-refresh-icon,
-  .shop-refresh.has-update::after { animation: none; }
+  .app-refresh.spinning .app-refresh-icon,
+  .app-refresh.has-update::after { animation: none; }
 }
 
 /* ── 26b. Customer Profile Tab ──────────────────────────────── */

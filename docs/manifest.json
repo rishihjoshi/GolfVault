@@ -62,10 +62,10 @@
   ],
   "shortcuts": [
     {
-      "name": "Shop",
-      "short_name": "Shop",
-      "description": "Browse premium golf accessories",
-      "url": "./#shop",
+      "name": "Marketplace",
+      "short_name": "Market",
+      "description": "Browse the Clubhouse store",
+      "url": "./#marketplace",
       "icons": [
         {
           "src": "icons/clubhouse-golf-app-icon.png",

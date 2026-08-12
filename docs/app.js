@@ -18,11 +18,20 @@ const DATA_BASE = `${BASE}/data`;
 // docs/version.json and the service-worker CACHE_NAME). The running app
 // compares this baked-in value against the live version.json to detect a
 // newer deploy and offer a one-tap "pull latest" refresh.
-const APP_VERSION = '1.9.1';
+const APP_VERSION = '2.0.0';
 const VERSION_URL = `${BASE}/version.json`;
 
-const TABS = ['shop', 'performance', 'caddy', 'vision', 'profile', 'docs'];
-const DEFAULT_TAB = 'shop';
+const TABS = ['vision', 'marketplace', 'performance', 'caddy', 'profile', 'docs'];
+const DEFAULT_TAB = 'vision';
+// Tabs renamed or merged since launch. Installed PWA shortcuts and old
+// bookmarks still point at the previous ids, so resolve rather than drop them.
+const TAB_ALIASES = {
+  shop: 'marketplace',
+  book: 'performance',
+  lessons: 'performance',
+  swing: 'performance',
+};
+const resolveTab = h => TAB_ALIASES[h] || h;
 const CLAUDE_API = 'https://api.anthropic.com/v1/messages';
 const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
 const MODELS = [
@@ -133,7 +142,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   ]).catch(err => console.warn('[GV] Data load partial failure:', err));
 
   // Route to initial tab
-  const hash = window.location.hash.replace('#', '');
+  const hash = resolveTab(window.location.hash.replace('#', ''));
   const tab = TABS.includes(hash) ? hash : DEFAULT_TAB;
   activateTab(tab, true);
 
@@ -187,19 +196,19 @@ async function checkForUpdate() {
 }
 
 function reflectUpdateState() {
-  const btn = document.getElementById('shop-refresh');
+  const btn = document.getElementById('app-refresh');
   if (!btn) return;
   btn.classList.toggle('has-update', state.updateAvailable && !state.updating);
   btn.setAttribute('title', state.updateAvailable
     ? `Update available (v${state.latestVersion}) — tap to refresh`
     : 'Check for updates');
-  const label = btn.querySelector('.shop-refresh-label');
+  const label = btn.querySelector('.app-refresh-label');
   if (label) label.textContent = state.updateAvailable ? 'Update' : '';
 }
 
 async function onShopRefresh() {
   if (state.updating) return;
-  const btn = document.getElementById('shop-refresh');
+  const btn = document.getElementById('app-refresh');
   btn?.classList.add('spinning');
   await checkForUpdate();
   if (state.updateAvailable) {
@@ -274,7 +283,7 @@ function setupNavigation() {
     });
   });
   window.addEventListener('hashchange', () => {
-    const hash = window.location.hash.replace('#', '');
+    const hash = resolveTab(window.location.hash.replace('#', ''));
     if (TABS.includes(hash)) activateTab(hash, true);
   });
 }
@@ -301,10 +310,10 @@ function activateTab(tab, skipHistory = false) {
 
 function renderTab(tab) {
   switch (tab) {
-    case 'shop':        renderShop(); break;
+    case 'vision':      renderVision(); break;
+    case 'marketplace': renderMarketplace(); break;
     case 'performance': renderPerformance(); break;
     case 'caddy':       renderCaddy(); break;
-    case 'vision':      renderVision(); break;
     case 'profile':     renderProfile(); break;
     case 'docs':        renderDocs();  break;
   }
@@ -313,36 +322,20 @@ function renderTab(tab) {
 // ─────────────────────────────────────────────────────────────
 // 7. SHOP TAB
 // ─────────────────────────────────────────────────────────────
-function renderShop() {
-  const panel = document.getElementById('tab-shop');
+function renderMarketplace() {
+  const panel = document.getElementById('tab-marketplace');
   if (panel.dataset.rendered) {
     filterProducts();
     return;
   }
   panel.dataset.rendered = '1';
   panel.innerHTML = `
-    <!-- Hero banner. The artwork carries its own headline and CTA, so nothing
-         is overlaid on it; the brand statement follows in real copy. -->
-    <div class="shop-banner">
-      <img class="shop-banner-img" src="assets/clubhouse-hero.png"
-        alt="Clubhouse Golf — elevate your game" width="900" height="600">
-      <button class="shop-refresh" id="shop-refresh" type="button"
-        aria-label="Check for updates" title="Check for updates">
-        <span class="shop-refresh-icon" aria-hidden="true">⟳</span>
-        <span class="shop-refresh-label"></span>
-      </button>
+    <div class="tab-header">
+      <h1>Marketplace</h1>
+      <div class="subtitle">EVERYTHING YOU CAN BUY OR SELL.</div>
     </div>
 
-    <header class="shop-hero">
-      <img class="shop-hero-logo" src="assets/clubhouse-logo.png"
-        alt="Clubhouse Golf" width="176" height="117">
-      <div class="brand-eyebrow">Modern Golf. Made Simple.</div>
-      <h1 class="brand-headline">Everything Golf.</h1>
-      <p class="brand-lede">Shop apparel, discover new gear, improve your game, and join the community changing golf.</p>
-    </header>
-
-    <!-- Search bar (below hero) -->
-    <div style="background:var(--golf-green);padding:12px var(--content-pad) 14px">
+    <div style="background:var(--ch-ink);padding:12px var(--content-pad) 14px">
       <div class="search-container">
         <span class="search-icon">🔍</span>
         <input class="search-input" id="shop-search" type="search"
@@ -359,14 +352,16 @@ function renderShop() {
     </div>
     <div class="product-grid" id="product-grid"></div>
 
-    <!-- Shop keeps a short teaser. The full brand story, the eight pillars,
-         the roadmap and the Founding Member CTA live on the Vision tab. -->
+    <!-- What the Marketplace pillar will cover beyond today's store. -->
     <section class="brand-story">
       <article class="story-block">
-        <div class="story-eyebrow">Why Clubhouse Exists</div>
-        <p class="story-lead">Golf has evolved. The experience hasn't.</p>
-        <p>We're building a modern golf brand centered around community, technology, experiences, and products people actually want.</p>
-        <button class="btn btn-outline btn-full" id="shop-see-vision" type="button">See what's coming →</button>
+        <div class="story-eyebrow">Also Coming to Marketplace</div>
+        <p class="story-lead">Everything you can buy or sell.</p>
+        <p>Today this is the Clubhouse store. The wider marketplace opens with the platform.</p>
+        <ul class="story-list">
+          ${['Buy / Sell Used Clubs','Equipment Trade-In','Try Before You Buy','Brand Marketplace',
+             'Simulators','Practice &amp; Training Aids'].map(i => `<li>${i}</li>`).join('')}
+        </ul>
       </article>
     </section>
 
@@ -397,8 +392,7 @@ function renderShop() {
   });
 
   // Pull-latest / update refresh button
-  panel.querySelector('#shop-see-vision').addEventListener('click', () => activateTab('vision'));
-  panel.querySelector('#shop-refresh').addEventListener('click', onShopRefresh);
+  
   reflectUpdateState();   // highlight if an update was already detected
 
   filterProducts();
@@ -1942,7 +1936,7 @@ function currentModelLabel() {
 //      Copy is taken verbatim from chgolfco.com.
 // ─────────────────────────────────────────────────────────────
 const PILLARS = [
-  { id: 'marketplace', icon: '🛒', title: 'Marketplace', tagline: 'Everything you can buy or sell.', status: 'coming',
+  { id: 'marketplace', icon: '🛒', title: 'Marketplace', tagline: 'Everything you can buy or sell.', status: 'beta', goto: 'marketplace',
     features: ['Equipment Marketplace', 'Brand Marketplace', 'Buy / Sell Used Clubs', 'Try Before You Buy',
                'Equipment Trade-In', 'Apparel & Accessories', 'Simulators', 'Health & Wellness', 'Practice & Training Aids'] },
   { id: 'caddy', icon: '🤖', title: 'Caddy AI', tagline: 'Your personal golf assistant.', status: 'beta', goto: 'caddy',
@@ -1980,10 +1974,26 @@ function renderVision() {
   panel.dataset.rendered = '1';
 
   panel.innerHTML = `
-    <div class="tab-header">
-      <h1>Vision</h1>
-      <div class="subtitle">MODERN GOLF. MADE SIMPLE.</div>
+    <!-- Landing surface. The artwork carries its own headline and CTA, so
+         nothing is overlaid on it; the brand statement follows in real copy.
+         The update control lives here because this is the first tab. -->
+    <div class="brand-banner">
+      <img class="brand-banner-img" src="assets/clubhouse-hero.png"
+        alt="Clubhouse Golf — elevate your game" width="900" height="600">
+      <button class="app-refresh" id="app-refresh" type="button"
+        aria-label="Check for updates" title="Check for updates">
+        <span class="app-refresh-icon" aria-hidden="true">⟳</span>
+        <span class="app-refresh-label"></span>
+      </button>
     </div>
+
+    <header class="brand-hero">
+      <img class="brand-hero-logo" src="assets/clubhouse-logo.png"
+        alt="Clubhouse Golf" width="176" height="117">
+      <div class="brand-eyebrow">Modern Golf. Made Simple.</div>
+      <h1 class="brand-headline">Everything Golf.</h1>
+      <p class="brand-lede">Shop apparel, discover new gear, improve your game, and join the community changing golf.</p>
+    </header>
 
     <section class="brand-story">
       <article class="story-block">
@@ -2025,6 +2035,8 @@ function renderVision() {
       </article>
     </section>
   `;
+
+  panel.querySelector('#app-refresh').addEventListener('click', onShopRefresh);
 
   panel.querySelector('.docs-tab-list').addEventListener('click', e => {
     const card = e.target.closest('[data-goto]');
