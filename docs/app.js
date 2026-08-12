@@ -18,7 +18,7 @@ const DATA_BASE = `${BASE}/data`;
 // docs/version.json and the service-worker CACHE_NAME). The running app
 // compares this baked-in value against the live version.json to detect a
 // newer deploy and offer a one-tap "pull latest" refresh.
-const APP_VERSION = '1.4.0';
+const APP_VERSION = '1.5.0';
 const VERSION_URL = `${BASE}/version.json`;
 
 const TABS = ['shop', 'book', 'lessons', 'swing', 'profile', 'docs'];
@@ -308,22 +308,24 @@ function renderShop() {
   }
   panel.dataset.rendered = '1';
   panel.innerHTML = `
-    <!-- Hero Banner -->
+    <!-- Hero Banner — the artwork carries its own headline and CTA, so no
+         text is overlaid on it. The brand message sits in real copy below. -->
     <div class="shop-hero">
-      <div class="shop-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1592937238247-cd0090e02f65?w=1200&q=80')"></div>
-      <div class="shop-hero-content">
-        <img class="shop-hero-logo" src="assets/clubhouse-logo.png" alt="Clubhouse Golf" width="126" height="83">
-        <div class="shop-hero-text">
-          <div class="shop-hero-tagline">Your Complete Golf Companion.</div>
-          <div class="shop-hero-title">Premium Gear,<br><span>Championship Results.</span></div>
-        </div>
-      </div>
+      <img class="shop-hero-img" src="assets/clubhouse-hero.png"
+        alt="Clubhouse Golf — elevate your game" width="900" height="600">
       <button class="shop-refresh" id="shop-refresh" type="button"
         aria-label="Check for updates" title="Check for updates">
         <span class="shop-refresh-icon" aria-hidden="true">⟳</span>
         <span class="shop-refresh-label"></span>
       </button>
     </div>
+
+    <!-- Brand statement -->
+    <section class="brand-statement">
+      <div class="brand-eyebrow">Modern Golf. Made Simple.</div>
+      <h2 class="brand-headline">Everything Golf.</h2>
+      <p class="brand-lede">Shop apparel, discover new gear, improve your game, and join the community changing golf.</p>
+    </section>
 
     <!-- Search bar (below hero) -->
     <div style="background:var(--golf-green);padding:12px var(--content-pad) 14px">
@@ -342,6 +344,40 @@ function renderShop() {
       ).join('')}
     </div>
     <div class="product-grid" id="product-grid"></div>
+
+    <!-- Brand story. Copy only — no membership signup or marketplace
+         functionality is wired up here. -->
+    <section class="brand-story">
+      <article class="story-block">
+        <div class="story-eyebrow">Why Clubhouse Exists</div>
+        <p class="story-lead">Golf has never had more players. Yet somehow the experience feels stuck.</p>
+        <p>We're building a modern golf brand centered around community, technology, experiences, and products people actually want.</p>
+        <p class="story-kicker">This is just the beginning.</p>
+      </article>
+
+      <article class="story-block">
+        <div class="story-eyebrow">The Clubhouse</div>
+        <p class="story-lead">Golf is better together.</p>
+        <p>We're building a nationwide network of golf courses, teaching professionals, brands, creators, influencers, tournament hosts, and business partners — all working together to grow the game.</p>
+      </article>
+
+      <article class="story-block story-block-feature">
+        <div class="story-eyebrow">Become a Founding Member</div>
+        <p class="story-lead">Founding Members are the first 500 golfers invited to join Clubhouse Golf.</p>
+        <p>During our beta launch, you'll receive early access to the platform, help test new features, provide feedback, and play a direct role in shaping the future of Clubhouse Golf before it's available to the public.</p>
+      </article>
+
+      <article class="story-block">
+        <div class="story-eyebrow">Marketplace</div>
+        <p class="story-lead">Everything you can buy or sell.</p>
+        <ul class="story-list">
+          ${['Equipment Marketplace','Brand Marketplace','Buy / Sell Used Clubs','Try Before You Buy',
+             'Equipment Trade-In','Apparel &amp; Accessories','Simulators','Health &amp; Wellness',
+             'Practice &amp; Training Aids'].map(i => `<li>${i}</li>`).join('')}
+        </ul>
+      </article>
+    </section>
+
     <div class="modal-overlay" id="product-modal">
       <div class="modal-sheet" id="product-detail"></div>
     </div>
