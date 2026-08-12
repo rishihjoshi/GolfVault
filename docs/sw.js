@@ -1,29 +1,31 @@
 // Clubhouse Golf Service Worker — Cache-First Strategy
 //
-// NOTE: the '/GolfVault/' path prefix below is NOT stale branding — it is the
-// GitHub Pages base path, which is derived from the repository name. The repo
-// is still called `GolfVault` even though the app is branded Clubhouse Golf.
-// Only change these if the repo is renamed or a custom domain is attached.
-const CACHE_NAME = 'clubhouse-golf-v7';  // bumped: Clubhouse Golf rebrand — forces cache refresh on existing installs
+// All asset paths are RELATIVE to this script's own location, so the worker
+// carries no hardcoded deploy path. It works unchanged at a repo subpath
+// (/whatever/), at a domain root, or behind a custom domain — rename the repo
+// or attach a domain and nothing here needs editing.
+const CACHE_NAME = 'clubhouse-golf-v13';  // bumped: hero artwork + brand copy
+const abs = rel => new URL(rel, self.location).href;
 const STATIC_ASSETS = [
-  '/GolfVault/',
-  '/GolfVault/index.html',
-  '/GolfVault/app.js',
-  '/GolfVault/styles.css',
-  '/GolfVault/manifest.json',
-  '/GolfVault/data/products.json',
-  '/GolfVault/data/coaches.json',
-  '/GolfVault/data/courses.json',
-  '/GolfVault/data/submissions.json',
-  '/GolfVault/data/profile.json',
-  '/GolfVault/icons/icon.svg',
-  '/GolfVault/icons/icon-maskable.svg',
-  '/GolfVault/icons/icon-192.png',
-  '/GolfVault/icons/icon-512.png',
-  '/GolfVault/icons/clubhouse-golf-app-icon.png',
-  '/GolfVault/icons/clubhouse-golf-app-hero.png',
-  '/GolfVault/icons/product-placeholder.svg'
-];
+  './',
+  './index.html',
+  './app.js',
+  './styles.css',
+  './manifest.json',
+  './data/products.json',
+  './data/coaches.json',
+  './data/courses.json',
+  './data/submissions.json',
+  './data/profile.json',
+  './icons/icon.svg',
+  './icons/icon-maskable.svg',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/clubhouse-golf-app-icon.png',
+  './icons/clubhouse-golf-app-hero.png',
+  './icons/product-placeholder.svg',
+  './assets/clubhouse-logo.png'
+].map(abs);
 
 // ── Install: pre-cache static shell ──────────────────────────────────────────
 self.addEventListener('install', event => {
@@ -78,7 +80,7 @@ self.addEventListener('fetch', event => {
     event.respondWith(
       fetch(event.request).catch(() =>
         // On failure, serve the branded placeholder instead of a blank pixel
-        caches.match('/GolfVault/icons/product-placeholder.svg')
+        caches.match(abs('./icons/product-placeholder.svg'))
       )
     );
     return;
@@ -104,7 +106,7 @@ self.addEventListener('fetch', event => {
       }).catch(() => {
         // Offline fallback — return the app shell
         if (event.request.destination === 'document') {
-          return caches.match('/GolfVault/index.html');
+          return caches.match(abs('./index.html'));
         }
       });
     })

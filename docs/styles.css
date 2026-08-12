@@ -1,60 +1,86 @@
 /* ============================================================
    Clubhouse Golf Design System v2
    Finalized Brand Identity — "Your Complete Golf Companion."
-   Montserrat (headings) · Inter (body) · Golf Green + Championship Gold
+   Bebas Neue (headings) · Bricolage Grotesque (body) · Ink + Tan
    ============================================================ */
 
 /* ── 1. Design Tokens ───────────────────────────────────────── */
 :root {
-  /* ── Brand Palette (Finalized) ────────────────────────────── */
-  /* Primary */
-  --golf-green:        #0E4B36;   /* Golf Green — primary brand */
-  --fairway-green:     #123524;   /* Deep Fairway Green — darkest */
-  --championship-gold: #C79A2B;   /* Championship Gold — accent */
+  /* ── Clubhouse Golf Brand Palette ─────────────────────────── */
+  /* Extracted from the rendered brand elements on chgolfco.com:
+     #0A0B0B carries the feature sections, #000000 the header and
+     buttons, #B69571 the primary CTA and tagline, #EEDAB8 the brand
+     badge. The theme's red (#C4301C) is cart/error chrome, not brand. */
+  --ch-ink:     #0A0B0B;   /* Near-black — primary brand surface */
+  --ch-black:   #000000;   /* Nav, buttons, deepest surface */
+  --ch-tan:     #B69571;   /* Brand accent — CTAs, taglines */
+  --ch-sand:    #EEDAB8;   /* Accent light — badges */
+  --ch-white:   #FFFFFF;
+  --ch-surface: #F5F5F5;   /* Secondary background */
+  --ch-border:  #E5E5E5;
+  --ch-subtext: #4D4D4D;
 
-  /* Secondary */
-  --sand-beige:   #E7D9B7;        /* Sand Beige */
-  --cloud-white:  #F8F8F5;        /* Cloud White */
-  --slate-gray:   #404040;        /* Slate Gray — text / nav */
+  /* Legacy token names are retained as aliases so every existing rule
+     re-themes in place. Renaming them would touch ~200 declarations for
+     no behavioural gain. The names read green/gold; the values do not. */
+  --golf-green:        var(--ch-ink);
+  --fairway-green:     var(--ch-black);
+  --championship-gold: var(--ch-tan);
+  --sand-beige:        var(--ch-sand);
+  --cloud-white:       var(--ch-white);
+  --slate-gray:        var(--ch-ink);
 
   /* Tints & shades (derived) */
-  --green-900: var(--fairway-green);
-  --green-800: var(--golf-green);
-  --green-700: #1a6647;
-  --green-600: #22835c;
-  --green-200: #b8ddc9;
-  --green-100: #dff0e7;
-  --gold-600:  #a07322;
-  --gold-500:  var(--championship-gold);
-  --gold-300:  #deb95f;
-  --gold-100:  #f5e9c5;
-  --white:     #ffffff;
-  --off-white: var(--cloud-white);
-  --charcoal:  var(--slate-gray);   /* Nav / Dark surfaces */
-  --gray-800:  #2c2c2c;
-  --gray-700:  #383838;
-  --gray-500:  #6b6b6b;
-  --gray-400:  #909090;
-  --gray-200:  #d4d4d4;
-  --gray-100:  #f3f3f0;            /* Warm near-white background */
+  --green-900: var(--ch-black);
+  --green-800: var(--ch-ink);
+  --green-700: #1C1C1C;
+  --green-600: #2E2E2E;
+  --green-200: #D2D1D2;
+  --green-100: #F0EFEF;
+  --gold-600:  #6E5940;            /* Darkened tan — 6.7:1 on white */
+  --gold-500:  var(--ch-tan);
+  --gold-300:  #CDB295;
+  --gold-100:  var(--ch-sand);
+  --white:     var(--ch-white);
+  --off-white: var(--ch-white);
+  --charcoal:  var(--ch-black);    /* Nav / Dark surfaces */
+  --gray-800:  #1C1C1C;
+  --gray-700:  #2E2E2E;
+  --gray-500:  var(--ch-subtext);
+  --gray-400:  #6F6F6F;
+  /* --gray-300 was referenced but never defined (pre-existing). Harmless
+     while text inherited mid-grey; now it would inherit ink and make
+     disabled calendar days look enabled. */
+  --gray-300:  #ABABAB;
+  --gray-200:  var(--ch-border);
+  --gray-100:  var(--ch-surface);
 
   /* Semantic */
-  --color-primary:      var(--golf-green);
-  --color-accent:       var(--championship-gold);
-  --color-surface:      var(--white);
+  --color-primary:      var(--ch-ink);
+  --color-accent:       var(--ch-tan);
+  --color-surface:      var(--ch-white);
   --color-surface-alt:  var(--gray-100);
-  --color-nav:          var(--slate-gray);
-  --color-text:         var(--slate-gray);
+  --color-nav:          var(--ch-black);
+  --nav-inactive:       #9A9A9A;   /* 6.0:1 on the black nav */
+  --color-text:         var(--ch-ink);
   --color-text-muted:   var(--gray-500);
   --color-border:       var(--gray-200);
-  --color-success:      #2d8a4e;
-  --color-warning:      #d4841a;
-  --color-error:        #c0392b;
+  --color-success:      #2A7259;
+  --color-warning:      #BA7517;
+  --color-error:        #C4301C;
 
   /* Layout */
   --nav-height:    62px;
   --header-height: 56px;
-  --safe-bottom:   0px;
+  /* Safe-area insets. No viewport-fit=cover, so these are 0 in the browser
+     and small-but-correct in standalone PWA mode; the 0px fallback means no
+     gap on plain web. --safe-t clears the Dynamic Island / status bar, which
+     black-translucent lets content slide under. */
+  --safe-t: env(safe-area-inset-top,    0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left,   0px);
+  --safe-r: env(safe-area-inset-right,  0px);
+  --safe-bottom:   var(--safe-b);   /* legacy alias */
   --content-pad:   16px;
   --radius-sm:     8px;
   --radius-md:     12px;
@@ -69,27 +95,30 @@
   --shadow-xl:  0 24px 64px rgba(0,0,0,.20);
 
   /* ── Typography System ────────────────────────────────────── */
-  /* Primary — Montserrat: headings, nav, CTAs, marketing */
-  --font-heading: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
-  /* Secondary — Inter: body copy, forms, dashboards, data */
-  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  /* Primary — Bebas Neue: headings, subheadings, CTAs (condensed caps) */
+  --font-heading: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif;
+  /* Secondary — Bricolage Grotesque: body copy, nav, forms, data */
+  --font-body:    'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono:    'SF Mono', Menlo, Monaco, Consolas, monospace;
 
   /* Legacy aliases (keep for compat) */
   --font-serif: var(--font-heading);
   --font-sans:  var(--font-body);
 
-  /* Heading weights */
-  --fw-hero:    700;   /* Hero Headlines */
-  --fw-section: 600;   /* Section Headers */
-  --fw-nav:     500;   /* Navigation */
-  --fw-cta:     600;   /* Buttons / CTAs */
+  /* Heading weights — Bebas Neue ships weight 400 only. Anything heavier
+     makes the browser synthesise a faux bold, which smears a condensed
+     face. Nav is the exception: it runs on Bricolage, which has 700. */
+  --fw-hero:    400;   /* Hero Headlines */
+  --fw-section: 400;   /* Section Headers */
+  --fw-nav:     700;   /* Navigation — Bricolage Grotesque */
+  --fw-cta:     400;   /* Buttons / CTAs */
 
   /* Motion */
   --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --dur-fast:    150ms;
   --dur-normal:  250ms;
+  --dur-med:     var(--dur-normal);  /* referenced by .loyalty-bar, never defined */
   --dur-slow:    400ms;
 }
 
@@ -98,6 +127,8 @@
 
 html {
   height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
   /* MixologyVault bottom-gap fix:
      Root background matches nav colour — fills iOS safe-area gap without viewport-fit=cover */
   background: var(--color-nav);
@@ -107,11 +138,12 @@ html {
 
 body {
   height: 100%;
+  overflow: hidden;
   font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.5;
   color: var(--color-text);
-  background: var(--color-surface-alt);
+  background: var(--ch-ink);
   overscroll-behavior: none;
   -webkit-overflow-scrolling: touch;
 }
@@ -127,6 +159,9 @@ ul, ol { list-style: none; }
   display: flex;
   flex-direction: column;
   height: 100%;
+  padding-top: var(--safe-t);
+  padding-left: var(--safe-l);
+  padding-right: var(--safe-r);
   max-width: 480px;
   margin: 0 auto;
   background: var(--color-surface-alt);
@@ -143,8 +178,17 @@ ul, ol { list-style: none; }
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
   /* Enough bottom padding so content clears the nav bar */
-  padding-bottom: calc(var(--nav-height) + 16px);
+  padding-bottom: calc(var(--nav-height) + var(--safe-b) + 16px);
   position: relative;
+}
+
+/* Native-app feel on chrome only. The blueprint puts user-select:none on
+   body, but this app has content worth copying — AI chat answers, product
+   names, order refs — so selection is disabled on controls and kept on copy. */
+#bottom-nav, .tab-header, .filter-chip, .btn, .nav-btn,
+.shop-refresh, .modal-handle, .cart-badge, .story-list li {
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* ── 5. Tab Panels ──────────────────────────────────────────── */
@@ -171,18 +215,18 @@ ul, ol { list-style: none; }
 }
 .tab-header h1 {
   font-family: var(--font-heading);
-  font-size: 22px;
+  font-size: 26px;
   font-weight: var(--fw-hero);
-  letter-spacing: -0.2px;
+  letter-spacing: 0.5px;
 }
 .tab-header .subtitle {
   font-family: var(--font-heading);
-  font-size: 10px;
+  font-size: 11px;
   color: var(--gold-300);
   letter-spacing: 1.5px;
   text-transform: uppercase;
   margin-top: 3px;
-  font-weight: var(--fw-nav);
+  font-weight: 400;
 }
 
 /* ── 7. Bottom Navigation ───────────────────────────────────── */
@@ -196,6 +240,17 @@ ul, ol { list-style: none; }
   height: var(--nav-height);
   flex-shrink: 0;
 }
+/* Extend the nav colour through the home-indicator strip so no light band
+   shows below it in standalone mode. */
+#bottom-nav::after {
+  content: '';
+  position: absolute;
+  bottom: calc(-1 * var(--safe-b));
+  left: 0;
+  right: 0;
+  height: var(--safe-b);
+  background: var(--color-nav);
+}
 
 .nav-btn {
   display: flex;
@@ -204,8 +259,8 @@ ul, ol { list-style: none; }
   justify-content: center;
   gap: 3px;
   padding: 6px 4px 8px;
-  color: var(--gray-500);
-  font-family: var(--font-heading);
+  color: var(--nav-inactive);
+  font-family: var(--font-body);
   font-size: 10px;
   font-weight: var(--fw-nav);
   letter-spacing: 0.4px;
@@ -274,7 +329,7 @@ ul, ol { list-style: none; }
 #install-prompt {
   display: none;
   position: fixed;
-  bottom: calc(var(--nav-height) + 16px);
+  bottom: calc(var(--nav-height) + var(--safe-b) + 16px);
   left: 16px;
   right: 16px;
   max-width: calc(480px - 32px);
@@ -285,7 +340,7 @@ ul, ol { list-style: none; }
   padding: 16px;
   box-shadow: var(--shadow-xl);
   z-index: 200;
-  border: 1px solid rgba(201,168,76,.3);
+  border: 1px solid rgba(182,149,113,.35);
   animation: slideUp var(--dur-slow) var(--ease-out);
 }
 #install-prompt.show { display: flex; gap: 12px; align-items: flex-start; }
@@ -301,7 +356,7 @@ ul, ol { list-style: none; }
   padding: 14px 16px;
   border-radius: var(--radius-lg);
   margin: 12px var(--content-pad);
-  border: 1px solid rgba(201,168,76,.3);
+  border: 1px solid rgba(182,149,113,.35);
   font-size: 13px;
   line-height: 1.5;
 }
@@ -314,11 +369,11 @@ ul, ol { list-style: none; }
 }
 
 /* ── 10. Typography ─────────────────────────────────────────── */
-h1 { font-size: 24px; font-weight: var(--fw-hero); font-family: var(--font-heading); letter-spacing: -0.3px; }
-h2 { font-size: 20px; font-weight: var(--fw-section); font-family: var(--font-heading); }
-h3 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-heading); }
-h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-heading); }
-/* .serif kept for legacy — now maps to Montserrat */
+h1 { font-size: 28px; font-weight: var(--fw-hero); font-family: var(--font-heading); letter-spacing: 0.5px; }
+h2 { font-size: 23px; font-weight: var(--fw-section); font-family: var(--font-heading); letter-spacing: 0.4px; }
+h3 { font-size: 19px; font-weight: var(--fw-section); font-family: var(--font-heading); letter-spacing: 0.3px; }
+h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-heading); letter-spacing: 0.3px; }
+/* .serif kept for legacy — now maps to Bebas Neue */
 .serif { font-family: var(--font-heading); font-weight: var(--fw-section); }
 .muted { color: var(--color-text-muted); }
 .gold  { color: var(--gold-500); }
@@ -332,9 +387,9 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
   padding: 12px 20px;
   border-radius: var(--radius-md);
   font-family: var(--font-heading);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: var(--fw-cta);
-  letter-spacing: 0.3px;
+  letter-spacing: 0.8px;
   transition: all var(--dur-fast) ease;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
@@ -352,7 +407,7 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
 .btn-accent {
   background: var(--gold-500);
   color: var(--charcoal);
-  font-weight: 700;
+  font-weight: 400;
 }
 .btn-accent:hover { background: var(--gold-300); }
 
@@ -533,7 +588,7 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
   color: var(--gray-500);
   margin-top: 4px;
 }
-.product-rating .stars { color: var(--gold-500); }
+.product-rating .stars { color: var(--gold-600); }
 
 /* ── 16. Product Detail Modal ───────────────────────────────── */
 .modal-overlay {
@@ -556,7 +611,7 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   animation: sheetUp var(--dur-slow) var(--ease-out);
-  padding-bottom: calc(var(--nav-height) + 24px);
+  padding-bottom: calc(var(--nav-height) + var(--safe-b) + 24px);
 }
 @keyframes sheetUp {
   from { transform: translateY(100%); }
@@ -602,8 +657,8 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
 .detail-body { padding: 20px var(--content-pad); }
 .detail-name {
   font-family: var(--font-serif);
-  font-size: 22px;
-  font-weight: bold;
+  font-size: 25px;
+  font-weight: 400;
   line-height: 1.25;
   margin-bottom: 6px;
 }
@@ -733,7 +788,7 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
   margin-bottom: 16px;
 }
 .cart-total-label { font-size: 14px; color: var(--gray-500); }
-.cart-total-price { font-size: 22px; font-weight: 700; color: var(--green-800); font-family: var(--font-serif); }
+.cart-total-price { font-size: 25px; font-weight: 400; color: var(--green-800); font-family: var(--font-serif); }
 
 /* ── 18. Coach Cards ────────────────────────────────────────── */
 .coaches-list { padding: 16px var(--content-pad); display: flex; flex-direction: column; gap: 16px; }
@@ -769,7 +824,7 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
   border-radius: var(--radius-full);
 }
 .coach-meta { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--gray-500); }
-.coach-rating .stars { color: var(--gold-500); }
+.coach-rating .stars { color: var(--gold-600); }
 
 /* ── 19. Booking Flow ───────────────────────────────────────── */
 .booking-screen { padding: 16px var(--content-pad); }
@@ -962,10 +1017,11 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
 .course-locked-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(27,67,50,.6);
+  background: rgba(10,11,11,.6);
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--white);
   font-size: 28px;
 }
 .course-play-btn {
@@ -975,6 +1031,7 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--white);
   font-size: 32px;
 }
 
@@ -1076,7 +1133,7 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
 .sub-prompt p { font-size: 13px; color: rgba(255,255,255,.75); line-height: 1.5; margin-bottom: 16px; }
 .sub-prompt-price {
   font-size: 28px;
-  font-weight: 700;
+  font-weight: 400;
   color: var(--gold-500);
   font-family: var(--font-serif);
   margin-bottom: 4px;
@@ -1179,6 +1236,7 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
   align-items: center;
   justify-content: center;
   background: rgba(0,0,0,.3);
+  color: var(--white);
   font-size: 28px;
 }
 .sub-info { padding: 12px 14px; flex: 1; min-width: 0; }
@@ -1234,7 +1292,7 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
 /* ── 22. AI Chat ────────────────────────────────────────────── */
 #chat-fab {
   position: fixed;
-  bottom: calc(var(--nav-height) + 16px);
+  bottom: calc(var(--nav-height) + var(--safe-b) + 16px);
   right: 16px;
   width: 52px;
   height: 52px;
@@ -1242,7 +1300,7 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
   background: var(--green-800);
   color: var(--white);
   font-size: 22px;
-  box-shadow: 0 4px 16px rgba(27,67,50,.45);
+  box-shadow: 0 4px 16px rgba(10,11,11,.45);
   border: 2px solid var(--gold-500);
   z-index: 150;
   display: flex;
@@ -1253,7 +1311,7 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
   touch-action: manipulation;
 }
 #chat-fab:active { transform: scale(0.92); }
-#chat-fab:hover { box-shadow: 0 6px 24px rgba(27,67,50,.55); }
+#chat-fab:hover { box-shadow: 0 6px 24px rgba(10,11,11,.55); }
 
 /* Hide FAB when chat is open */
 #chat-fab.hidden { display: none; }
@@ -1522,7 +1580,7 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
 /* ── 24. Toast Notifications ────────────────────────────────── */
 .toast {
   position: fixed;
-  bottom: calc(var(--nav-height) + 80px);
+  bottom: calc(var(--nav-height) + var(--safe-b) + 80px);
   left: 50%;
   transform: translateX(-50%) translateY(8px);
   background: var(--charcoal);
@@ -1581,70 +1639,109 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
 /* ── 26. Hero Banner ────────────────────────────────────────── */
 .shop-hero {
   position: relative;
-  width: 100%;
-  height: 190px;
-  overflow: hidden;
-  background: var(--fairway-green);
-}
-/* Scenic golf background photo */
-.shop-hero-bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center 62%;
-}
-/* Dark-green scrim for text legibility */
-.shop-hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    115deg,
-    rgba(18, 53, 36, 0.92) 0%,
-    rgba(14, 75, 54, 0.78) 45%,
-    rgba(14, 75, 54, 0.42) 100%
-  );
-}
-.shop-hero-content {
-  position: relative;
-  z-index: 1;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 0 var(--content-pad);
+  background: var(--ch-ink);
+  padding: 26px var(--content-pad) 26px;
+  text-align: center;
 }
 .shop-hero-logo {
-  width: 72px;
-  height: 72px;
-  border-radius: 16px;
-  flex-shrink: 0;
-  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+  display: block;
+  width: 204px;
+  height: auto;
+  margin: 0 auto 18px;
 }
-.shop-hero-text {
-  display: flex;
-  flex-direction: column;
-}
-.shop-hero-tagline {
+
+/* ── Brand statement (inside the hero) ───────────────────────── */
+.brand-eyebrow {
   font-family: var(--font-heading);
-  font-size: 11px;
-  font-weight: var(--fw-nav);
+  font-size: 13px;
+  font-weight: 400;
   letter-spacing: 2.5px;
   text-transform: uppercase;
-  color: var(--championship-gold);
-  margin-bottom: 6px;
+  color: var(--ch-tan);
+  margin-bottom: 8px;
 }
-.shop-hero-title {
+.brand-headline {
   font-family: var(--font-heading);
-  font-size: 25px;
+  font-size: 34px;
   font-weight: var(--fw-hero);
+  letter-spacing: 1px;
+  text-transform: uppercase;
   color: var(--white);
-  line-height: 1.15;
-  letter-spacing: -0.5px;
-  text-shadow: 0 1px 8px rgba(0,0,0,.35);
+  line-height: 1.05;
+  margin-bottom: 10px;
 }
-.shop-hero-title span {
-  color: var(--championship-gold);
+.brand-lede {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #D2D1D2;
+  max-width: 34ch;
+  margin: 0 auto;
+}
+
+/* ── Brand story blocks (below the product grid) ─────────────── */
+.brand-story {
+  padding: 4px var(--content-pad) 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.story-block {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 18px 16px;
+}
+.story-block p {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--gray-500);
+  margin-bottom: 10px;
+}
+.story-block p:last-child { margin-bottom: 0; }
+.story-eyebrow {
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold-600);
+  margin-bottom: 8px;
+}
+.story-lead {
+  font-family: var(--font-heading);
+  font-size: 21px !important;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  color: var(--color-text) !important;
+  line-height: 1.25 !important;
+  margin-bottom: 10px;
+}
+.story-kicker {
+  color: var(--gold-600) !important;
+  font-weight: 500;
+}
+/* Founding Member block inverts to pull focus */
+.story-block-feature {
+  background: var(--ch-ink);
+  border-color: var(--ch-ink);
+}
+.story-block-feature .story-eyebrow { color: var(--ch-tan); }
+.story-block-feature .story-lead { color: var(--white) !important; }
+.story-block-feature p { color: #D2D1D2; }
+.story-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+.story-list li {
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--gold-600);
+  background: var(--gold-100);
+  border-radius: var(--radius-full);
+  padding: 5px 11px;
 }
 
 /* Pull-latest / update refresh button (top-right of hero) */
@@ -1660,7 +1757,7 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
   padding: 0 10px;
   border: 1px solid rgba(255,255,255,.35);
   border-radius: var(--radius-full);
-  background: rgba(18, 53, 36, 0.45);
+  background: rgba(10, 11, 11, 0.55);
   backdrop-filter: blur(4px);
   color: var(--white);
   cursor: pointer;
@@ -1672,7 +1769,7 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
 .shop-refresh-label {
   font-family: var(--font-heading);
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: .5px;
   text-transform: uppercase;
   white-space: nowrap;
@@ -1724,12 +1821,12 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
   align-items: center;
   justify-content: center;
   font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 22px;
+  font-weight: 400;
+  font-size: 24px;
   flex-shrink: 0;
 }
 .profile-identity-info { flex: 1; min-width: 0; }
-.profile-name { font-family: var(--font-heading); font-weight: 700; font-size: 18px; }
+.profile-name { font-family: var(--font-heading); font-weight: 400; font-size: 20px; }
 .profile-email { font-size: 13px; color: rgba(255,255,255,.8); }
 .profile-member { font-size: 11px; color: var(--gold-300); margin-top: 2px; }
 .profile-tier-chip {
@@ -1737,7 +1834,7 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
   background: var(--championship-gold);
   color: var(--fairway-green);
   font-family: var(--font-heading);
-  font-weight: 600;
+  font-weight: 400;
   font-size: 11px;
   letter-spacing: .5px;
   text-transform: uppercase;
@@ -1749,23 +1846,23 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
   margin: var(--content-pad);
   padding: 18px;
   border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, var(--fairway-green), var(--golf-green));
+  background: linear-gradient(135deg, var(--ch-black), var(--gray-700));
   color: var(--white);
   box-shadow: var(--shadow-md);
 }
 .loyalty-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
 .loyalty-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold-300); }
-.loyalty-points { font-family: var(--font-heading); font-weight: 700; font-size: 32px; color: var(--championship-gold); line-height: 1.1; }
-.loyalty-tier { font-family: var(--font-heading); font-size: 12px; font-weight: 600; background: rgba(255,255,255,.12); padding: 6px 10px; border-radius: var(--radius-full); white-space: nowrap; }
+.loyalty-points { font-family: var(--font-heading); font-weight: 400; font-size: 34px; color: var(--championship-gold); line-height: 1.1; }
+.loyalty-tier { font-family: var(--font-heading); font-size: 12px; font-weight: 400; background: rgba(255,255,255,.12); padding: 6px 10px; border-radius: var(--radius-full); white-space: nowrap; }
 .loyalty-bar-wrap { height: 8px; border-radius: var(--radius-full); background: rgba(255,255,255,.18); overflow: hidden; }
 .loyalty-bar { height: 100%; border-radius: var(--radius-full); background: var(--championship-gold); transition: width var(--dur-med) ease; }
 .loyalty-next { font-size: 12px; color: rgba(255,255,255,.85); margin-top: 8px; }
 
 .profile-section { padding: 4px var(--content-pad) 8px; }
 .profile-section-head { display: flex; align-items: center; justify-content: space-between; margin: 16px 0 10px; }
-.profile-section-head h2 { font-family: var(--font-heading); font-size: 15px; font-weight: 600; color: var(--charcoal); }
+.profile-section-head h2 { font-family: var(--font-heading); font-size: 16px; font-weight: 400; color: var(--charcoal); }
 .profile-count { font-size: 12px; color: var(--gray-500); background: var(--gray-100); padding: 2px 9px; border-radius: var(--radius-full); }
-.profile-add-btn { background: none; border: none; color: var(--golf-green); font-family: var(--font-heading); font-weight: 600; font-size: 13px; cursor: pointer; padding: 4px; }
+.profile-add-btn { background: none; border: none; color: var(--golf-green); font-family: var(--font-heading); font-weight: 400; font-size: 13px; cursor: pointer; padding: 4px; }
 
 .profile-order, .profile-card-row {
   background: var(--white);
@@ -1776,14 +1873,14 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
 }
 .profile-order { padding: 14px; }
 .profile-order-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-.profile-order-id { font-family: var(--font-heading); font-weight: 600; font-size: 14px; color: var(--charcoal); }
+.profile-order-id { font-family: var(--font-heading); font-weight: 400; font-size: 14px; color: var(--charcoal); }
 .profile-order-date { font-size: 12px; color: var(--gray-500); }
 .profile-order-items { border-top: 1px dashed var(--color-border); padding-top: 8px; }
 .profile-order-item { display: flex; justify-content: space-between; font-size: 13px; color: var(--gray-700); padding: 3px 0; gap: 12px; }
 .profile-order-total { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border); margin-top: 8px; padding-top: 8px; font-size: 13px; }
-.profile-order-total .serif { font-family: var(--font-heading); font-weight: 700; font-size: 16px; color: var(--golf-green); }
+.profile-order-total .serif { font-family: var(--font-heading); font-weight: 400; font-size: 16px; color: var(--golf-green); }
 
-.order-status { font-family: var(--font-heading); font-size: 10px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; padding: 3px 9px; border-radius: var(--radius-full); white-space: nowrap; }
+.order-status { font-family: var(--font-heading); font-size: 10px; font-weight: 400; letter-spacing: .5px; text-transform: uppercase; padding: 3px 9px; border-radius: var(--radius-full); white-space: nowrap; }
 .order-status-delivered { background: var(--green-100); color: var(--color-success); }
 .order-status-shipped { background: var(--gold-100); color: var(--gold-600); }
 .order-status-processing { background: var(--gray-100); color: var(--gray-700); }
@@ -1791,9 +1888,9 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
 .profile-card-row { display: flex; align-items: flex-start; gap: 12px; padding: 14px; }
 .profile-card-glyph { font-size: 22px; line-height: 1; flex-shrink: 0; }
 .profile-card-main { flex: 1; min-width: 0; }
-.profile-card-title { font-family: var(--font-heading); font-weight: 600; font-size: 14px; color: var(--charcoal); }
+.profile-card-title { font-family: var(--font-heading); font-weight: 400; font-size: 14px; color: var(--charcoal); }
 .profile-card-sub { font-size: 12px; color: var(--gray-500); line-height: 1.6; margin-top: 2px; }
-.profile-default { display: inline-block; background: var(--green-100); color: var(--color-success); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; padding: 1px 7px; border-radius: var(--radius-full); margin-left: 4px; vertical-align: middle; }
+.profile-default { display: inline-block; background: var(--green-100); color: var(--color-success); font-size: 10px; font-weight: 400; text-transform: uppercase; letter-spacing: .5px; padding: 1px 7px; border-radius: var(--radius-full); margin-left: 4px; vertical-align: middle; }
 
 /* ── 27. Desktop Layout ─────────────────────────────────────── */
 @media (min-width: 481px) {
@@ -1856,15 +1953,15 @@ h4 { font-size: 15px; font-weight: var(--fw-nav); font-family: var(--font-headin
 .doc-card-tag {
   font-family: var(--font-heading);
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: var(--championship-gold);
+  color: var(--gold-600);
 }
 .doc-card-title {
   font-family: var(--font-heading);
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 400;
   color: var(--color-text);
   line-height: 1.25;
 }
