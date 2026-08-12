@@ -1,5 +1,5 @@
 {
-  "version": "1.7.0",
-  "build": "2026-08-11",
+  "version": "1.9.1",
+  "build": "2026-08-12",
   "notes": "Bump this version on every deploy (keep in sync with APP_VERSION in app.js and CACHE_NAME in sw.js) so the PWA can detect a new release and offer the Shop refresh/update button."
 }

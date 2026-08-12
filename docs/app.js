@@ -18,10 +18,10 @@ const DATA_BASE = `${BASE}/data`;
 // docs/version.json and the service-worker CACHE_NAME). The running app
 // compares this baked-in value against the live version.json to detect a
 // newer deploy and offer a one-tap "pull latest" refresh.
-const APP_VERSION = '1.7.0';
+const APP_VERSION = '1.9.1';
 const VERSION_URL = `${BASE}/version.json`;
 
-const TABS = ['shop', 'book', 'lessons', 'swing', 'profile', 'docs'];
+const TABS = ['shop', 'performance', 'caddy', 'vision', 'profile', 'docs'];
 const DEFAULT_TAB = 'shop';
 const CLAUDE_API = 'https://api.anthropic.com/v1/messages';
 const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
@@ -29,7 +29,7 @@ const MODELS = [
   { id: 'claude-haiku-4-5-20251001',  label: 'Haiku 4.5 (fast & affordable)' },
   { id: 'claude-sonnet-4-6',           label: 'Sonnet 4.6 (balanced)' },
 ];
-const SYSTEM_PROMPT = `You are an expert golf coach and premium golf equipment advisor for Clubhouse Golf, a high-end golf platform.
+const SYSTEM_PROMPT = `You are Caddy AI, the personal golf assistant for Clubhouse Golf.
 
 You help golfers with:
 • Club selection and fitting advice based on their swing characteristics and handicap
@@ -42,13 +42,16 @@ You help golfers with:
 
 Tone: knowledgeable, encouraging, precise — like a PGA Tour caddie who is also a PGA professional coach.
 Keep responses concise but complete (2–4 paragraphs max). Use bullet points for lists.
-When recommending equipment, naturally reference products that would be found in a premium golf shop.
-Never make up specific product model numbers unless you are confident they exist.`;
+Never make up specific product model numbers unless you are confident they exist.
+You cannot see the golfer's bag, rounds or swing — ask for the detail you need rather than assuming it.`;
 
 // ─────────────────────────────────────────────────────────────
 // 2. APPLICATION STATE
 // ─────────────────────────────────────────────────────────────
 const state = {
+  // Navigation
+  activeTab: DEFAULT_TAB,
+
   // Data
   products: [],
   coaches: [],
@@ -83,6 +86,11 @@ const state = {
   selectedCourse: null,
   videoProgress: {},  // { courseId: percent }
   subscribed: false,
+
+  // Performance sub-tab — 'swing' | 'lessons' | 'coaching' | 'stats'.
+  // Deliberately NOT state.activeTopic, which the Lessons topic filter owns
+  // and which now renders inside Performance.
+  perfSub: 'swing',
 
   // Swing
   selectedSubmission: null,
@@ -272,10 +280,15 @@ function setupNavigation() {
 }
 
 function activateTab(tab, skipHistory = false) {
+  state.activeTab = tab;
+
   // Update nav buttons
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === tab);
   });
+  // The FAB is redundant on Caddy, which has its own Ask button.
+  syncFab(tab);
+
   // Show/hide panels
   document.querySelectorAll('.tab-panel').forEach(panel => {
     const isActive = panel.id === `tab-${tab}`;
@@ -288,12 +301,12 @@ function activateTab(tab, skipHistory = false) {
 
 function renderTab(tab) {
   switch (tab) {
-    case 'shop':    renderShop(); break;
-    case 'book':    renderBooking(); break;
-    case 'lessons': renderLessons(); break;
-    case 'swing':   renderSwing(); break;
-    case 'profile': renderProfile(); break;
-    case 'docs':    renderDocs();  break;
+    case 'shop':        renderShop(); break;
+    case 'performance': renderPerformance(); break;
+    case 'caddy':       renderCaddy(); break;
+    case 'vision':      renderVision(); break;
+    case 'profile':     renderProfile(); break;
+    case 'docs':        renderDocs();  break;
   }
 }
 
@@ -308,19 +321,24 @@ function renderShop() {
   }
   panel.dataset.rendered = '1';
   panel.innerHTML = `
-    <!-- Hero — the mark on ink, then the brand statement. One identity:
-         the Clubhouse Golf logo and the chgolfco.com palette. -->
-    <header class="shop-hero">
-      <img class="shop-hero-logo" src="assets/clubhouse-logo.png"
-        alt="Clubhouse Golf" width="204" height="135">
-      <div class="brand-eyebrow">Modern Golf. Made Simple.</div>
-      <h1 class="brand-headline">Everything Golf.</h1>
-      <p class="brand-lede">Shop apparel, discover new gear, improve your game, and join the community changing golf.</p>
+    <!-- Hero banner. The artwork carries its own headline and CTA, so nothing
+         is overlaid on it; the brand statement follows in real copy. -->
+    <div class="shop-banner">
+      <img class="shop-banner-img" src="assets/clubhouse-hero.png"
+        alt="Clubhouse Golf — elevate your game" width="900" height="600">
       <button class="shop-refresh" id="shop-refresh" type="button"
         aria-label="Check for updates" title="Check for updates">
         <span class="shop-refresh-icon" aria-hidden="true">⟳</span>
         <span class="shop-refresh-label"></span>
       </button>
+    </div>
+
+    <header class="shop-hero">
+      <img class="shop-hero-logo" src="assets/clubhouse-logo.png"
+        alt="Clubhouse Golf" width="176" height="117">
+      <div class="brand-eyebrow">Modern Golf. Made Simple.</div>
+      <h1 class="brand-headline">Everything Golf.</h1>
+      <p class="brand-lede">Shop apparel, discover new gear, improve your game, and join the community changing golf.</p>
     </header>
 
     <!-- Search bar (below hero) -->
@@ -341,36 +359,14 @@ function renderShop() {
     </div>
     <div class="product-grid" id="product-grid"></div>
 
-    <!-- Brand story. Copy only — no membership signup or marketplace
-         functionality is wired up here. -->
+    <!-- Shop keeps a short teaser. The full brand story, the eight pillars,
+         the roadmap and the Founding Member CTA live on the Vision tab. -->
     <section class="brand-story">
       <article class="story-block">
         <div class="story-eyebrow">Why Clubhouse Exists</div>
-        <p class="story-lead">Golf has never had more players. Yet somehow the experience feels stuck.</p>
+        <p class="story-lead">Golf has evolved. The experience hasn't.</p>
         <p>We're building a modern golf brand centered around community, technology, experiences, and products people actually want.</p>
-        <p class="story-kicker">This is just the beginning.</p>
-      </article>
-
-      <article class="story-block">
-        <div class="story-eyebrow">The Clubhouse</div>
-        <p class="story-lead">Golf is better together.</p>
-        <p>We're building a nationwide network of golf courses, teaching professionals, brands, creators, influencers, tournament hosts, and business partners — all working together to grow the game.</p>
-      </article>
-
-      <article class="story-block story-block-feature">
-        <div class="story-eyebrow">Become a Founding Member</div>
-        <p class="story-lead">Founding Members are the first 500 golfers invited to join Clubhouse Golf.</p>
-        <p>During our beta launch, you'll receive early access to the platform, help test new features, provide feedback, and play a direct role in shaping the future of Clubhouse Golf before it's available to the public.</p>
-      </article>
-
-      <article class="story-block">
-        <div class="story-eyebrow">Marketplace</div>
-        <p class="story-lead">Everything you can buy or sell.</p>
-        <ul class="story-list">
-          ${['Equipment Marketplace','Brand Marketplace','Buy / Sell Used Clubs','Try Before You Buy',
-             'Equipment Trade-In','Apparel &amp; Accessories','Simulators','Health &amp; Wellness',
-             'Practice &amp; Training Aids'].map(i => `<li>${i}</li>`).join('')}
-        </ul>
+        <button class="btn btn-outline btn-full" id="shop-see-vision" type="button">See what's coming →</button>
       </article>
     </section>
 
@@ -401,6 +397,7 @@ function renderShop() {
   });
 
   // Pull-latest / update refresh button
+  panel.querySelector('#shop-see-vision').addEventListener('click', () => activateTab('vision'));
   panel.querySelector('#shop-refresh').addEventListener('click', onShopRefresh);
   reflectUpdateState();   // highlight if an update was already detected
 
@@ -659,10 +656,84 @@ function setupGlobalCart() {
 }
 
 // ─────────────────────────────────────────────────────────────
+// 7b. PERFORMANCE TAB — hosts Swing, Lessons and Coaching as sub-views.
+// The brand groups all three under one pillar ("Track, improve, and compete."),
+// so they are sub-tabs here rather than three top-level destinations.
+// ─────────────────────────────────────────────────────────────
+const PERF_SUBS = [
+  { id: 'swing',    label: 'Swing' },
+  { id: 'lessons',  label: 'Lessons' },
+  { id: 'coaching', label: 'Coaching' },
+  { id: 'stats',    label: 'Stats' },
+];
+
+function renderPerformance() {
+  const panel = document.getElementById('tab-performance');
+
+  if (!panel.dataset.rendered) {
+    panel.dataset.rendered = '1';
+    panel.innerHTML = `
+      <div class="tab-header">
+        <h1>Performance</h1>
+        <div class="subtitle">TRACK, IMPROVE, AND COMPETE.</div>
+      </div>
+      <div class="topic-tabs" id="perf-subnav" role="tablist">
+        ${PERF_SUBS.map(t => `<button class="topic-tab${state.perfSub === t.id ? ' active' : ''}" data-sub="${t.id}">${t.label}</button>`).join('')}
+      </div>
+      <div class="perf-body" id="perf-body"></div>
+    `;
+
+    // data-sub, not data-topic — the Lessons topic filter renders inside this
+    // panel and listens for [data-topic] on its own row.
+    panel.querySelector('#perf-subnav').addEventListener('click', e => {
+      const btn = e.target.closest('[data-sub]');
+      if (!btn || btn.dataset.sub === state.perfSub) return;
+      state.perfSub = btn.dataset.sub;
+      panel.querySelectorAll('#perf-subnav .topic-tab').forEach(b =>
+        b.classList.toggle('active', b.dataset.sub === state.perfSub));
+      renderPerfBody();
+    });
+  }
+
+  renderPerfBody();
+}
+
+function renderPerfBody() {
+  const body = document.getElementById('perf-body');
+  if (!body) return;
+
+  // The sub-renderers guard on dataset.rendered, so clear it when swapping
+  // views or they refuse to redraw into the reused container.
+  delete body.dataset.rendered;
+  body.innerHTML = '';
+  body.className = 'perf-body perf-' + state.perfSub;
+
+  switch (state.perfSub) {
+    case 'swing':    renderSwing(body); break;
+    case 'lessons':  renderLessons(body); break;
+    case 'coaching': renderBooking(body); break;
+    case 'stats':    body.innerHTML = perfStatsHtml(); break;
+  }
+}
+
+// Not built. The four features are the brand site's own Performance list.
+function perfStatsHtml() {
+  const soon = ['Shot tracking', 'Handicap dashboard', 'Performance analytics', 'Virtual coaching'];
+  return `
+    <div class="empty-state">
+      <div class="empty-icon">📊</div>
+      <h3>Stats are on the way</h3>
+      <p>Round-by-round tracking and analytics arrive with the Performance pillar.</p>
+      <ul class="story-list" style="justify-content:center;margin-top:14px">
+        ${soon.map(f => `<li>${escHtml(f)}</li>`).join('')}
+      </ul>
+    </div>`;
+}
+
+// ─────────────────────────────────────────────────────────────
 // 8. BOOK A SESSION TAB
 // ─────────────────────────────────────────────────────────────
-function renderBooking() {
-  const panel = document.getElementById('tab-book');
+function renderBooking(panel = document.getElementById('tab-book')) {
   panel.innerHTML = bookingHtml();
   wireBookingEvents(panel);
 }
@@ -729,7 +800,7 @@ function wireBookingEvents(panel) {
       state.selectedTime = null;
       state.selectedSession = null;
       state.calendarDate = new Date();
-      renderBooking();
+      renderBooking(panel);
     });
   });
 
@@ -737,7 +808,7 @@ function wireBookingEvents(panel) {
   panel.querySelector('.booking-back')?.addEventListener('click', () => {
     if (state.bookingStep === 'details') { state.bookingStep = 'coaches'; }
     else if (state.bookingStep === 'confirm') { state.bookingStep = 'details'; }
-    renderBooking();
+    renderBooking(panel);
   });
 
   // Session type buttons
@@ -753,11 +824,11 @@ function wireBookingEvents(panel) {
   panel.querySelector('.cal-prev')?.addEventListener('click', () => {
     state.calendarDate = new Date(state.calendarDate.getFullYear(), state.calendarDate.getMonth() - 1, 1);
     panel.querySelector('.calendar-wrap').outerHTML = calendarHtml(state.calendarDate);
-    renderBooking(); // re-render for simplicity
+    renderBooking(panel); // re-render for simplicity
   });
   panel.querySelector('.cal-next')?.addEventListener('click', () => {
     state.calendarDate = new Date(state.calendarDate.getFullYear(), state.calendarDate.getMonth() + 1, 1);
-    renderBooking();
+    renderBooking(panel);
   });
 
   // Day selection
@@ -793,13 +864,13 @@ function wireBookingEvents(panel) {
     if (!state.selectedTime) { showToast('Please select a time slot'); return; }
     if (!state.selectedSession) { showToast('Please select a session type'); return; }
     state.bookingStep = 'confirm';
-    renderBooking();
+    renderBooking(panel);
   });
 
   // Confirm booking
   panel.querySelector('#booking-confirm-btn')?.addEventListener('click', () => {
     state.bookingStep = 'confirmed';
-    renderBooking();
+    renderBooking(panel);
   });
 
   // Start over
@@ -809,7 +880,7 @@ function wireBookingEvents(panel) {
     state.selectedDate = null;
     state.selectedTime = null;
     state.selectedSession = null;
-    renderBooking();
+    renderBooking(panel);
   });
 }
 
@@ -1015,8 +1086,7 @@ function bookingConfirmedHtml() {
 // ─────────────────────────────────────────────────────────────
 const TOPICS = ['all','driving','putting','chipping','bunker','irons','strategy','mental','advanced','fitness','fundamentals'];
 
-function renderLessons() {
-  const panel = document.getElementById('tab-lessons');
+function renderLessons(panel = document.getElementById('tab-lessons')) {
   if (!panel.dataset.rendered) {
     panel.dataset.rendered = '1';
     panel.innerHTML = `
@@ -1197,8 +1267,7 @@ function closeVideoModal() {
 // ─────────────────────────────────────────────────────────────
 // 10. SWING ANALYSIS TAB
 // ─────────────────────────────────────────────────────────────
-function renderSwing() {
-  const panel = document.getElementById('tab-swing');
+function renderSwing(panel = document.getElementById('tab-swing')) {
   if (panel.dataset.rendered) {
     renderSubmissionList();
     return;
@@ -1489,19 +1558,25 @@ function setupChat() {
 
 function openChat() {
   const modal = document.getElementById('chat-modal');
-  const fab = document.getElementById('chat-fab');
   modal.classList.add('open');
-  fab.classList.add('hidden');
   state.chatOpen = true;
+  syncFab();
   setTimeout(() => modal.querySelector('.chat-input')?.focus(), 300);
 }
 
 function closeChat() {
   const modal = document.getElementById('chat-modal');
-  const fab = document.getElementById('chat-fab');
   modal.classList.remove('open');
-  fab.classList.remove('hidden');
   state.chatOpen = false;
+  syncFab();
+}
+
+// Single source of truth for FAB visibility: hidden while the chat is open,
+// and hidden on the Caddy tab, which has its own Ask button.
+function syncFab(tab = state.activeTab) {
+  const fab = document.getElementById('chat-fab');
+  if (!fab) return;
+  fab.classList.toggle('hidden', state.chatOpen || tab === 'caddy');
 }
 
 function renderChatMessages() {
@@ -1512,8 +1587,9 @@ function renderChatMessages() {
     container.innerHTML = `
       <div class="chat-empty">
         <div class="chat-empty-logo">⛳</div>
-        <div class="chat-empty-title">Golf AI Assistant</div>
-        <div class="chat-empty-text">Ask me anything about golf — club selection, swing tips, course strategy, or equipment recommendations.</div>
+        <div class="chat-empty-title">Caddy AI</div>
+        <div class="chat-empty-text">Your personal golf assistant. Ask about club selection, swing tips, course strategy, or practice plans.</div>
+        <div class="chat-empty-note">Beta — runs on your own Anthropic API key. Tap ⚙️ to add one.</div>
         <div class="chat-suggestions">
           ${['What driver should I buy for a 15 handicap?',
              'Why do I slice the ball with my driver?',
@@ -1801,6 +1877,183 @@ function renderDocs() {
 }
 
 // ─────────────────────────────────────────────────────────────
+// 11c. CADDY AI TAB — the chat itself stays in #chat-modal; this is its home
+//      screen. The brand treats Caddy AI as a headline pillar, not a FAB.
+// ─────────────────────────────────────────────────────────────
+const CADDY_CAPABILITIES = [
+  { label: 'Virtual Caddie',        status: 'beta' },
+  { label: 'Club Recommendations',  status: 'beta' },
+  { label: 'Course Strategy',       status: 'beta' },
+  { label: 'Practice Plans',        status: 'beta' },
+  { label: 'Swing Analysis',        status: 'coming' },
+];
+
+function renderCaddy() {
+  const panel = document.getElementById('tab-caddy');
+  const hasKey = !!state.apiKey;
+
+  panel.innerHTML = `
+    <div class="tab-header">
+      <h1>Caddy AI</h1>
+      <div class="subtitle">YOUR PERSONAL GOLF ASSISTANT</div>
+    </div>
+
+    <div class="caddy-wrap">
+      <div class="story-block story-block-feature">
+        <div class="story-eyebrow">Open Beta</div>
+        <p class="story-lead">Ask anything about your game.</p>
+        <p>Club selection, course strategy, practice plans and the rules — answered in plain language.</p>
+        <button class="btn btn-accent btn-full btn-lg" id="caddy-ask">Ask Caddy →</button>
+      </div>
+
+      <button class="caddy-key ${hasKey ? 'set' : 'unset'}" id="caddy-key" type="button">
+        ${hasKey
+          ? `<span>✅ Connected · ${escHtml(currentModelLabel())}</span><span class="caddy-key-action">Change</span>`
+          : `<span>⚪ Bring your own Anthropic API key</span><span class="caddy-key-action">Add key</span>`}
+      </button>
+
+      <div class="caddy-caps">
+        ${CADDY_CAPABILITIES.map(c => `
+          <div class="caddy-cap">
+            <span>${escHtml(c.label)}</span>
+            ${statusBadge(c.status)}
+          </div>`).join('')}
+      </div>
+
+      <p class="caddy-note">
+        Caddy AI runs on your own Anthropic API key and is billed to your account.
+        It is a general golf advisor — it cannot see your bag, your rounds or your swing,
+        so tell it what it needs to know.
+      </p>
+    </div>
+  `;
+
+  panel.querySelector('#caddy-ask').addEventListener('click', openChat);
+  panel.querySelector('#caddy-key').addEventListener('click', openSettings);
+}
+
+function currentModelLabel() {
+  const m = MODELS.find(x => x.id === state.selectedModel);
+  return m ? m.label.replace(/\s*\(.*\)$/, '') : state.selectedModel;
+}
+
+// ─────────────────────────────────────────────────────────────
+// 11d. VISION TAB — the brand's eight pillars, the roadmap, and the one CTA.
+//      Copy is taken verbatim from chgolfco.com.
+// ─────────────────────────────────────────────────────────────
+const PILLARS = [
+  { id: 'marketplace', icon: '🛒', title: 'Marketplace', tagline: 'Everything you can buy or sell.', status: 'coming',
+    features: ['Equipment Marketplace', 'Brand Marketplace', 'Buy / Sell Used Clubs', 'Try Before You Buy',
+               'Equipment Trade-In', 'Apparel & Accessories', 'Simulators', 'Health & Wellness', 'Practice & Training Aids'] },
+  { id: 'caddy', icon: '🤖', title: 'Caddy AI', tagline: 'Your personal golf assistant.', status: 'beta', goto: 'caddy',
+    features: ['Virtual Caddie', 'Swing Analysis', 'Club Recommendations', 'Practice Plans', 'Course Strategy'] },
+  { id: 'performance', icon: '🏌', title: 'Performance', tagline: 'Track, improve, and compete.', status: 'beta', goto: 'performance',
+    features: ['Shot Tracking', 'Handicap Dashboard', 'Performance Analytics', 'Virtual Coaching'] },
+  { id: 'competition', icon: '🏆', title: 'Competition', tagline: 'Everything around playing.', status: 'coming',
+    features: ['Tournament Platform', 'League Management', 'Challenges', 'Leaderboards', 'Fantasy Golf'] },
+  { id: 'experiences', icon: '✈️', title: 'Experiences', tagline: 'Golf beyond the course.', status: 'coming',
+    features: ['Golf Trips', 'Tee Time Deals', 'Course Partnerships', 'Club Fitting Network', 'Local Events'] },
+  { id: 'community', icon: '👥', title: 'Community', tagline: 'Where golfers connect.', status: 'coming',
+    features: ['Member Groups', 'Playing Partner Finder', 'Junior Golf', 'Forums'] },
+  { id: 'technology', icon: '📡', title: 'Technology', tagline: 'Connect your golf life.', status: 'coming',
+    features: ['Mobile App', 'Simulator Integration', 'Wearables', 'GPS Features', 'Smart Notifications'] },
+  { id: 'memberships', icon: '⭐', title: 'Memberships', tagline: 'Exclusive perks. Real value.', status: 'coming',
+    features: ['Early Access', 'Rewards', 'Loyalty & XP', 'Discounts', 'Giveaways', 'Subscription Boxes'] },
+];
+
+// Status markers rather than dates — the site's "Summer 2026" framing has
+// already passed, and shipping stale dates would be its own kind of dishonest.
+const ROADMAP = [
+  { label: 'Founding Members',      detail: 'Join now',                              state: 'now' },
+  { label: 'Brand Reveal',          detail: 'Announcement + full brand unveiled',    state: 'next' },
+  { label: 'First Apparel Drop',    detail: 'Limited drop for Founding Members',     state: 'next' },
+  { label: 'Community Launch',      detail: 'Discord + member community goes live',  state: 'next' },
+  { label: 'Beta AI Tools',         detail: 'Early access to Caddy AI + more',       state: 'next' },
+  { label: 'Clubhouse Experiences', detail: 'Tournaments, trips + real-world events', state: 'next' },
+];
+
+const JOIN_URL = 'https://chgolfco.com/?utm_source=pwa&utm_medium=app&utm_campaign=founding';
+
+function renderVision() {
+  const panel = document.getElementById('tab-vision');
+  if (panel.dataset.rendered) return;
+  panel.dataset.rendered = '1';
+
+  panel.innerHTML = `
+    <div class="tab-header">
+      <h1>Vision</h1>
+      <div class="subtitle">MODERN GOLF. MADE SIMPLE.</div>
+    </div>
+
+    <section class="brand-story">
+      <article class="story-block">
+        <div class="story-eyebrow">Why Clubhouse Exists</div>
+        <p class="story-lead">Golf has evolved. The experience hasn't.</p>
+        <p>We're building a modern golf brand centered around community, technology, experiences, and products people actually want.</p>
+        <p class="story-kicker">This is just the beginning.</p>
+      </article>
+
+      <article class="story-block">
+        <div class="story-eyebrow">The Clubhouse</div>
+        <p class="story-lead">Golf is better together.</p>
+        <p>We're building a nationwide network of golf courses, teaching professionals, brands, creators, influencers, tournament hosts, and business partners — all working together to grow the game.</p>
+      </article>
+    </section>
+
+    <div class="section-header"><h2>What's Coming</h2></div>
+    <div class="docs-tab-list">
+      ${PILLARS.map(pillarCardHtml).join('')}
+    </div>
+
+    <div class="section-header"><h2>The Road Ahead</h2></div>
+    <ol class="roadmap">
+      ${ROADMAP.map(r => `
+        <li class="roadmap-item roadmap-${r.state}">
+          <div class="roadmap-label">${escHtml(r.label)}</div>
+          <div class="roadmap-detail">${escHtml(r.detail)}</div>
+        </li>`).join('')}
+    </ol>
+
+    <section class="brand-story">
+      <article class="story-block story-block-feature">
+        <div class="story-eyebrow">Become a Founding Member</div>
+        <p class="story-lead">Be part of what's next.</p>
+        <p>Founding Members are the first 500 golfers invited to join Clubhouse Golf. You'll get early access during the beta, help test new features, and shape the platform before it opens to the public.</p>
+        <p class="story-kicker">Spots are limited.</p>
+        <a class="btn btn-accent btn-full btn-lg" id="join-cta" href="${JOIN_URL}" target="_blank" rel="noopener">JOIN NOW →</a>
+        <a class="join-secondary" href="${JOIN_URL}" target="_blank" rel="noopener">Become a Partner →</a>
+      </article>
+    </section>
+  `;
+
+  panel.querySelector('.docs-tab-list').addEventListener('click', e => {
+    const card = e.target.closest('[data-goto]');
+    if (card) activateTab(card.dataset.goto);
+  });
+
+  // The app cannot know whether the signup completed on the site, so this only
+  // ever records that the user left to try — never that they are a member.
+  panel.querySelector('#join-cta').addEventListener('click', () => {
+    try { localStorage.setItem('gv_join_clicked', '1'); } catch (_) {}
+  });
+}
+
+function pillarCardHtml(p) {
+  const live = !!p.goto;
+  return `
+    <${live ? 'button' : 'div'} class="doc-card pillar-card${live ? '' : ' pillar-card-static'}"${live ? ` data-goto="${p.goto}" type="button"` : ''}>
+      <div class="doc-card-icon">${p.icon}</div>
+      <div class="doc-card-body">
+        <div class="doc-card-tag">${statusBadge(p.status)}</div>
+        <div class="doc-card-title">${escHtml(p.title)}</div>
+        <div class="doc-card-desc">${escHtml(p.tagline)}</div>
+        <ul class="story-list">${p.features.map(f => `<li>${escHtml(f)}</li>`).join('')}</ul>
+      </div>
+      ${live ? '<div class="doc-card-arrow">→</div>' : ''}
+    </${live ? 'button' : 'div'}>`;
+}
+
+// ─────────────────────────────────────────────────────────────
 // 13. SETTINGS
 // ─────────────────────────────────────────────────────────────
 function setupSettings() {
@@ -1985,6 +2238,12 @@ function registerServiceWorker() {
 // ─────────────────────────────────────────────────────────────
 // 16. UTILITIES
 // ─────────────────────────────────────────────────────────────
+const STATUS_LABELS = { live: 'LIVE', beta: 'BETA', coming: 'COMING SOON' };
+function statusBadge(status) {
+  const key = STATUS_LABELS[status] ? status : 'coming';
+  return `<span class="status-badge status-badge--${key}">${STATUS_LABELS[key]}</span>`;
+}
+
 function escHtml(str) {
   return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }

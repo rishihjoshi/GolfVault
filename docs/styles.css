@@ -186,9 +186,19 @@ ul, ol { list-style: none; }
    body, but this app has content worth copying — AI chat answers, product
    names, order refs — so selection is disabled on controls and kept on copy. */
 #bottom-nav, .tab-header, .filter-chip, .btn, .nav-btn,
-.shop-refresh, .modal-handle, .cart-badge, .story-list li {
+.shop-refresh, .modal-handle, .cart-badge, .story-list li,
+.topic-tab, .pillar-card, .caddy-key, .status-badge {
   -webkit-user-select: none;
   user-select: none;
+}
+
+/* Performance sub-views. Swing and Lessons each render their own page
+   header, which duplicates the Performance header directly above it, so those
+   two are suppressed. Coaching keeps its header — it carries the step title
+   and the back button, and hiding it would strand the user mid-wizard. */
+.perf-body.perf-swing > .swing-header,
+.perf-body.perf-lessons > .tab-header:first-child {
+  display: none;
 }
 
 /* ── 5. Tab Panels ──────────────────────────────────────────── */
@@ -234,7 +244,7 @@ ul, ol { list-style: none; }
   position: relative; /* sits at end of flex column */
   z-index: 100;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   background: var(--color-nav);
   border-top: 1px solid rgba(255,255,255,.08);
   height: var(--nav-height);
@@ -1469,6 +1479,15 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
 .chat-empty-logo { font-size: 56px; margin-bottom: 16px; }
 .chat-empty-title { font-family: var(--font-serif); font-size: 20px; color: var(--green-800); margin-bottom: 8px; }
 .chat-empty-text { font-size: 13px; line-height: 1.6; }
+.chat-empty-note {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--gold-600);
+  background: var(--gold-100);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+}
 .chat-suggestions { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; width: 100%; }
 .suggestion-chip {
   background: var(--green-100);
@@ -1637,17 +1656,44 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
 .empty-state p { font-size: 13px; line-height: 1.6; }
 
 /* ── 26. Hero Banner ────────────────────────────────────────── */
+/* Hero banner — shown whole, since the artwork is a finished composition. */
+.shop-banner {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--ch-ink);
+  line-height: 0;
+}
+.shop-banner-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* The banner is a bright, green-lit photograph and the section below it is
+   ink. Fade the last tenth into ink so there is no hard seam; it covers grass
+   only, so no artwork content is obscured. */
+.shop-banner::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 10%;
+  background: linear-gradient(to bottom, rgba(10,11,11,0), var(--ch-ink));
+  pointer-events: none;
+}
+
 .shop-hero {
   position: relative;
   background: var(--ch-ink);
-  padding: 26px var(--content-pad) 26px;
+  padding: 22px var(--content-pad) 26px;
   text-align: center;
 }
 .shop-hero-logo {
   display: block;
-  width: 204px;
+  width: 176px;
   height: auto;
-  margin: 0 auto 18px;
+  margin: 0 auto 16px;
 }
 
 /* ── Brand statement (inside the hero) ───────────────────────── */
@@ -1728,6 +1774,119 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
 .story-block-feature .story-eyebrow { color: var(--ch-tan); }
 .story-block-feature .story-lead { color: var(--white) !important; }
 .story-block-feature p { color: #D2D1D2; }
+/* --gold-600 is tuned for light surfaces; on the inverted card it is
+   dark-on-dark (2.97:1). Use the brand tan, which is 6.5:1 on ink. */
+.story-block-feature .story-kicker { color: var(--ch-tan) !important; }
+/* ─────────────── Status badges ───────────────
+   Labels, not controls: no pointer, no press state. The BETA variant reuses
+   the tan-on-sand treatment already established by .story-list li. */
+.status-badge {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  cursor: default;
+  white-space: nowrap;
+}
+.status-badge--live   { background: #E3F1EA; color: #1F5A46; }
+.status-badge--beta   { background: var(--gold-100); color: var(--gold-600); }
+.status-badge--coming { background: var(--gray-100); color: var(--gray-500); }
+
+/* ─────────────── Caddy AI tab ─────────────── */
+.caddy-wrap { padding: 14px var(--content-pad) 24px; display: flex; flex-direction: column; gap: 12px; }
+.caddy-wrap .story-block-feature .btn { margin-top: 14px; }
+.caddy-key {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  font-size: 13px;
+  padding: 13px 14px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+}
+.caddy-key.unset { border-color: var(--gold-300); background: var(--gold-100); color: var(--gold-600); }
+.caddy-key-action { font-weight: 600; color: var(--gold-600); white-space: nowrap; }
+.caddy-caps {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.caddy-cap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--color-border);
+}
+.caddy-cap:last-child { border-bottom: none; }
+.caddy-note { font-size: 12px; line-height: 1.6; color: var(--gray-500); padding: 0 2px; }
+
+/* ─────────────── Pillar cards ───────────────
+   Built on .doc-card. Only pillars that lead somewhere are buttons. */
+.pillar-card { width: 100%; text-align: left; font: inherit; color: inherit; }
+.topic-tab, .pillar-card, .caddy-key {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.pillar-card-static { cursor: default; }
+.pillar-card .doc-card-tag { margin-bottom: 6px; }
+.pillar-card .story-list { margin-top: 10px; }
+
+/* ─────────────── Road Ahead ─────────────── */
+.roadmap {
+  list-style: none;
+  margin: 0;
+  padding: 4px var(--content-pad) 8px calc(var(--content-pad) + 22px);
+  position: relative;
+}
+.roadmap::before {
+  content: '';
+  position: absolute;
+  left: calc(var(--content-pad) + 5px);
+  top: 14px;
+  bottom: 20px;
+  width: 2px;
+  background: var(--color-border);
+}
+.roadmap-item { position: relative; padding: 0 0 18px 4px; }
+.roadmap-item::before {
+  content: '';
+  position: absolute;
+  left: -22px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+}
+.roadmap-now::before { background: var(--ch-tan); border-color: var(--ch-tan); }
+.roadmap-label { font-family: var(--font-heading); font-size: 16px; letter-spacing: .3px; color: var(--color-text); }
+.roadmap-now .roadmap-label { color: var(--gold-600); }
+.roadmap-detail { font-size: 13px; color: var(--gray-500); margin-top: 1px; }
+
+.join-secondary {
+  display: block;
+  text-align: center;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--ch-tan);
+  text-decoration: none;
+}
+
 .story-list {
   list-style: none;
   display: flex;
