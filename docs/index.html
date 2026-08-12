@@ -77,11 +77,18 @@
     <!-- ── Main Content ──────────────────────────────────────── -->
     <main id="main-content" role="main">
 
-      <!-- ── Tab 1: Shop ─────────────────────────────────────── -->
-      <section id="tab-shop" class="tab-panel" role="tabpanel" aria-label="Shop">
+      <!-- ── Tab 1: Vision (landing) ─────────────────────────── -->
+      <section id="tab-vision" class="tab-panel" role="tabpanel" aria-label="Vision">
         <!-- Rendered by app.js -->
         <div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--gray-400)">
-          <span style="font-size:32px">🛍</span>
+          <span style="font-size:32px">✦</span>
+        </div>
+      </section>
+
+      <!-- ── Tab 2: Marketplace ──────────────────────────────── -->
+      <section id="tab-marketplace" class="tab-panel" role="tabpanel" aria-label="Marketplace">
+        <div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--gray-400)">
+          <span style="font-size:32px">🛒</span>
         </div>
       </section>
 
@@ -96,13 +103,6 @@
       <section id="tab-caddy" class="tab-panel" role="tabpanel" aria-label="Caddy AI">
         <div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--gray-400)">
           <span style="font-size:32px">🤖</span>
-        </div>
-      </section>
-
-      <!-- ── Tab 4: Vision ───────────────────────────────────── -->
-      <section id="tab-vision" class="tab-panel" role="tabpanel" aria-label="Vision">
-        <div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--gray-400)">
-          <span style="font-size:32px">✦</span>
         </div>
       </section>
 
@@ -128,10 +128,15 @@
     <!-- ── Bottom Navigation ──────────────────────────────────── -->
     <nav id="bottom-nav" role="navigation" aria-label="Main navigation">
 
-      <button class="nav-btn" data-tab="shop" role="tab" aria-label="Shop">
-        <span class="nav-icon">🛍</span>
-        <span>Shop</span>
-        <span class="cart-badge" id="cart-badge" aria-label="Cart items">0</span>
+      <button class="nav-btn" data-tab="vision" role="tab" aria-label="Vision">
+        <span class="nav-icon">✦</span>
+        <span>Vision</span>
+      </button>
+
+      <button class="nav-btn" data-tab="marketplace" role="tab" aria-label="Marketplace">
+        <span class="nav-icon">🛒</span>
+        <span>Market</span>
+        <span class="cart-badge" id="cart-badge" aria-label="Saved items">0</span>
       </button>
 
       <button class="nav-btn" data-tab="performance" role="tab" aria-label="Performance">
@@ -142,11 +147,6 @@
       <button class="nav-btn" data-tab="caddy" role="tab" aria-label="Caddy AI">
         <span class="nav-icon">🤖</span>
         <span>Caddy</span>
-      </button>
-
-      <button class="nav-btn" data-tab="vision" role="tab" aria-label="Vision">
-        <span class="nav-icon">✦</span>
-        <span>Vision</span>
       </button>
 
       <button class="nav-btn" data-tab="profile" role="tab" aria-label="My Profile">
