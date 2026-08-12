@@ -18,7 +18,7 @@ const DATA_BASE = `${BASE}/data`;
 // docs/version.json and the service-worker CACHE_NAME). The running app
 // compares this baked-in value against the live version.json to detect a
 // newer deploy and offer a one-tap "pull latest" refresh.
-const APP_VERSION = '1.9.0';
+const APP_VERSION = '1.9.1';
 const VERSION_URL = `${BASE}/version.json`;
 
 const TABS = ['shop', 'performance', 'caddy', 'vision', 'profile', 'docs'];

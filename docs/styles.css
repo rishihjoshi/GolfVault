@@ -186,7 +186,8 @@ ul, ol { list-style: none; }
    body, but this app has content worth copying — AI chat answers, product
    names, order refs — so selection is disabled on controls and kept on copy. */
 #bottom-nav, .tab-header, .filter-chip, .btn, .nav-btn,
-.shop-refresh, .modal-handle, .cart-badge, .story-list li {
+.shop-refresh, .modal-handle, .cart-badge, .story-list li,
+.topic-tab, .pillar-card, .caddy-key, .status-badge {
   -webkit-user-select: none;
   user-select: none;
 }
@@ -1836,6 +1837,10 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
 /* ─────────────── Pillar cards ───────────────
    Built on .doc-card. Only pillars that lead somewhere are buttons. */
 .pillar-card { width: 100%; text-align: left; font: inherit; color: inherit; }
+.topic-tab, .pillar-card, .caddy-key {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
 .pillar-card-static { cursor: default; }
 .pillar-card .doc-card-tag { margin-bottom: 6px; }
 .pillar-card .story-list { margin-top: 10px; }

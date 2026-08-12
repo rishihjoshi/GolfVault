@@ -4,7 +4,7 @@
 // carries no hardcoded deploy path. It works unchanged at a repo subpath
 // (/whatever/), at a domain root, or behind a custom domain — rename the repo
 // or attach a domain and nothing here needs editing.
-const CACHE_NAME = 'clubhouse-golf-v15';  // bumped: hero artwork + brand copy
+const CACHE_NAME = 'clubhouse-golf-v16';  // bumped: hero artwork + brand copy
 const abs = rel => new URL(rel, self.location).href;
 const STATIC_ASSETS = [
   './',
