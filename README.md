@@ -10,13 +10,13 @@ A mobile-first Progressive Web App built for iOS and Android, deployable to GitH
 
 ## 🚀 Live Demo
 
-After deploying to GitHub Pages: `https://<your-username>.github.io/GolfVault/`
+After deploying to GitHub Pages: `https://<your-username>.github.io/<repo-name>/`
 
-> **Branding vs. URL:** the app is branded **Clubhouse Golf**, but the GitHub
-> repository is still named `GolfVault`, so the public Pages URL keeps the
-> `/GolfVault/` path. `start_url`/`scope` in `manifest.json` and the pre-cache
-> URLs in `sw.js` are deliberately left on `/GolfVault/` to match. Rename the
-> repo (or attach a custom domain) to change this, then update those paths.
+> **Deploy paths are repo-name-agnostic.** `start_url`/`scope` in
+> `manifest.json` and every pre-cache URL in `sw.js` are relative, resolved at
+> runtime against the manifest and service-worker locations. Rename the repo,
+> move it to a domain root, or attach a custom domain and nothing needs
+> editing — just bump `CACHE_NAME` so installed clients re-fetch.
 
 ---
 
@@ -78,9 +78,10 @@ docs/
 1. Go to **Settings → Pages**
 2. Set **Source** to `Deploy from a branch`
 3. Branch: `main`, Folder: `/docs`
-4. Save — your site will be live at `https://<username>.github.io/GolfVault/`
+4. Save — your site will be live at `https://<username>.github.io/<repo-name>/`
 
-> **Note:** After deployment, update the `"start_url"` and `"scope"` in `manifest.json` and the cache URLs in `sw.js` if your repository name differs from `GolfVault`.
+> **Note:** No path configuration is required. `manifest.json` and `sw.js` use
+> relative URLs, so the app runs correctly at any deploy path.
 
 ---
 
