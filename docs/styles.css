@@ -1639,38 +1639,18 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
 /* ── 26. Hero Banner ────────────────────────────────────────── */
 .shop-hero {
   position: relative;
-  width: 100%;
-  overflow: hidden;
   background: var(--ch-ink);
-  line-height: 0;               /* kill the inline-image descender gap */
-}
-/* The hero artwork is a finished banner — its own headline, mark and CTA are
-   baked in — so it is shown whole rather than cropped behind overlaid text. */
-.shop-hero-img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-/* The banner is a bright, green-lit photograph and the brand statement below
-   it is ink. Fading the last tenth into ink removes the hard seam; it covers
-   grass only, so no artwork content is obscured. */
-.shop-hero::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 10%;
-  background: linear-gradient(to bottom, rgba(10,11,11,0), var(--ch-ink));
-  pointer-events: none;
-}
-
-/* ── Brand statement ─────────────────────────────────────────── */
-.brand-statement {
-  background: var(--ch-ink);
-  padding: 22px var(--content-pad) 24px;
+  padding: 26px var(--content-pad) 26px;
   text-align: center;
 }
+.shop-hero-logo {
+  display: block;
+  width: 204px;
+  height: auto;
+  margin: 0 auto 18px;
+}
+
+/* ── Brand statement (inside the hero) ───────────────────────── */
 .brand-eyebrow {
   font-family: var(--font-heading);
   font-size: 13px;
