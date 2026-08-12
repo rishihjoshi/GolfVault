@@ -18,7 +18,7 @@ const DATA_BASE = `${BASE}/data`;
 // docs/version.json and the service-worker CACHE_NAME). The running app
 // compares this baked-in value against the live version.json to detect a
 // newer deploy and offer a one-tap "pull latest" refresh.
-const APP_VERSION = '1.3.0';
+const APP_VERSION = '1.4.0';
 const VERSION_URL = `${BASE}/version.json`;
 
 const TABS = ['shop', 'book', 'lessons', 'swing', 'profile', 'docs'];
@@ -312,7 +312,7 @@ function renderShop() {
     <div class="shop-hero">
       <div class="shop-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1592937238247-cd0090e02f65?w=1200&q=80')"></div>
       <div class="shop-hero-content">
-        <img class="shop-hero-logo" src="icons/icon.svg" alt="Clubhouse Golf logo" width="72" height="72">
+        <img class="shop-hero-logo" src="assets/clubhouse-logo.png" alt="Clubhouse Golf" width="126" height="83">
         <div class="shop-hero-text">
           <div class="shop-hero-tagline">Your Complete Golf Companion.</div>
           <div class="shop-hero-title">Premium Gear,<br><span>Championship Results.</span></div>

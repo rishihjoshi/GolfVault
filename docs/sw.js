@@ -4,7 +4,7 @@
 // carries no hardcoded deploy path. It works unchanged at a repo subpath
 // (/whatever/), at a domain root, or behind a custom domain — rename the repo
 // or attach a domain and nothing here needs editing.
-const CACHE_NAME = 'clubhouse-golf-v9';  // bumped: path-agnostic asset URLs
+const CACHE_NAME = 'clubhouse-golf-v10';  // bumped: real logo across the icon set
 const abs = rel => new URL(rel, self.location).href;
 const STATIC_ASSETS = [
   './',
@@ -23,7 +23,8 @@ const STATIC_ASSETS = [
   './icons/icon-512.png',
   './icons/clubhouse-golf-app-icon.png',
   './icons/clubhouse-golf-app-hero.png',
-  './icons/product-placeholder.svg'
+  './icons/product-placeholder.svg',
+  './assets/clubhouse-logo.png'
 ].map(abs);
 
 // ── Install: pre-cache static shell ──────────────────────────────────────────

@@ -13,7 +13,7 @@
   "icons": [
     {
       "src": "icons/clubhouse-golf-app-icon.png",
-      "sizes": "1254x1254",
+      "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "any"
     },
@@ -57,28 +57,28 @@
       "short_name": "Shop",
       "description": "Browse premium golf accessories",
       "url": "./#shop",
-      "icons": [{ "src": "icons/clubhouse-golf-app-icon.png", "sizes": "1254x1254" }]
+      "icons": [{ "src": "icons/clubhouse-golf-app-icon.png", "sizes": "1024x1024" }]
     },
     {
       "name": "Book a Lesson",
       "short_name": "Book",
       "description": "Book a coaching session",
       "url": "./#book",
-      "icons": [{ "src": "icons/clubhouse-golf-app-icon.png", "sizes": "1254x1254" }]
+      "icons": [{ "src": "icons/clubhouse-golf-app-icon.png", "sizes": "1024x1024" }]
     },
     {
       "name": "Video Lessons",
       "short_name": "Lessons",
       "description": "Browse video coaching library",
       "url": "./#lessons",
-      "icons": [{ "src": "icons/clubhouse-golf-app-icon.png", "sizes": "1254x1254" }]
+      "icons": [{ "src": "icons/clubhouse-golf-app-icon.png", "sizes": "1024x1024" }]
     },
     {
       "name": "Swing Analysis",
       "short_name": "Swing",
       "description": "Submit your swing for expert feedback",
       "url": "./#swing",
-      "icons": [{ "src": "icons/clubhouse-golf-app-icon.png", "sizes": "1254x1254" }]
+      "icons": [{ "src": "icons/clubhouse-golf-app-icon.png", "sizes": "1024x1024" }]
     }
   ]
 }

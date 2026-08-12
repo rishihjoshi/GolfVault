@@ -1639,9 +1639,9 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
   padding: 0 var(--content-pad);
 }
 .shop-hero-logo {
-  width: 72px;
-  height: 72px;
-  border-radius: 16px;
+  width: 126px;
+  height: auto;
+  border-radius: 12px;
   flex-shrink: 0;
   box-shadow: 0 6px 18px rgba(0,0,0,.35);
 }
