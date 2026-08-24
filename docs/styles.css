@@ -1,57 +1,67 @@
 /* ============================================================
-   Clubhouse Golf Design System v2
+   Clubhouse Golf Design System v3
    Finalized Brand Identity — "Your Complete Golf Companion."
-   Bebas Neue (headings) · Bricolage Grotesque (body) · Ink + Tan
+   Bebas Neue (headings) · Bricolage Grotesque (body)
+   Deep Green + Ivory + Muted Gold + Onyx
    ============================================================ */
 
 /* ── 1. Design Tokens ───────────────────────────────────────── */
 :root {
   /* ── Clubhouse Golf Brand Palette ─────────────────────────── */
-  /* Extracted from the rendered brand elements on chgolfco.com:
-     #0A0B0B carries the feature sections, #000000 the header and
-     buttons, #B69571 the primary CTA and tagline, #EEDAB8 the brand
-     badge. The theme's red (#C4301C) is cart/error chrome, not brand. */
-  --ch-ink:     #0A0B0B;   /* Near-black — primary brand surface */
-  --ch-black:   #000000;   /* Nav, buttons, deepest surface */
-  --ch-tan:     #B69571;   /* Brand accent — CTAs, taglines */
-  --ch-sand:    #EEDAB8;   /* Accent light — badges */
-  --ch-white:   #FFFFFF;
-  --ch-surface: #F5F5F5;   /* Secondary background */
-  --ch-border:  #E5E5E5;
-  --ch-subtext: #4D4D4D;
+  /* The six brand colours, verbatim. Deep green is the primary and
+     carries the header, hero and dark panels; onyx sits beneath it as
+     the deepest surface (nav, buttons); gold is reserved for the pin,
+     accents and CTAs; ivory is the light ground and reverse text. */
+  --ch-green:    #0B2F24;   /* Deep Clubhouse Green — primary */
+  --ch-onyx:     #0A0D0C;   /* Almost black — deepest surface, premium */
+  --ch-gold:     #C49A43;   /* Muted Masters Gold — flag, accents, trim */
+  --ch-ivory:    #F2EFE8;   /* Warm Ivory — light ground, reverse text */
+  --ch-sage:     #53695C;   /* Muted Sage — secondary green */
+  --ch-charcoal: #252B28;   /* Supporting neutral */
+
+  /* Role aliases. The whole sheet is written against these four plus the
+     scales below, so a palette change is confined to this block. */
+  --ch-ink:     var(--ch-green);   /* Primary brand surface */
+  --ch-black:   var(--ch-onyx);    /* Nav, buttons, deepest surface */
+  --ch-tan:     var(--ch-gold);    /* Brand accent — CTAs, taglines */
+  --ch-sand:    #EFE3C9;           /* Gold tint — badge grounds */
+  --ch-white:   #FFFFFF;           /* Card surfaces stay pure white */
+  --ch-surface: var(--ch-ivory);   /* Secondary background */
+  --ch-border:  #E2DED4;           /* Warm border, tuned to ivory */
+  --ch-subtext: #4A534E;           /* 6.9:1 on ivory, 8.0:1 on white */
 
   /* Legacy token names are retained as aliases so every existing rule
      re-themes in place. Renaming them would touch ~200 declarations for
-     no behavioural gain. The names read green/gold; the values do not. */
-  --golf-green:        var(--ch-ink);
-  --fairway-green:     var(--ch-black);
-  --championship-gold: var(--ch-tan);
+     no behavioural gain — and now the green/gold names read true again. */
+  --golf-green:        var(--ch-green);
+  --fairway-green:     var(--ch-onyx);
+  --championship-gold: var(--ch-gold);
   --sand-beige:        var(--ch-sand);
-  --cloud-white:       var(--ch-white);
-  --slate-gray:        var(--ch-ink);
+  --cloud-white:       var(--ch-ivory);
+  --slate-gray:        var(--ch-charcoal);
 
   /* Tints & shades (derived) */
-  --green-900: var(--ch-black);
-  --green-800: var(--ch-ink);
-  --green-700: #1C1C1C;
-  --green-600: #2E2E2E;
-  --green-200: #D2D1D2;
-  --green-100: #F0EFEF;
-  --gold-600:  #6E5940;            /* Darkened tan — 6.7:1 on white */
-  --gold-500:  var(--ch-tan);
-  --gold-300:  #CDB295;
+  --green-900: var(--ch-onyx);
+  --green-800: var(--ch-green);
+  --green-700: #123B2D;
+  --green-600: var(--ch-sage);
+  --green-200: #C3CFC7;
+  --green-100: #E7EDE8;
+  --gold-600:  #7A5E22;            /* Darkened gold — 6.1:1 on white */
+  --gold-500:  var(--ch-gold);
+  --gold-300:  #D9BC80;            /* 7.9:1 on deep green */
   --gold-100:  var(--ch-sand);
   --white:     var(--ch-white);
-  --off-white: var(--ch-white);
-  --charcoal:  var(--ch-black);    /* Nav / Dark surfaces */
-  --gray-800:  #1C1C1C;
-  --gray-700:  #2E2E2E;
+  --off-white: var(--ch-ivory);
+  --charcoal:  var(--ch-charcoal); /* Supporting neutral surfaces */
+  --gray-800:  #14261F;
+  --gray-700:  var(--ch-charcoal);
   --gray-500:  var(--ch-subtext);
-  --gray-400:  #6F6F6F;
+  --gray-400:  #5E6863;            /* 5.0:1 on ivory — the lightest muted grey that still passes */
   /* --gray-300 was referenced but never defined (pre-existing). Harmless
      while text inherited mid-grey; now it would inherit ink and make
      disabled calendar days look enabled. */
-  --gray-300:  #ABABAB;
+  --gray-300:  #A8B0AB;
   --gray-200:  var(--ch-border);
   --gray-100:  var(--ch-surface);
 
@@ -61,7 +71,7 @@
   --color-surface:      var(--ch-white);
   --color-surface-alt:  var(--gray-100);
   --color-nav:          var(--ch-black);
-  --nav-inactive:       #9A9A9A;   /* 6.0:1 on the black nav */
+  --nav-inactive:       #9AA49E;   /* 7.6:1 on the onyx nav */
   --color-text:         var(--ch-ink);
   --color-text-muted:   var(--gray-500);
   --color-border:       var(--gray-200);
@@ -325,7 +335,9 @@ ul, ol { list-style: none; }
   right: 0;
   z-index: 1000;
   background: var(--color-warning);
-  color: var(--charcoal);
+  /* Onyx, not the charcoal neutral: charcoal only reaches 3.9:1 on the amber
+     ground and this banner is 13px. */
+  color: var(--ch-onyx);
   text-align: center;
   padding: 10px 16px;
   font-size: 13px;
@@ -1027,7 +1039,7 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
 .course-locked-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(10,11,11,.6);
+  background: rgba(10,13,12,.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1310,7 +1322,7 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
   background: var(--green-800);
   color: var(--white);
   font-size: 22px;
-  box-shadow: 0 4px 16px rgba(10,11,11,.45);
+  box-shadow: 0 4px 16px rgba(10,13,12,.45);
   border: 2px solid var(--gold-500);
   z-index: 150;
   display: flex;
@@ -1321,7 +1333,7 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
   touch-action: manipulation;
 }
 #chat-fab:active { transform: scale(0.92); }
-#chat-fab:hover { box-shadow: 0 6px 24px rgba(10,11,11,.55); }
+#chat-fab:hover { box-shadow: 0 6px 24px rgba(10,13,12,.55); }
 
 /* Hide FAB when chat is open */
 #chat-fab.hidden { display: none; }
@@ -1655,45 +1667,54 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
 .empty-state h3 { font-size: 16px; font-weight: 600; color: var(--gray-500); margin-bottom: 8px; }
 .empty-state p { font-size: 13px; line-height: 1.6; }
 
-/* ── 26. Hero Banner ────────────────────────────────────────── */
-/* Hero banner — shown whole, since the artwork is a finished composition. */
-.brand-banner {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  background: var(--ch-ink);
-  line-height: 0;
-}
-.brand-banner-img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-/* The banner is a bright, green-lit photograph and the section below it is
-   ink. Fade the last tenth into ink so there is no hard seam; it covers grass
-   only, so no artwork content is obscured. */
-.brand-banner::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 10%;
-  background: linear-gradient(to bottom, rgba(10,11,11,0), var(--ch-ink));
-  pointer-events: none;
-}
-
+/* ── 26. Brand Hero ─────────────────────────────────────────── */
+/* The landing lockup: monogram, wordmark, rule, statement — all on the deep
+   green primary. Built from type and one vector mark rather than a raster,
+   so it is sharp on every display and costs a couple of kilobytes. */
 .brand-hero {
   position: relative;
+  overflow: hidden;
   background: var(--ch-ink);
-  padding: 22px var(--content-pad) 26px;
+  padding: 34px var(--content-pad) 30px;
   text-align: center;
 }
-.brand-hero-logo {
+/* Sheen: an off-centre gold wash and a deeper pool at the foot, so the flat
+   green reads as a lit surface. Sits behind the content, ignores pointers. */
+.brand-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 78% at 50% 6%,  rgba(196,154,67,.20), rgba(196,154,67,0) 62%),
+    radial-gradient(100% 68% at 50% 108%, rgba(10,13,12,.85),  rgba(10,13,12,0)  70%);
+  pointer-events: none;
+}
+.brand-hero > * { position: relative; }
+.brand-hero-mark {
   display: block;
-  width: 176px;
-  height: auto;
-  margin: 0 auto 16px;
+  width: 104px;
+  height: 104px;
+  margin: 0 auto 14px;
+}
+/* Wordmark — Bebas, letterspaced to match the printed lockup. "Golf" carries
+   the gold, exactly as in the horizontal lockup. */
+.brand-wordmark {
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 8.6vw, 40px);
+  font-weight: var(--fw-hero);
+  letter-spacing: 5px;
+  text-indent: 5px;          /* balances the trailing letterspace */
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--ch-ivory);
+}
+.brand-wordmark span { color: var(--gold-500); }
+.brand-rule {
+  width: 56px;
+  height: 2px;
+  margin: 14px auto 16px;
+  background: var(--gold-500);
+  border-radius: var(--radius-full);
 }
 
 /* ── Brand statement (inside the hero) ───────────────────────── */
@@ -1712,14 +1733,14 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
   font-weight: var(--fw-hero);
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: var(--white);
+  color: var(--ch-ivory);
   line-height: 1.05;
   margin-bottom: 10px;
 }
 .brand-lede {
   font-size: 14px;
   line-height: 1.6;
-  color: #D2D1D2;
+  color: #D3D8D4;
   max-width: 34ch;
   margin: 0 auto;
 }
@@ -1773,7 +1794,7 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
 }
 .story-block-feature .story-eyebrow { color: var(--ch-tan); }
 .story-block-feature .story-lead { color: var(--white) !important; }
-.story-block-feature p { color: #D2D1D2; }
+.story-block-feature p { color: #D3D8D4; }
 /* --gold-600 is tuned for light surfaces; on the inverted card it is
    dark-on-dark (2.97:1). Use the brand tan, which is 6.5:1 on ink. */
 .story-block-feature .story-kicker { color: var(--ch-tan) !important; }
@@ -1916,14 +1937,14 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
   padding: 0 10px;
   border: 1px solid rgba(255,255,255,.35);
   border-radius: var(--radius-full);
-  background: rgba(10, 11, 11, 0.55);
+  background: rgba(10, 13, 12, 0.55);
   backdrop-filter: blur(4px);
   color: var(--white);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: background var(--dur-fast) ease, border-color var(--dur-fast) ease;
 }
-.app-refresh:hover { background: rgba(18, 53, 36, 0.65); }
+.app-refresh:hover { background: rgba(11, 47, 36, 0.75); }
 .app-refresh-icon { font-size: 18px; line-height: 1; display: inline-block; }
 .app-refresh-label {
   font-family: var(--font-heading);

@@ -18,7 +18,7 @@ const DATA_BASE = `${BASE}/data`;
 // docs/version.json and the service-worker CACHE_NAME). The running app
 // compares this baked-in value against the live version.json to detect a
 // newer deploy and offer a one-tap "pull latest" refresh.
-const APP_VERSION = '2.0.0';
+const APP_VERSION = '2.1.0';
 const VERSION_URL = `${BASE}/version.json`;
 
 const TABS = ['vision', 'marketplace', 'performance', 'caddy', 'profile', 'docs'];
@@ -1827,45 +1827,27 @@ function renderProfile() {
 // ─────────────────────────────────────────────────────────────
 // 12. PROJECT DOCS TAB
 // ─────────────────────────────────────────────────────────────
+// The two internal reference pages this tab used to link — the order
+// processing workflow and the custom-vs-Shopify comparison — now live in
+// `docs-archive/`, which GitHub Pages does not publish. Linking them from here
+// would only produce 404s, so the tab keeps its shell and says so instead. The
+// panel and renderer stay so a future doc can be restored by re-adding a card.
 function renderDocs() {
   const panel = document.getElementById('tab-docs');
   if (panel.dataset.rendered) return;
   panel.dataset.rendered = '1';
-
-  const docs = [
-    {
-      href: 'clubhouse-golf-order-processing-workflow.html',
-      icon: '📦',
-      title: 'Order Processing Workflow',
-      desc: 'End-to-end fulfillment flow — from cart checkout through warehouse pick/pack to last-mile delivery and returns.',
-      tag: 'Operations',
-    },
-    {
-      href: 'clubhouse-golf-custom-vs-shopify-comparison.html',
-      icon: '⚖️',
-      title: 'Custom vs Shopify',
-      desc: 'Side-by-side platform comparison covering cost, flexibility, time-to-market, and long-term scalability.',
-      tag: 'Strategy',
-    },
-  ];
 
   panel.innerHTML = `
     <div class="tab-header">
       <h1 class="serif">Project Docs</h1>
       <div class="subtitle">INTERNAL REFERENCE</div>
     </div>
-    <div class="docs-tab-list">
-      ${docs.map(d => `
-        <a class="doc-card" href="${d.href}">
-          <div class="doc-card-icon">${d.icon}</div>
-          <div class="doc-card-body">
-            <div class="doc-card-tag">${d.tag}</div>
-            <div class="doc-card-title">${d.title}</div>
-            <div class="doc-card-desc">${d.desc}</div>
-          </div>
-          <div class="doc-card-arrow">→</div>
-        </a>
-      `).join('')}
+    <div class="empty-state">
+      <div class="empty-icon" aria-hidden="true">🗄️</div>
+      <h3>Archived</h3>
+      <p>The order processing workflow and the custom-vs-Shopify comparison have
+         been moved to <code>docs-archive/</code> in the repository. They are kept
+         as historical records and are no longer published with the app.</p>
     </div>
   `;
 }
@@ -1974,22 +1956,21 @@ function renderVision() {
   panel.dataset.rendered = '1';
 
   panel.innerHTML = `
-    <!-- Landing surface. The artwork carries its own headline and CTA, so
-         nothing is overlaid on it; the brand statement follows in real copy.
+    <!-- Landing surface: the full brand lockup on deep green. The wordmark is
+         live text in Bebas rather than baked into the artwork, so it stays
+         sharp at every density and re-themes with the palette. Only the "C"
+         monogram is an asset, and it is vector.
          The update control lives here because this is the first tab. -->
-    <div class="brand-banner">
-      <img class="brand-banner-img" src="assets/clubhouse-hero.png"
-        alt="Clubhouse Golf — elevate your game" width="900" height="600">
+    <header class="brand-hero">
       <button class="app-refresh" id="app-refresh" type="button"
         aria-label="Check for updates" title="Check for updates">
         <span class="app-refresh-icon" aria-hidden="true">⟳</span>
         <span class="app-refresh-label"></span>
       </button>
-    </div>
-
-    <header class="brand-hero">
-      <img class="brand-hero-logo" src="assets/clubhouse-logo.png"
-        alt="Clubhouse Golf" width="176" height="117">
+      <img class="brand-hero-mark" src="assets/clubhouse-mark.svg"
+        alt="" aria-hidden="true" width="104" height="104">
+      <div class="brand-wordmark">Clubhouse <span>Golf</span></div>
+      <div class="brand-rule" aria-hidden="true"></div>
       <div class="brand-eyebrow">Modern Golf. Made Simple.</div>
       <h1 class="brand-headline">Everything Golf.</h1>
       <p class="brand-lede">Shop apparel, discover new gear, improve your game, and join the community changing golf.</p>

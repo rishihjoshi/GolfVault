@@ -3,6 +3,7 @@ const path = require('path');
 const { JSDOM } = require('jsdom');
 
 const DOCS_DIR = path.join(__dirname, '..', 'docs');
+const ARCHIVE_DIR = path.join(__dirname, '..', 'docs-archive');
 const INDEX_HTML = fs.readFileSync(path.join(DOCS_DIR, 'index.html'), 'utf8');
 const APP_JS    = fs.readFileSync(path.join(DOCS_DIR, 'app.js'), 'utf8');
 const STYLES_CSS = fs.readFileSync(path.join(DOCS_DIR, 'styles.css'), 'utf8');
@@ -47,25 +48,40 @@ describe('Docs tab — app.js behaviour', () => {
     expect(APP_JS).toMatch(/function renderDocs\s*\(\)/);
   });
 
-  test('doc cards navigate in the same window (no target=_blank in renderDocs)', () => {
+  test('renderDocs links nothing — the reference pages are archived', () => {
     const renderDocsBlock = APP_JS.slice(
       APP_JS.indexOf('function renderDocs'),
       APP_JS.indexOf('// ─', APP_JS.indexOf('function renderDocs') + 1)
     );
     expect(renderDocsBlock).not.toMatch(/target\s*=\s*["']_blank["']/);
+    expect(renderDocsBlock).not.toMatch(/href=/);
   });
 });
 
-describe('Docs tab — linked files exist', () => {
-  const EXPECTED_FILES = [
+// The two internal reference pages were archived out of the published app.
+// docs-archive/ is not served by GitHub Pages, so a copy left behind in docs/
+// would be a stale duplicate and a link back into it would 404.
+describe('Project docs — archived, not published', () => {
+  const ARCHIVED_FILES = [
     'clubhouse-golf-order-processing-workflow.html',
     'clubhouse-golf-custom-vs-shopify-comparison.html',
   ];
 
-  EXPECTED_FILES.forEach(file => {
-    test(`${file} exists in docs/`, () => {
-      expect(fs.existsSync(path.join(DOCS_DIR, file))).toBe(true);
+  ARCHIVED_FILES.forEach(file => {
+    test(`${file} lives in docs-archive/, not docs/`, () => {
+      expect(fs.existsSync(path.join(ARCHIVE_DIR, file))).toBe(true);
+      expect(fs.existsSync(path.join(DOCS_DIR, file))).toBe(false);
     });
+
+    test(`nothing in docs/ links to ${file}`, () => {
+      expect(APP_JS).not.toContain(file);
+      expect(INDEX_HTML).not.toContain(file);
+    });
+  });
+
+  test('index.html is the only HTML published from docs/', () => {
+    const html = fs.readdirSync(DOCS_DIR).filter(f => f.endsWith('.html'));
+    expect(html).toEqual(['index.html']);
   });
 });
 
