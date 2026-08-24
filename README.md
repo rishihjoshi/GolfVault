@@ -56,12 +56,27 @@ docs/
 │   ├── coaches.json    # 3 coach profiles with availability
 │   ├── courses.json    # 10 video courses (locked/unlocked)
 │   └── submissions.json # Sample swing submissions with feedback
+├── assets/
+│   ├── clubhouse-mark.svg       # "C" monogram for dark grounds
+│   └── clubhouse-mark-light.svg # "C" monogram for ivory grounds
 └── icons/
     ├── icon.svg
     ├── icon-maskable.svg
     ├── icon-192.png
     └── icon-512.png
 ```
+
+Every mark is generated from one vector definition:
+
+```bash
+node generate-icons.mjs
+```
+
+`brand-mark.mjs` holds the monogram as analytic geometry and renders it two
+ways — as SVG elements, and as a point sampler the supersampling rasteriser in
+`generate-icons.mjs` uses to write the PNGs. Nothing is ever upscaled from a
+raster, so editing the geometry there updates the favicon, the app icons, the
+maskable icon and the in-app logo together.
 
 ---
 
@@ -98,23 +113,24 @@ Your key is stored in `localStorage` — never sent to our servers.
 
 ## 🎨 Design System
 
-Palette extracted from the brand reference site, [chgolfco.com](https://chgolfco.com/).
+The six brand colours. The working combination is **Deep Green + Ivory +
+Muted Gold + Onyx**; sage and charcoal are supporting tones.
 
 | Token | Value | Role |
 |-------|-------|------|
-| Ink | `#0A0B0B` | Primary brand surface |
-| Black | `#000000` | Nav, buttons, deepest surface |
-| Tan | `#B69571` | Brand accent — CTAs, taglines |
-| Sand | `#EEDAB8` | Accent light — badges |
-| Surface | `#F5F5F5` | Secondary background |
-| Border | `#E5E5E5` | Hairlines |
-| Subtext | `#4D4D4D` | Muted copy |
+| Deep Clubhouse Green | `#0B2F24` | Primary brand colour — header, hero, dark panels |
+| Almost Black / Onyx | `#0A0D0C` | Backgrounds, nav, apparel, premium applications |
+| Muted Masters Gold | `#C49A43` | Flag, accents, trim, buttons |
+| Warm Ivory | `#F2EFE8` | Wordmark, light backgrounds, contrast |
+| Muted Sage / Moss | `#53695C` | Secondary green, lifestyle graphics |
+| Charcoal | `#252B28` | Supporting neutral |
 
 **Type:** Bebas Neue (headings, subheadings, CTAs) · Bricolage Grotesque (body, nav, forms).
 
-> The earlier table here documented `#1B4332 / #C9A84C / #1C1C1E / #f2f2f7`. Those
-> values were never in `styles.css` — the doc had drifted from the code. Every
-> colour now lives in the `:root` block of `docs/styles.css`; change it there.
+> Every colour lives in the `:root` block of `docs/styles.css` as a `--ch-*`
+> token; the rest of the sheet references those, so a palette change is a
+> one-block edit. Text colours in this palette were checked against WCAG AA on
+> both the ivory and deep-green grounds.
 
 ---
 
