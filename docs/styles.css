@@ -1668,54 +1668,50 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
 .empty-state p { font-size: 13px; line-height: 1.6; }
 
 /* ── 26. Brand Hero ─────────────────────────────────────────── */
-/* The landing lockup: monogram, wordmark, rule, statement — all on the deep
-   green primary. Built from type and one vector mark rather than a raster,
-   so it is sharp on every display and costs a couple of kilobytes. */
+/* Hero banner — shown whole, since the supplied artwork is a finished
+   composition that already carries the monogram and wordmark. */
+.brand-banner {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--ch-ink);
+  line-height: 0;
+}
+.brand-banner-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* The artwork's foot is sunlit grass and the section below it is deep green.
+   Fade the last eighth into that green so there is no hard seam; it covers
+   turf only, so no part of the lockup is obscured. */
+.brand-banner::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 12%;
+  background: linear-gradient(to bottom, rgba(11,47,36,0), var(--ch-ink));
+  pointer-events: none;
+}
+
 .brand-hero {
   position: relative;
   overflow: hidden;
   background: var(--ch-ink);
-  padding: 34px var(--content-pad) 30px;
+  padding: 22px var(--content-pad) 26px;
   text-align: center;
 }
-/* Sheen: an off-centre gold wash and a deeper pool at the foot, so the flat
-   green reads as a lit surface. Sits behind the content, ignores pointers. */
+/* Sheen: a soft gold wash so the flat green reads as a lit surface. */
 .brand-hero::before {
   content: '';
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(120% 78% at 50% 6%,  rgba(196,154,67,.20), rgba(196,154,67,0) 62%),
-    radial-gradient(100% 68% at 50% 108%, rgba(10,13,12,.85),  rgba(10,13,12,0)  70%);
+  background: radial-gradient(120% 90% at 50% 0%, rgba(196,154,67,.16), rgba(196,154,67,0) 66%);
   pointer-events: none;
 }
 .brand-hero > * { position: relative; }
-.brand-hero-mark {
-  display: block;
-  width: 104px;
-  height: 104px;
-  margin: 0 auto 14px;
-}
-/* Wordmark — Bebas, letterspaced to match the printed lockup. "Golf" carries
-   the gold, exactly as in the horizontal lockup. */
-.brand-wordmark {
-  font-family: var(--font-heading);
-  font-size: clamp(28px, 8.6vw, 40px);
-  font-weight: var(--fw-hero);
-  letter-spacing: 5px;
-  text-indent: 5px;          /* balances the trailing letterspace */
-  text-transform: uppercase;
-  line-height: 1;
-  color: var(--ch-ivory);
-}
-.brand-wordmark span { color: var(--gold-500); }
-.brand-rule {
-  width: 56px;
-  height: 2px;
-  margin: 14px auto 16px;
-  background: var(--gold-500);
-  border-radius: var(--radius-full);
-}
 
 /* ── Brand statement (inside the hero) ───────────────────────── */
 .brand-eyebrow {
@@ -2173,4 +2169,195 @@ h4 { font-size: 17px; font-weight: var(--fw-section); font-family: var(--font-he
 :focus-visible {
   outline: 2px solid var(--green-600);
   outline-offset: 2px;
+}
+
+/* ── 34. Find Your Fit — stats form, driver ranking, curated picks ──── */
+/* Lives in Performance > Stats. The visual job is "confidence over clutter":
+   one card per idea, a numbered ranking rather than a photo grid, and the
+   reasoning for each placement shown inline instead of hidden. */
+.stats-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px var(--content-pad) 24px;
+}
+.stats-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 18px 16px;
+}
+.stats-card .story-lead { margin-bottom: 6px; }
+.stats-note {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  margin-bottom: 14px;
+}
+
+/* Numbers form */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.stats-field { display: flex; flex-direction: column; gap: 5px; }
+.stats-field-wide { grid-column: 1 / -1; }
+.stats-field > span {
+  font-family: var(--font-heading);
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.stats-field > span em { font-style: normal; text-transform: none; letter-spacing: 0; opacity: .75; }
+.stats-field input,
+.stats-field select {
+  font-family: var(--font-body);
+  font-size: 16px;              /* 16px keeps iOS from zooming the viewport */
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  width: 100%;
+}
+.stats-field input:focus,
+.stats-field select:focus { outline: 2px solid var(--gold-500); outline-offset: 1px; }
+
+/* Derived profile readout */
+.stats-readout { background: var(--green-100); border-color: var(--green-200); }
+.readout-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 10px; }
+.readout-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--color-surface);
+  border: 1px solid var(--green-200);
+  border-radius: var(--radius-sm);
+  padding: 7px 11px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+.readout-chip em {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.stats-disclaimer { font-size: 12px; line-height: 1.5; color: var(--color-text-muted); }
+
+.curated-sort { margin: 0 0 12px; }
+
+/* Driver ranking */
+.driver-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.driver-row {
+  display: flex;
+  gap: 12px;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  padding: 12px;
+}
+/* The left rule is the only colour signal for match strength, so it never
+   carries meaning on its own — the percentage is always written out too. */
+.driver-row.match-strong { border-left-color: var(--color-success); }
+.driver-row.match-fair   { border-left-color: var(--gold-500); }
+.driver-row.match-weak   { border-left-color: var(--gray-300); }
+.driver-rank {
+  flex: 0 0 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background: var(--ch-ink);
+  color: var(--ch-ivory);
+  font-family: var(--font-heading);
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.driver-body { flex: 1; min-width: 0; }
+.driver-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.driver-name {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  letter-spacing: .4px;
+  color: var(--color-text);
+}
+.driver-price { font-size: 14px; font-weight: 700; color: var(--color-text); white-space: nowrap; }
+.driver-line {
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gold-600);
+  margin-bottom: 6px;
+}
+.driver-blurb { font-size: 13px; line-height: 1.55; color: var(--color-text-muted); margin-bottom: 8px; }
+.driver-specs { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+.spec-chip {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  background: var(--green-100);
+  color: var(--green-800);
+  border: 1px solid var(--green-200);
+}
+.driver-match { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.match-bar {
+  flex: 1;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--gray-200);
+  overflow: hidden;
+}
+.match-bar span { display: block; height: 100%; background: var(--ch-ink); border-radius: var(--radius-full); }
+.match-score {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  letter-spacing: .5px;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+.driver-reasons { list-style: none; display: flex; flex-direction: column; gap: 3px; margin-bottom: 8px; }
+.driver-reasons li { font-size: 12px; line-height: 1.5; color: var(--color-text-muted); padding-left: 14px; position: relative; }
+.driver-reasons li::before { content: '·'; position: absolute; left: 4px; color: var(--gold-600); font-weight: 700; }
+.driver-shop { width: 100%; }
+
+/* Cross-category picks */
+.curated-picks { display: flex; flex-direction: column; gap: 10px; }
+.curated-pick {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  text-align: left;
+  width: 100%;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 10px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color var(--dur-fast) ease;
+}
+.curated-pick:hover { border-color: var(--gold-500); }
+.curated-pick img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex: 0 0 56px;
+  background: var(--gray-200);
+}
+.curated-pick-body { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.curated-pick-name { font-size: 14px; font-weight: 600; color: var(--color-text); }
+.curated-pick-why { font-size: 12px; line-height: 1.5; color: var(--color-text-muted); }
+.curated-pick-price { font-size: 13px; font-weight: 700; color: var(--color-text); }
+
+@media (max-width: 359px) {
+  .stats-grid { grid-template-columns: 1fr; }
 }
