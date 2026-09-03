@@ -55,6 +55,7 @@ docs/
 │   ├── products.json   # 20 sample golf products
 │   ├── coaches.json    # 3 coach profiles with availability
 │   ├── courses.json    # 10 video courses (locked/unlocked)
+│   ├── drivers.json    # Top 10 drivers + their fitting attributes
 │   └── submissions.json # Sample swing submissions with feedback
 ├── assets/
 │   ├── clubhouse-mark.svg       # "C" monogram for dark grounds
@@ -127,10 +128,49 @@ Muted Gold + Onyx**; sage and charcoal are supporting tones.
 
 **Type:** Bebas Neue (headings, subheadings, CTAs) · Bricolage Grotesque (body, nav, forms).
 
+### Brand language
+
+Copy follows the *Clubhouse Golf Brand Messaging & Go-To-Market Playbook*.
+
+| Element | Line |
+|---------|------|
+| Brand line | **Everything Golf. One Clubhouse.** |
+| Supporting line | Modern Golf. Made Simple. |
+| Brand promise | We make golf easier to navigate. |
+| Customer benefit | Discover more. Decide better. Experience more. |
+| Campaign thought | Golf has everything. It just isn't all in one place. Yet. |
+
+Voice: *"Here are the best options and why they matter"* — not *"this revolutionary
+technology will transform your game."* CTAs are intent-specific ("Find Your Fit",
+"Compare Options"), never generic. Market what the app does **today**
+(Discover, Compare, Shop); the rest of the ecosystem is framed as coming next.
+
 > Every colour lives in the `:root` block of `docs/styles.css` as a `--ch-*`
 > token; the rest of the sheet references those, so a palette change is a
 > one-block edit. Text colours in this palette were checked against WCAG AA on
 > both the ivory and deep-green grounds.
+
+---
+
+## ⛳ Find Your Fit
+
+The **Performance → Stats** tab is the "Confidence Over Clutter" pillar in code.
+A golfer enters five numbers — handicap, clubhead speed, driver carry, budget and
+typical miss — and the Top 10 driver list re-ranks around them.
+
+Scoring lives in `scoreDriver()` and is deliberately plain arithmetic over four
+factors (handicap-band overlap, speed window, bias vs. the stated miss, and
+forgiveness-or-workability weighted by band), minus a sloped budget penalty.
+That means:
+
+- every placement can be explained in a sentence, and the UI shows those reasons
+  inline rather than hiding them behind a score;
+- the same numbers always produce the same order (ties break on editorial rank);
+- the profile persists in `localStorage` under `gv_player_profile`.
+
+Driver data lives in `docs/data/drivers.json`. Like the rest of the catalogue it
+is **sample data with invented model names** — it is not a real product database,
+and the UI labels the output as guidance rather than a launch-monitor fitting.
 
 ---
 

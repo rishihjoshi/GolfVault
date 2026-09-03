@@ -1,0 +1,143 @@
+[
+  {
+    "id": "d01",
+    "rank": 1,
+    "name": "TourEdge Pro 460cc",
+    "line": "Clubhouse Select",
+    "price": 449.99,
+    "productId": "p001",
+    "blurb": "Adjustable loft, low-spin face and a genuinely forgiving 460cc head — the rare driver that suits a wide band of players.",
+    "fit": {
+      "handicapMin": 5, "handicapMax": 22,
+      "speedMin": 88, "speedMax": 108,
+      "launch": "mid", "spin": "low",
+      "forgiveness": 4, "workability": 3, "bias": "neutral"
+    }
+  },
+  {
+    "id": "d02",
+    "rank": 2,
+    "name": "Fairway Authority Max D",
+    "line": "Clubhouse Select",
+    "price": 399.99,
+    "blurb": "Heel-weighted draw bias with a deep centre of gravity. Built to straighten a slice without feeling like a corrective club.",
+    "fit": {
+      "handicapMin": 14, "handicapMax": 36,
+      "speedMin": 70, "speedMax": 95,
+      "launch": "high", "spin": "high",
+      "forgiveness": 5, "workability": 1, "bias": "draw"
+    }
+  },
+  {
+    "id": "d03",
+    "rank": 3,
+    "name": "Meridian TS Tour",
+    "line": "Clubhouse Tour",
+    "price": 579.99,
+    "blurb": "A compact, low-spin head for players who shape shots on purpose. Punishing off the toe — that is the trade for the control.",
+    "fit": {
+      "handicapMin": 0, "handicapMax": 8,
+      "speedMin": 100, "speedMax": 125,
+      "launch": "low", "spin": "low",
+      "forgiveness": 2, "workability": 5, "bias": "neutral"
+    }
+  },
+  {
+    "id": "d04",
+    "rank": 4,
+    "name": "Clubhouse Ascent 10.5",
+    "line": "Clubhouse Select",
+    "price": 329.99,
+    "blurb": "High-launch, lightweight build aimed at moderate swing speeds. The easiest club in this list to get airborne.",
+    "fit": {
+      "handicapMin": 18, "handicapMax": 36,
+      "speedMin": 65, "speedMax": 88,
+      "launch": "high", "spin": "high",
+      "forgiveness": 5, "workability": 1, "bias": "draw"
+    }
+  },
+  {
+    "id": "d05",
+    "rank": 5,
+    "name": "Vector CB Carbon",
+    "line": "Clubhouse Tour",
+    "price": 629.99,
+    "blurb": "Carbon crown frees up weight for a wide, stable face. Long and forgiving, but the price only makes sense at speed.",
+    "fit": {
+      "handicapMin": 2, "handicapMax": 14,
+      "speedMin": 98, "speedMax": 120,
+      "launch": "mid", "spin": "low",
+      "forgiveness": 4, "workability": 4, "bias": "neutral"
+    }
+  },
+  {
+    "id": "d06",
+    "rank": 6,
+    "name": "Bunker Hill Stability 9",
+    "line": "Clubhouse Select",
+    "price": 379.99,
+    "blurb": "The widest effective face here. Mishits off the heel and toe lose distance slowly rather than falling off a cliff.",
+    "fit": {
+      "handicapMin": 10, "handicapMax": 28,
+      "speedMin": 80, "speedMax": 100,
+      "launch": "mid", "spin": "mid",
+      "forgiveness": 5, "workability": 2, "bias": "neutral"
+    }
+  },
+  {
+    "id": "d07",
+    "rank": 7,
+    "name": "Augusta Line Fade Spec",
+    "line": "Clubhouse Tour",
+    "price": 549.99,
+    "blurb": "Toe-weighted for players who fight a hook. A specialist club — wrong miss, wrong driver.",
+    "fit": {
+      "handicapMin": 0, "handicapMax": 12,
+      "speedMin": 95, "speedMax": 118,
+      "launch": "low", "spin": "low",
+      "forgiveness": 3, "workability": 4, "bias": "fade"
+    }
+  },
+  {
+    "id": "d08",
+    "rank": 8,
+    "name": "Clubhouse Origin Lite",
+    "line": "Clubhouse Essentials",
+    "price": 219.99,
+    "blurb": "The value pick. A light, high-launching head that does the job while a new player works out what they actually need.",
+    "fit": {
+      "handicapMin": 22, "handicapMax": 36,
+      "speedMin": 60, "speedMax": 85,
+      "launch": "high", "spin": "high",
+      "forgiveness": 4, "workability": 1, "bias": "draw"
+    }
+  },
+  {
+    "id": "d09",
+    "rank": 9,
+    "name": "Longbow XT Distance",
+    "line": "Clubhouse Select",
+    "price": 469.99,
+    "blurb": "Long, hot face built for chasing carry numbers. Rewards a centred strike and does little to help a bad one.",
+    "fit": {
+      "handicapMin": 4, "handicapMax": 16,
+      "speedMin": 95, "speedMax": 115,
+      "launch": "mid", "spin": "low",
+      "forgiveness": 3, "workability": 3, "bias": "neutral"
+    }
+  },
+  {
+    "id": "d10",
+    "rank": 10,
+    "name": "Greenkeeper Tempo 12°",
+    "line": "Clubhouse Essentials",
+    "price": 259.99,
+    "blurb": "Twelve degrees of loft and a soft, whippy profile for slower tempos. Built for height and a soft landing, not for distance.",
+    "fit": {
+      "handicapMin": 24, "handicapMax": 36,
+      "speedMin": 55, "speedMax": 80,
+      "launch": "high", "spin": "high",
+      "forgiveness": 4, "workability": 1, "bias": "draw"
+    }
+  }
+]

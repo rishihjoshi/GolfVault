@@ -4,7 +4,7 @@
 // carries no hardcoded deploy path. It works unchanged at a repo subpath
 // (/whatever/), at a domain root, or behind a custom domain — rename the repo
 // or attach a domain and nothing here needs editing.
-const CACHE_NAME = 'clubhouse-golf-v18';  // bumped: green/ivory/gold palette, C monogram, docs archived
+const CACHE_NAME = 'clubhouse-golf-v19';  // bumped: Home tab, supplied hero art, Find Your Fit
 const abs = rel => new URL(rel, self.location).href;
 const STATIC_ASSETS = [
   './',
@@ -17,6 +17,7 @@ const STATIC_ASSETS = [
   './data/courses.json',
   './data/submissions.json',
   './data/profile.json',
+  './data/drivers.json',
   './icons/icon.svg',
   './icons/icon-maskable.svg',
   './icons/icon-192.png',
@@ -24,7 +25,8 @@ const STATIC_ASSETS = [
   './icons/clubhouse-golf-app-icon.png',
   './icons/clubhouse-golf-app-hero.png',
   './icons/product-placeholder.svg',
-  './assets/clubhouse-mark.svg'
+  './assets/clubhouse-mark.svg',
+  './assets/clubhouse-hero.jpg'
 ].map(abs);
 
 // ── Install: pre-cache static shell ──────────────────────────────────────────

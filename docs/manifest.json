@@ -2,7 +2,7 @@
   "id": "./",
   "name": "Clubhouse Golf",
   "short_name": "Clubhouse Golf",
-  "description": "Modern Golf. Made Simple. Shop apparel and gear, improve your game with Caddy AI, and join the community changing golf.",
+  "description": "The all-in-one destination for discovering, comparing and experiencing everything golf.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -57,7 +57,7 @@
       "sizes": "874x1024",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Clubhouse Golf — Your Complete Golf Companion"
+      "label": "Clubhouse Golf — Everything Golf. One Clubhouse."
     }
   ],
   "shortcuts": [

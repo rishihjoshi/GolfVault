@@ -18,14 +18,15 @@ const DATA_BASE = `${BASE}/data`;
 // docs/version.json and the service-worker CACHE_NAME). The running app
 // compares this baked-in value against the live version.json to detect a
 // newer deploy and offer a one-tap "pull latest" refresh.
-const APP_VERSION = '2.1.0';
+const APP_VERSION = '2.2.0';
 const VERSION_URL = `${BASE}/version.json`;
 
-const TABS = ['vision', 'marketplace', 'performance', 'caddy', 'profile', 'docs'];
-const DEFAULT_TAB = 'vision';
+const TABS = ['home', 'marketplace', 'performance', 'caddy', 'profile', 'docs'];
+const DEFAULT_TAB = 'home';
 // Tabs renamed or merged since launch. Installed PWA shortcuts and old
 // bookmarks still point at the previous ids, so resolve rather than drop them.
 const TAB_ALIASES = {
+  vision: 'home',
   shop: 'marketplace',
   book: 'performance',
   lessons: 'performance',
@@ -101,6 +102,11 @@ const state = {
   // and which now renders inside Performance.
   perfSub: 'swing',
 
+  // Fitting — the Top 10 drivers list and the numbers it is scored against.
+  drivers: [],
+  playerProfile: null,      // null until the golfer fills in their numbers
+  curatedSort: 'fit',       // 'fit' | 'rank'
+
   // Swing
   selectedSubmission: null,
   uploadFile: null,
@@ -139,6 +145,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadJSON(`${DATA_BASE}/courses.json`).then(d => { state.courses = d; }),
     loadJSON(`${DATA_BASE}/submissions.json`).then(d => { state.submissions = d; }),
     loadJSON(`${DATA_BASE}/profile.json`).then(d => { state.profile = d; }),
+    loadJSON(`${DATA_BASE}/drivers.json`).then(d => { state.drivers = d; }),
   ]).catch(err => console.warn('[GV] Data load partial failure:', err));
 
   // Route to initial tab
@@ -262,6 +269,8 @@ function loadPersistedState() {
     if (progress) state.videoProgress = JSON.parse(progress);
     const subscribed = localStorage.getItem('gv_subscribed');
     if (subscribed) state.subscribed = subscribed === 'true';
+    const player = localStorage.getItem('gv_player_profile');
+    if (player) state.playerProfile = normalisePlayerProfile(JSON.parse(player));
   } catch (e) { console.warn('[GV] State restore error:', e); }
 }
 
@@ -271,6 +280,29 @@ function saveCart() {
 
 function saveVideoProgress() {
   localStorage.setItem('gv_video_progress', JSON.stringify(state.videoProgress));
+}
+
+// The stored profile is whatever was in localStorage last: an older schema, a
+// hand-edited value, or a half-written object. Coerce it into range rather
+// than trusting it — an out-of-band handicap silently breaks every match
+// score, and a missing one used to throw and take the Stats tab down.
+function normalisePlayerProfile(raw) {
+  if (!raw || typeof raw !== 'object') return null;
+  const num = (v, lo, hi, dflt) => {
+    const n = Math.round(Number(v));
+    return Number.isFinite(n) ? Math.max(lo, Math.min(hi, n)) : dflt;
+  };
+  return {
+    handicap:    num(raw.handicap,     0,  54,  15),
+    swingSpeed:  num(raw.swingSpeed,  40, 140,  92),
+    driverCarry: num(raw.driverCarry, 80, 380, 230),
+    budget:      num(raw.budget,       0, 5000, 500),
+    miss: MISS_TYPES.some(m => m.id === raw.miss) ? raw.miss : 'straight',
+  };
+}
+
+function savePlayerProfile() {
+  localStorage.setItem('gv_player_profile', JSON.stringify(state.playerProfile));
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -310,7 +342,7 @@ function activateTab(tab, skipHistory = false) {
 
 function renderTab(tab) {
   switch (tab) {
-    case 'vision':      renderVision(); break;
+    case 'home':        renderHome();   break;
     case 'marketplace': renderMarketplace(); break;
     case 'performance': renderPerformance(); break;
     case 'caddy':       renderCaddy(); break;
@@ -683,11 +715,15 @@ function renderPerformance() {
       const btn = e.target.closest('[data-sub]');
       if (!btn || btn.dataset.sub === state.perfSub) return;
       state.perfSub = btn.dataset.sub;
-      panel.querySelectorAll('#perf-subnav .topic-tab').forEach(b =>
-        b.classList.toggle('active', b.dataset.sub === state.perfSub));
-      renderPerfBody();
+      renderPerformance();   // idempotent: syncs the pills, redraws the body
     });
   }
+
+  // Sync every time, not just on first render: another tab can set
+  // state.perfSub before routing here (the Home "Find Your Fit" CTA does),
+  // and the sub-nav is only built once.
+  panel.querySelectorAll('#perf-subnav .topic-tab').forEach(b =>
+    b.classList.toggle('active', b.dataset.sub === state.perfSub));
 
   renderPerfBody();
 }
@@ -706,22 +742,332 @@ function renderPerfBody() {
     case 'swing':    renderSwing(body); break;
     case 'lessons':  renderLessons(body); break;
     case 'coaching': renderBooking(body); break;
-    case 'stats':    body.innerHTML = perfStatsHtml(); break;
+    case 'stats':    body.innerHTML = perfStatsHtml(); wireStatsEvents(body); break;
   }
 }
 
-// Not built. The four features are the brand site's own Performance list.
+// ─────────────────────────────────────────────────────────────
+// 7b. FIND YOUR FIT — stats in, a shortlist out
+//
+// This is the "Confidence Over Clutter" pillar in code: rather than dropping a
+// wall of drivers in front of a golfer, take five numbers and rank the list
+// around them. The golfer enters the numbers; everything below is derived by
+// plain arithmetic, so every placement can be explained in a sentence and two
+// golfers with the same numbers always see the same order.
+//
+// The rules are the conventional fitting heuristics — more forgiveness as
+// handicap rises, flex from clubhead speed, bias opposite the miss. Useful
+// guidance, not a launch-monitor fitting, and the UI says so rather than
+// implying a precision it does not have.
+// ─────────────────────────────────────────────────────────────
+const MISS_TYPES = [
+  { id: 'slice',    label: 'Slice / fade right', wants: 'draw' },
+  { id: 'straight', label: 'Reasonably straight', wants: 'neutral' },
+  { id: 'hook',     label: 'Hook / pull left',   wants: 'fade' },
+];
+
+// Handicap bands. `priority` is what a player in this band gains most from,
+// and it drives both the copy and the forgiveness weighting.
+const HC_BANDS = [
+  { max: 5,  label: 'Low / scratch',   priority: 'workability', blurb: 'You strike it well enough that shot shape and spin control matter more than forgiveness.' },
+  { max: 12, label: 'Mid-low',         priority: 'balanced',    blurb: 'Look for a head that holds up on mishits without giving away the ability to shape a shot.' },
+  { max: 20, label: 'Mid',             priority: 'forgiveness', blurb: 'Stability across the face is worth more to your scorecard than workability.' },
+  { max: 28, label: 'High',            priority: 'forgiveness', blurb: 'Forgiveness and launch first. Keeping the ball in play beats squeezing out extra yards.' },
+  { max: 99, label: 'New to the game', priority: 'forgiveness', blurb: 'Height and forgiveness first. A light, high-launching head makes the game far more enjoyable early on.' },
+];
+
+const hcBand = hc => HC_BANDS.find(b => hc <= b.max);
+
+// Shaft flex from clubhead speed — the standard published bands.
+function shaftFlex(mph) {
+  if (mph < 75)  return 'Senior (A)';
+  if (mph < 85)  return 'Regular (R)';
+  if (mph < 97)  return 'Regular / Stiff';
+  if (mph < 105) return 'Stiff (S)';
+  return 'Extra Stiff (X)';
+}
+
+// A driver's fit as a 0-100 score plus the reasons behind it. Each component is
+// capped so no single factor can carry an otherwise poor match.
+function scoreDriver(d, prof) {
+  const f = d.fit;
+  const reasons = [];
+  let score = 0;
+
+  // Handicap band overlap — the heaviest single factor.
+  if (prof.handicap >= f.handicapMin && prof.handicap <= f.handicapMax) {
+    score += 34;
+    reasons.push(`Built for ${f.handicapMin}-${f.handicapMax} handicaps`);
+  } else {
+    const off = prof.handicap < f.handicapMin ? f.handicapMin - prof.handicap : prof.handicap - f.handicapMax;
+    score += Math.max(0, 34 - off * 4);
+    if (off > 4) reasons.push(prof.handicap < f.handicapMin ? 'Aimed at higher handicaps than yours' : 'Aimed at lower handicaps than yours');
+  }
+
+  // Clubhead speed against the head's designed window.
+  if (prof.swingSpeed >= f.speedMin && prof.swingSpeed <= f.speedMax) {
+    score += 26;
+    reasons.push(`Suits ${prof.swingSpeed} mph`);
+  } else {
+    const off = prof.swingSpeed < f.speedMin ? f.speedMin - prof.swingSpeed : prof.swingSpeed - f.speedMax;
+    score += Math.max(0, 26 - off * 2);
+    reasons.push(prof.swingSpeed < f.speedMin ? 'Wants more clubhead speed than you carry' : 'You would likely outrun this head');
+  }
+
+  // Bias against the stated miss — a draw-biased head for a slice, and so on.
+  const wants = (MISS_TYPES.find(m => m.id === prof.miss) || {}).wants;
+  if (f.bias === wants) {
+    score += 18;
+    if (wants !== 'neutral') reasons.push(`${cap(f.bias)} bias works against your ${prof.miss}`);
+  } else if (wants === 'neutral' || f.bias === 'neutral') {
+    score += 10;
+  } else {
+    reasons.push(`${cap(f.bias)} bias would exaggerate your ${prof.miss}`);
+  }
+
+  // Forgiveness vs. workability, weighted by what the handicap band needs.
+  const need = hcBand(prof.handicap).priority;
+  if (need === 'forgiveness')      score += f.forgiveness * 3.4;
+  else if (need === 'workability') score += f.workability * 3.4;
+  else                             score += (f.forgiveness + f.workability) * 1.7;
+
+  // Budget. Over is penalised on a slope rather than a cliff, so a slightly
+  // expensive but otherwise excellent match still surfaces.
+  if (prof.budget && d.price > prof.budget) {
+    score -= Math.min(22, ((d.price - prof.budget) / prof.budget) * 55);
+    reasons.push(`$${Math.round(d.price - prof.budget)} over your budget`);
+  } else if (prof.budget) {
+    score += 5;
+  }
+
+  return { score: Math.max(0, Math.min(100, Math.round(score))), reasons: reasons.slice(0, 3) };
+}
+
+// Cross-category picks: a handful of rules mapping a band and a miss onto other
+// things worth a look. Deliberately short — a shortlist, not another wall.
+function curatedProducts(prof) {
+  const need = hcBand(prof.handicap).priority;
+  const picks = [];
+  const add = (id, why) => {
+    const p = state.products.find(x => x.id === id);
+    if (p) picks.push({ product: p, why });
+  };
+
+  if (need === 'forgiveness') {
+    add('p005', 'A hybrid replaces the long irons most mid-to-high handicaps struggle to launch.');
+  } else {
+    add('p002', 'Blades reward the repeatable strike your handicap implies.');
+    add('p004', 'A tour-grind lob wedge gives you short-side control to match.');
+  }
+  if (prof.miss === 'slice') add('p019', 'Path work targets the out-to-in swing behind most slices.');
+  if (prof.driverCarry && prof.driverCarry < 200) add('p017', 'Carry that short means more of your scoring happens on the green than off the tee.');
+  add('p012', 'Knowing your real number is worth more than ten imagined yards.');
+  if (prof.budget >= 800) add('p016', 'A launch monitor turns everything on this page from guidance into measurement.');
+
+  const seen = new Set();
+  return picks.filter(x => !seen.has(x.product.id) && seen.add(x.product.id)).slice(0, 4);
+}
+
+// ── Stats view ───────────────────────────────────────────────
 function perfStatsHtml() {
-  const soon = ['Shot tracking', 'Handicap dashboard', 'Performance analytics', 'Virtual coaching'];
+  const prof = state.playerProfile;
   return `
-    <div class="empty-state">
-      <div class="empty-icon">📊</div>
-      <h3>Stats are on the way</h3>
-      <p>Round-by-round tracking and analytics arrive with the Performance pillar.</p>
-      <ul class="story-list" style="justify-content:center;margin-top:14px">
-        ${soon.map(f => `<li>${escHtml(f)}</li>`).join('')}
-      </ul>
+    <div class="stats-wrap">
+      ${playerNumbersHtml(prof)}
+      ${prof ? playerReadoutHtml(prof) : ''}
+      ${curatedHtml(prof)}
     </div>`;
+}
+
+function playerNumbersHtml(prof) {
+  const p = prof || { handicap: 15, swingSpeed: 92, driverCarry: 230, miss: 'straight', budget: 500 };
+  return `
+    <section class="stats-card">
+      <div class="story-eyebrow">Your Numbers</div>
+      <p class="story-lead">${prof ? 'Tune your numbers' : 'Start with five numbers'}</p>
+      <p class="stats-note">Buying a driver blind is an easy way to spend $600 badly. Tell us where your game is and we will narrow the field to the few worth your time.</p>
+      <div class="stats-grid">
+        <label class="stats-field">
+          <span>Handicap</span>
+          <input type="number" id="pf-handicap" min="0" max="54" step="1" value="${p.handicap}" inputmode="numeric">
+        </label>
+        <label class="stats-field">
+          <span>Clubhead speed <em>mph</em></span>
+          <input type="number" id="pf-speed" min="40" max="140" step="1" value="${p.swingSpeed}" inputmode="numeric">
+        </label>
+        <label class="stats-field">
+          <span>Driver carry <em>yds</em></span>
+          <input type="number" id="pf-carry" min="80" max="380" step="5" value="${p.driverCarry}" inputmode="numeric">
+        </label>
+        <label class="stats-field">
+          <span>Budget <em>USD</em></span>
+          <input type="number" id="pf-budget" min="0" max="5000" step="50" value="${p.budget}" inputmode="numeric">
+        </label>
+        <label class="stats-field stats-field-wide">
+          <span>Your typical miss</span>
+          <select id="pf-miss">
+            ${MISS_TYPES.map(m => `<option value="${m.id}"${m.id === p.miss ? ' selected' : ''}>${escHtml(m.label)}</option>`).join('')}
+          </select>
+        </label>
+      </div>
+      <button class="btn btn-accent btn-full" id="pf-save" type="button">${prof ? 'Update My Fit' : 'Find Your Fit'}</button>
+      ${prof ? '<button class="btn btn-ghost btn-full" id="pf-clear" type="button" style="margin-top:8px">Clear my numbers</button>' : ''}
+    </section>`;
+}
+
+function playerReadoutHtml(prof) {
+  const b = hcBand(prof.handicap);
+  const miss = MISS_TYPES.find(m => m.id === prof.miss);
+  return `
+    <section class="stats-card stats-readout">
+      <div class="story-eyebrow">Your Profile</div>
+      <p class="story-lead">${escHtml(b.label)} &middot; ${prof.handicap} handicap</p>
+      <p>${escHtml(b.blurb)}</p>
+      <div class="readout-chips">
+        <span class="readout-chip"><em>Shaft flex</em>${escHtml(shaftFlex(prof.swingSpeed))}</span>
+        <span class="readout-chip"><em>Prioritise</em>${b.priority === 'workability' ? 'Control' : b.priority === 'balanced' ? 'Balance' : 'Forgiveness'}</span>
+        <span class="readout-chip"><em>Correct for</em>${escHtml(miss ? miss.label : '—')}</span>
+      </div>
+      <p class="stats-disclaimer">Guidance built from your numbers &mdash; a starting point, not a replacement for being fitted on a launch monitor.</p>
+    </section>`;
+}
+
+function curatedHtml(prof) {
+  const scored = state.drivers.map(d => ({ d, ...(prof ? scoreDriver(d, prof) : { score: null, reasons: [] }) }));
+  const list = prof && state.curatedSort === 'fit'
+    ? [...scored].sort((a, b) => b.score - a.score)
+    : [...scored].sort((a, b) => a.d.rank - b.d.rank);
+
+  return `
+    <section class="stats-card">
+      <div class="story-eyebrow">${prof ? 'Curated For You' : 'Compare Your Options'}</div>
+      <p class="story-lead">Top 10 Drivers</p>
+      <p class="stats-note">${prof
+        ? 'Ranked by how well each head matches your numbers. Every position is explained — no black box.'
+        : 'Our ranking of the ten worth comparing. Add your numbers above and the list re-sorts around your game.'}</p>
+      ${prof ? `
+      <div class="topic-tabs curated-sort" role="tablist">
+        <button class="topic-tab${state.curatedSort === 'fit' ? ' active' : ''}" data-sort="fit" type="button">Best fit for you</button>
+        <button class="topic-tab${state.curatedSort === 'rank' ? ' active' : ''}" data-sort="rank" type="button">Our ranking</button>
+      </div>` : ''}
+      <ol class="driver-list">
+        ${list.map(x => driverRowHtml(x)).join('')}
+      </ol>
+    </section>
+
+    ${prof ? `
+    <section class="stats-card">
+      <div class="story-eyebrow">Also Worth Considering</div>
+      <p class="story-lead">Beyond the tee</p>
+      <div class="curated-picks">
+        ${curatedProducts(prof).map(x => `
+          <button class="curated-pick" data-product-id="${x.product.id}" type="button">
+            <img src="${x.product.image}" alt="" loading="lazy" aria-hidden="true">
+            <span class="curated-pick-body">
+              <span class="curated-pick-name">${escHtml(x.product.name)}</span>
+              <span class="curated-pick-why">${escHtml(x.why)}</span>
+              <span class="curated-pick-price">$${x.product.price.toFixed(2)}</span>
+            </span>
+          </button>`).join('')}
+      </div>
+    </section>` : ''}`;
+}
+
+function driverRowHtml({ d, score, reasons }) {
+  const f = d.fit;
+  const tier = score === null ? '' : score >= 75 ? ' match-strong' : score >= 50 ? ' match-fair' : ' match-weak';
+  return `
+    <li class="driver-row${tier}">
+      <div class="driver-rank">${d.rank}</div>
+      <div class="driver-body">
+        <div class="driver-head">
+          <span class="driver-name">${escHtml(d.name)}</span>
+          <span class="driver-price">$${d.price.toFixed(2)}</span>
+        </div>
+        <div class="driver-line">${escHtml(d.line)}</div>
+        <p class="driver-blurb">${escHtml(d.blurb)}</p>
+        <div class="driver-specs">
+          <span class="spec-chip">${escHtml(f.launch)} launch</span>
+          <span class="spec-chip">${escHtml(f.spin)} spin</span>
+          <span class="spec-chip">${escHtml(f.bias)} bias</span>
+          <span class="spec-chip">hcp ${f.handicapMin}–${f.handicapMax}</span>
+        </div>
+        ${score === null ? '' : `
+        <div class="driver-match">
+          <div class="match-bar"><span style="width:${score}%"></span></div>
+          <span class="match-score">${score}% match</span>
+        </div>
+        ${reasons.length ? `<ul class="driver-reasons">${reasons.map(r => `<li>${escHtml(r)}</li>`).join('')}</ul>` : ''}`}
+        ${d.productId ? `<button class="btn btn-ghost btn-sm driver-shop" data-product-id="${d.productId}" type="button">See it in the Marketplace →</button>` : ''}
+      </div>
+    </li>`;
+}
+
+// Wires the Stats view. Called after every render of that sub-tab, since
+// renderPerfBody replaces the container's markup wholesale.
+function wireStatsEvents(body) {
+  const num = (id, fallback) => {
+    const el = body.querySelector(id);
+    const v = el ? parseInt(el.value, 10) : NaN;
+    return Number.isFinite(v) ? v : fallback;
+  };
+
+  body.querySelector('#pf-save')?.addEventListener('click', () => {
+    // Same normaliser as the restore path, so a hand-typed 900 handicap and a
+    // hand-edited localStorage entry are clamped by exactly one set of rules.
+    state.playerProfile = normalisePlayerProfile({
+      handicap:    num('#pf-handicap', 15),
+      swingSpeed:  num('#pf-speed',    92),
+      driverCarry: num('#pf-carry',   230),
+      budget:      num('#pf-budget',  500),
+      miss:        body.querySelector('#pf-miss')?.value,
+    });
+    savePlayerProfile();
+    renderPerfBody();
+    showToast('Your shortlist is ready ✓');
+  });
+
+  body.querySelector('#pf-clear')?.addEventListener('click', () => {
+    state.playerProfile = null;
+    try { localStorage.removeItem('gv_player_profile'); } catch (_) {}
+    renderPerfBody();
+  });
+
+  body.querySelector('.curated-sort')?.addEventListener('click', e => {
+    const btn = e.target.closest('[data-sort]');
+    if (!btn || btn.dataset.sort === state.curatedSort) return;
+    state.curatedSort = btn.dataset.sort;
+    renderPerfBody();
+  });
+
+  // Both the driver row's shop button and a cross-category pick open the
+  // catalogue item. #product-modal is rendered inside the Marketplace panel,
+  // so that tab has to be live before the detail can be opened — which is also
+  // where the golfer wants to end up.
+  body.addEventListener('click', e => {
+    const el = e.target.closest('[data-product-id]');
+    if (!el) return;
+    activateTab('marketplace');
+    openProductDetail(el.dataset.productId);
+  });
+}
+
+// Home teaser — the entry point into the fitting flow from the landing tab.
+function curatedTeaserHtml() {
+  const prof = state.playerProfile;
+  return `
+    <section class="brand-story">
+      <article class="story-block story-block-feature">
+        <div class="story-eyebrow">Decide Better</div>
+        <p class="story-lead">${prof
+          ? `Your Top 10, ranked for a ${prof.handicap} handicap.`
+          : 'Which driver is actually right for you?'}</p>
+        <p>${prof
+          ? 'Your shortlist is ranked against your handicap, clubhead speed and typical miss, with the reasoning shown for every placement. Update your numbers any time.'
+          : 'Give us your handicap, clubhead speed and typical miss. We will rank the ten drivers worth comparing around your game — and show you why each one landed where it did.'}</p>
+        <button class="btn btn-accent btn-full btn-lg" id="curated-cta" type="button">${prof ? 'See My Fit →' : 'Find Your Fit →'}</button>
+      </article>
+    </section>`;
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -1950,48 +2296,52 @@ const ROADMAP = [
 
 const JOIN_URL = 'https://chgolfco.com/?utm_source=pwa&utm_medium=app&utm_campaign=founding';
 
-function renderVision() {
-  const panel = document.getElementById('tab-vision');
+function renderHome() {
+  const panel = document.getElementById('tab-home');
   if (panel.dataset.rendered) return;
   panel.dataset.rendered = '1';
 
   panel.innerHTML = `
-    <!-- Landing surface: the full brand lockup on deep green. The wordmark is
-         live text in Bebas rather than baked into the artwork, so it stays
-         sharp at every density and re-themes with the palette. Only the "C"
-         monogram is an asset, and it is vector.
-         The update control lives here because this is the first tab. -->
-    <header class="brand-hero">
+    <!-- Landing surface. The supplied hero artwork already carries the full
+         lockup — monogram plus "CLUBHOUSE GOLF" — so nothing is overlaid on it
+         and the wordmark is not repeated below; the brand statement follows in
+         real copy. The update control lives here because this is the first tab. -->
+    <div class="brand-banner">
+      <img class="brand-banner-img" src="assets/clubhouse-hero.jpg"
+        alt="Clubhouse Golf" width="1024" height="608" fetchpriority="high">
       <button class="app-refresh" id="app-refresh" type="button"
         aria-label="Check for updates" title="Check for updates">
         <span class="app-refresh-icon" aria-hidden="true">⟳</span>
         <span class="app-refresh-label"></span>
       </button>
-      <img class="brand-hero-mark" src="assets/clubhouse-mark.svg"
-        alt="" aria-hidden="true" width="104" height="104">
-      <div class="brand-wordmark">Clubhouse <span>Golf</span></div>
-      <div class="brand-rule" aria-hidden="true"></div>
+    </div>
+
+    <header class="brand-hero">
       <div class="brand-eyebrow">Modern Golf. Made Simple.</div>
-      <h1 class="brand-headline">Everything Golf.</h1>
-      <p class="brand-lede">Shop apparel, discover new gear, improve your game, and join the community changing golf.</p>
+      <h1 class="brand-headline">Everything Golf.<br>One Clubhouse.</h1>
+      <p class="brand-lede">Discover, compare, shop, improve and experience more of the game &mdash; all in one place.</p>
     </header>
+
+    ${curatedTeaserHtml()}
 
     <section class="brand-story">
       <article class="story-block">
-        <div class="story-eyebrow">Why Clubhouse Exists</div>
-        <p class="story-lead">Golf has evolved. The experience hasn't.</p>
-        <p>We're building a modern golf brand centered around community, technology, experiences, and products people actually want.</p>
-        <p class="story-kicker">This is just the beginning.</p>
+        <div class="story-eyebrow">The Problem We Own</div>
+        <p class="story-lead">Golf isn't short on options. It's overwhelmed by them.</p>
+        <p>Equipment is on one site. Used clubs are somewhere else. Apparel, instruction, travel, courses and reviews are all somewhere else again — and every company tells you its own product is the answer.</p>
+        <p>Clubhouse exists to organise that fragmented world around the golfer.</p>
+        <p class="story-kicker">Golf has everything. It just isn't all in one place. Yet.</p>
       </article>
 
       <article class="story-block">
-        <div class="story-eyebrow">The Clubhouse</div>
-        <p class="story-lead">Golf is better together.</p>
-        <p>We're building a nationwide network of golf courses, teaching professionals, brands, creators, influencers, tournament hosts, and business partners — all working together to grow the game.</p>
+        <div class="story-eyebrow">Better Together</div>
+        <p class="story-lead">We're on the golfer's team.</p>
+        <p>We're not on any one manufacturer's side. New, used, premium or value — more choice means better decisions, so we bring courses, teaching professionals, brands, creators and partners into one ecosystem rather than trying to replace them.</p>
+        <p class="story-kicker">Discover more. Decide better. Experience more.</p>
       </article>
     </section>
 
-    <div class="section-header"><h2>What's Coming</h2></div>
+    <div class="section-header"><h2>What's Inside</h2></div>
     <div class="docs-tab-list">
       ${PILLARS.map(pillarCardHtml).join('')}
     </div>
@@ -2018,6 +2368,12 @@ function renderVision() {
   `;
 
   panel.querySelector('#app-refresh').addEventListener('click', onShopRefresh);
+
+  // Straight into the fitting flow, which lives under Performance > Stats.
+  panel.querySelector('#curated-cta').addEventListener('click', () => {
+    state.perfSub = 'stats';
+    activateTab('performance');
+  });
 
   panel.querySelector('.docs-tab-list').addEventListener('click', e => {
     const card = e.target.closest('[data-goto]');
