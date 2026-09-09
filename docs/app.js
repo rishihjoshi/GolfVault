@@ -18,7 +18,7 @@ const DATA_BASE = `${BASE}/data`;
 // docs/version.json and the service-worker CACHE_NAME). The running app
 // compares this baked-in value against the live version.json to detect a
 // newer deploy and offer a one-tap "pull latest" refresh.
-const APP_VERSION = '2.2.0';
+const APP_VERSION = '2.3.0';
 const VERSION_URL = `${BASE}/version.json`;
 
 const TABS = ['home', 'marketplace', 'performance', 'caddy', 'profile', 'docs'];
@@ -1095,7 +1095,29 @@ function coachListHtml() {
     </div>
     <div class="coaches-list">
       ${state.coaches.map(coach => coachCardHtml(coach)).join('')}
-    </div>`;
+    </div>
+
+    <!-- Supply side of the marketplace, sat under the coach list where a
+         browsing professional will see it. A full page rather than a modal:
+         the application is nine sections and wants its own URL so a coach
+         can be linked straight to it.
+         "Clubhouse Coach", not "golf coach" — this is an application to
+         join the network, not a route into the profession, and the copy
+         should not read as though we train people from scratch. -->
+    <section class="brand-story">
+      <article class="story-block story-block-feature">
+        <div class="story-eyebrow">For Coaches</div>
+        <p class="story-lead">Want to become a Clubhouse Coach?</p>
+        <p>Golfers arrive here not knowing who to work with. Tell us how you teach and who you teach best, and we will point the right golfers at you &mdash; not just any golfer.</p>
+        <ul class="story-list">
+          <li>Matched to golfers who fit</li>
+          <li>Verified profile</li>
+          <li>Free to apply</li>
+        </ul>
+        <a class="btn btn-accent btn-full btn-lg" href="coach-application.html">Apply to Coach &rarr;</a>
+        <p class="join-secondary">Takes about 10 minutes. Your progress saves as you go.</p>
+      </article>
+    </section>`;
 }
 
 function coachCardHtml(c) {

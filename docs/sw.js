@@ -4,11 +4,14 @@
 // carries no hardcoded deploy path. It works unchanged at a repo subpath
 // (/whatever/), at a domain root, or behind a custom domain — rename the repo
 // or attach a domain and nothing here needs editing.
-const CACHE_NAME = 'clubhouse-golf-v19';  // bumped: Home tab, supplied hero art, Find Your Fit
+const CACHE_NAME = 'clubhouse-golf-v20';  // bumped: coach application form
 const abs = rel => new URL(rel, self.location).href;
 const STATIC_ASSETS = [
   './',
   './index.html',
+  './coach-application.html',
+  './coach-application.css',
+  './coach-application.js',
   './app.js',
   './styles.css',
   './manifest.json',

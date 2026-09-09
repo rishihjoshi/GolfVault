@@ -79,9 +79,13 @@ describe('Project docs — archived, not published', () => {
     });
   });
 
-  test('index.html is the only HTML published from docs/', () => {
+  // The point is that the archived pages are not left behind as stale
+  // duplicates — not that docs/ may only ever hold one page. New pages (the
+  // coach application, for one) are fine; resurrected archived ones are not.
+  test('no archived page is republished from docs/', () => {
     const html = fs.readdirSync(DOCS_DIR).filter(f => f.endsWith('.html'));
-    expect(html).toEqual(['index.html']);
+    ARCHIVED_FILES.forEach(f => expect(html).not.toContain(f));
+    expect(html).toContain('index.html');
   });
 });
 
