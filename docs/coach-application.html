@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Coach Application — Clubhouse Golf</title>
+  <meta name="description" content="Join the Clubhouse Golf coaching network. Tell us how you teach and who you teach best, and we will match you with the golfers you are right for.">
+  <meta name="theme-color" content="#0B2F24">
+  <meta name="robots" content="noindex">
+
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bricolage+Grotesque:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- styles.css first, purely for the brand token block: the palette stays
+       single-sourced in its :root rather than being copied here. It also
+       carries unscoped html/body rules for the PWA shell, which DO apply here;
+       coach-application.css undoes them explicitly and says which. -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="coach-application.css">
+</head>
+<body class="ca-body">
+
+<header class="ca-masthead">
+  <a class="ca-brand" href="./">
+    <img src="assets/clubhouse-mark.svg" alt="" aria-hidden="true" width="44" height="44">
+    <span class="ca-brand-name">Clubhouse <span>Golf</span></span>
+  </a>
+  <div class="ca-masthead-copy">
+    <p class="ca-eyebrow">Coaching Network</p>
+    <h1>Teach on Clubhouse</h1>
+    <p class="ca-lede">Golfers arrive at Clubhouse not knowing who to work with. This form is how we learn who you teach best &mdash; so we point the right golfers at you, not just any golfer.</p>
+    <p class="ca-time">About 10 minutes &middot; Your progress saves as you go</p>
+  </div>
+</header>
+
+<div class="ca-shell">
+
+  <!-- Progress rail. Purely a wayfinding aid: it mirrors section state and is
+       hidden from assistive tech, which gets the real headings instead. -->
+  <nav class="ca-rail" aria-hidden="true">
+    <ol id="ca-rail-list"></ol>
+  </nav>
+
+  <main class="ca-main">
+    <form id="coach-form" novalidate autocomplete="on">
+
+      <!-- ── 1. Basic Info ─────────────────────────────────────────────── -->
+      <section class="ca-section" id="sec-basic" data-title="Basic Info">
+        <header class="ca-section-head">
+          <span class="ca-section-num">1</span>
+          <h2>Basic Info</h2>
+        </header>
+
+        <div class="ca-grid">
+          <p class="ca-field">
+            <label for="fullName">Full name <span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="fullName" name="fullName" required autocomplete="name">
+          </p>
+          <p class="ca-field">
+            <label for="businessName">Business / academy name</label>
+            <input type="text" id="businessName" name="businessName" autocomplete="organization">
+          </p>
+          <p class="ca-field">
+            <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
+            <input type="email" id="email" name="email" required autocomplete="email" inputmode="email">
+          </p>
+          <p class="ca-field">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" autocomplete="tel" inputmode="tel">
+          </p>
+          <p class="ca-field ca-span">
+            <label for="website">Website</label>
+            <input type="url" id="website" name="website" placeholder="https://" autocomplete="url">
+          </p>
+          <p class="ca-field">
+            <label for="instagram">Instagram</label>
+            <input type="text" id="instagram" name="instagram" placeholder="@handle">
+          </p>
+          <p class="ca-field">
+            <label for="tiktok">TikTok</label>
+            <input type="text" id="tiktok" name="tiktok" placeholder="@handle">
+          </p>
+          <p class="ca-field ca-span">
+            <label for="linkedin">LinkedIn</label>
+            <input type="text" id="linkedin" name="linkedin" placeholder="Profile URL or handle">
+          </p>
+          <p class="ca-field">
+            <label for="city">City <span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="city" name="city" required autocomplete="address-level2">
+          </p>
+          <p class="ca-field">
+            <label for="state">State <span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="state" name="state" required autocomplete="address-level1" maxlength="40">
+          </p>
+          <p class="ca-field ca-span">
+            <label for="serviceArea">Service area / travel radius</label>
+            <input type="text" id="serviceArea" name="serviceArea" placeholder="e.g. 30 miles around Scottsdale, or statewide for clinics">
+          </p>
+        </div>
+
+        <div class="ca-grid">
+          <p class="ca-field">
+            <label for="profilePhoto">Profile photo</label>
+            <input type="file" id="profilePhoto" name="profilePhoto" accept="image/*" data-preview="profilePhotoPreview">
+            <span class="ca-hint">JPEG or PNG, up to 5 MB.</span>
+            <span class="ca-thumb" id="profilePhotoPreview"></span>
+          </p>
+          <p class="ca-field">
+            <label for="logo">Logo</label>
+            <input type="file" id="logo" name="logo" accept="image/*" data-preview="logoPreview">
+            <span class="ca-hint">Optional. PNG with transparency works best.</span>
+            <span class="ca-thumb" id="logoPreview"></span>
+          </p>
+        </div>
+      </section>
+
+      <!-- ── 2. Professional Background ────────────────────────────────── -->
+      <section class="ca-section" id="sec-background" data-title="Background">
+        <header class="ca-section-head">
+          <span class="ca-section-num">2</span>
+          <h2>Professional Background</h2>
+        </header>
+
+        <fieldset class="ca-fieldset">
+          <legend>Current role <span class="ca-legend-note">Select all that apply</span></legend>
+          <div class="ca-choices">
+            <label class="ca-check"><input type="checkbox" name="role" value="PGA Professional"><span>PGA Professional</span></label>
+            <label class="ca-check"><input type="checkbox" name="role" value="Teaching Professional"><span>Teaching Professional</span></label>
+            <label class="ca-check"><input type="checkbox" name="role" value="Golf Coach"><span>Golf Coach</span></label>
+            <label class="ca-check"><input type="checkbox" name="role" value="Fitness Trainer"><span>Fitness Trainer</span></label>
+            <label class="ca-check"><input type="checkbox" name="role" value="Mental Performance Coach"><span>Mental Performance Coach</span></label>
+            <label class="ca-check"><input type="checkbox" name="role" value="Club Fitter"><span>Club Fitter</span></label>
+            <label class="ca-check"><input type="checkbox" name="role" value="Putting Coach"><span>Putting Coach</span></label>
+            <label class="ca-check"><input type="checkbox" name="role" value="Junior Coach"><span>Junior Coach</span></label>
+            <label class="ca-check" data-other="roleOther"><input type="checkbox" name="role" value="Other"><span>Other</span></label>
+          </div>
+          <p class="ca-field ca-other" id="roleOther" hidden>
+            <label for="roleOtherText">Tell us your role</label>
+            <input type="text" id="roleOtherText" name="roleOtherText">
+          </p>
+        </fieldset>
+
+        <div class="ca-grid">
+          <p class="ca-field">
+            <label for="yearsExperience">Years of experience</label>
+            <input type="number" id="yearsExperience" name="yearsExperience" min="0" max="70" step="1" inputmode="numeric">
+          </p>
+          <p class="ca-field">
+            <label for="pgaAffiliation">PGA / LPGA affiliation</label>
+            <select id="pgaAffiliation" name="pgaAffiliation">
+              <option value="">Select one</option>
+              <option>PGA of America</option>
+              <option>LPGA</option>
+              <option>Both</option>
+              <option>Other association</option>
+              <option>Not affiliated</option>
+            </select>
+          </p>
+          <p class="ca-field ca-span">
+            <label for="certifications">Certifications / credentials</label>
+            <textarea id="certifications" name="certifications" rows="3" placeholder="e.g. PGA Class A, TPI Level 2, Trackman Level 1"></textarea>
+          </p>
+          <p class="ca-field ca-span">
+            <label for="facility">Facility / course affiliation</label>
+            <input type="text" id="facility" name="facility" placeholder="Where do you primarily teach?">
+          </p>
+          <p class="ca-field ca-span">
+            <label for="bio">Short bio</label>
+            <textarea id="bio" name="bio" rows="4" maxlength="800" data-counter placeholder="A few sentences a golfer would read before booking with you."></textarea>
+            <span class="ca-hint"><span class="ca-count" data-for="bio">0</span> / 800</span>
+          </p>
+          <p class="ca-field ca-span">
+            <label for="accomplishments">Notable experience / accomplishments</label>
+            <textarea id="accomplishments" name="accomplishments" rows="3" placeholder="Players coached, tournaments, awards, media, published work."></textarea>
+          </p>
+        </div>
+      </section>
+
+      <!-- ── 3. What They Offer ────────────────────────────────────────── -->
+      <section class="ca-section" id="sec-offer" data-title="What You Offer">
+        <header class="ca-section-head">
+          <span class="ca-section-num">3</span>
+          <h2>What You Offer</h2>
+        </header>
+
+        <fieldset class="ca-fieldset">
+          <legend>Services <span class="ca-legend-note">Select all that apply</span></legend>
+          <div class="ca-choices">
+            <label class="ca-check"><input type="checkbox" name="services" value="Swing Instruction"><span>Swing Instruction</span></label>
+            <label class="ca-check"><input type="checkbox" name="services" value="Putting"><span>Putting</span></label>
+            <label class="ca-check"><input type="checkbox" name="services" value="Short Game"><span>Short Game</span></label>
+            <label class="ca-check"><input type="checkbox" name="services" value="Driver / Distance"><span>Driver / Distance</span></label>
+            <label class="ca-check"><input type="checkbox" name="services" value="Course Management"><span>Course Management</span></label>
+            <label class="ca-check"><input type="checkbox" name="services" value="Junior Golf"><span>Junior Golf</span></label>
+            <label class="ca-check"><input type="checkbox" name="services" value="Beginner Lessons"><span>Beginner Lessons</span></label>
+            <label class="ca-check"><input type="checkbox" name="services" value="Competitive Players"><span>Competitive Players</span></label>
+            <label class="ca-check"><input type="checkbox" name="services" value="College Recruiting"><span>College Recruiting</span></label>
+            <label class="ca-check"><input type="checkbox" name="services" value="Golf Fitness"><span>Golf Fitness</span></label>
+            <label class="ca-check"><input type="checkbox" name="services" value="Mobility"><span>Mobility</span></label>
+            <label class="ca-check"><input type="checkbox" name="services" value="Strength &amp; Conditioning"><span>Strength &amp; Conditioning</span></label>
+            <label class="ca-check"><input type="checkbox" name="services" value="Mental Performance"><span>Mental Performance</span></label>
+            <label class="ca-check"><input type="checkbox" name="services" value="Club Fitting"><span>Club Fitting</span></label>
+            <label class="ca-check"><input type="checkbox" name="services" value="Simulator Training"><span>Simulator Training</span></label>
+            <label class="ca-check"><input type="checkbox" name="services" value="On-Course Lessons"><span>On-Course Lessons</span></label>
+            <label class="ca-check"><input type="checkbox" name="services" value="Group Clinics"><span>Group Clinics</span></label>
+            <label class="ca-check"><input type="checkbox" name="services" value="Corporate Events"><span>Corporate Events</span></label>
+          </div>
+        </fieldset>
+      </section>
+
+      <!-- ── 4. How They Work ──────────────────────────────────────────── -->
+      <section class="ca-section" id="sec-how" data-title="How You Work">
+        <header class="ca-section-head">
+          <span class="ca-section-num">4</span>
+          <h2>How You Work</h2>
+        </header>
+
+        <fieldset class="ca-fieldset">
+          <legend>Delivery</legend>
+          <div class="ca-choices ca-choices-row">
+            <label class="ca-check"><input type="radio" name="delivery" value="In-Person"><span>In-Person</span></label>
+            <label class="ca-check"><input type="radio" name="delivery" value="Virtual"><span>Virtual</span></label>
+            <label class="ca-check"><input type="radio" name="delivery" value="Both"><span>Both</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="ca-fieldset">
+          <legend>Setting <span class="ca-legend-note">Select all that apply</span></legend>
+          <div class="ca-choices ca-choices-row">
+            <label class="ca-check"><input type="checkbox" name="setting" value="Indoor"><span>Indoor</span></label>
+            <label class="ca-check"><input type="checkbox" name="setting" value="Outdoor"><span>Outdoor</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="ca-fieldset">
+          <legend>Lesson formats <span class="ca-legend-note">Select all that apply</span></legend>
+          <div class="ca-choices">
+            <label class="ca-check"><input type="checkbox" name="formats" value="Individual Lessons"><span>Individual Lessons</span></label>
+            <label class="ca-check"><input type="checkbox" name="formats" value="Group Lessons"><span>Group Lessons</span></label>
+            <label class="ca-check"><input type="checkbox" name="formats" value="Clinics"><span>Clinics</span></label>
+            <label class="ca-check"><input type="checkbox" name="formats" value="Packages / Programs"><span>Packages / Programs</span></label>
+            <label class="ca-check"><input type="checkbox" name="formats" value="Subscription / Membership Coaching"><span>Subscription / Membership Coaching</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="ca-fieldset">
+          <legend>Typical price range</legend>
+          <div class="ca-choices ca-choices-row">
+            <label class="ca-check"><input type="radio" name="priceRange" value="Under $50"><span>Under $50</span></label>
+            <label class="ca-check"><input type="radio" name="priceRange" value="$50–$100"><span>$50&ndash;$100</span></label>
+            <label class="ca-check"><input type="radio" name="priceRange" value="$100–$200"><span>$100&ndash;$200</span></label>
+            <label class="ca-check"><input type="radio" name="priceRange" value="$200+"><span>$200+</span></label>
+            <label class="ca-check" data-other="priceOther"><input type="radio" name="priceRange" value="Custom"><span>Custom</span></label>
+          </div>
+          <p class="ca-field ca-other" id="priceOther" hidden>
+            <label for="priceRangeNotes">How is your pricing structured?</label>
+            <input type="text" id="priceRangeNotes" name="priceRangeNotes">
+          </p>
+        </fieldset>
+      </section>
+
+      <!-- ── 5. Golfer Fit ─────────────────────────────────────────────── -->
+      <section class="ca-section ca-section-key" id="sec-fit" data-title="Golfer Fit">
+        <header class="ca-section-head">
+          <span class="ca-section-num">5</span>
+          <h2>Golfer Fit</h2>
+        </header>
+        <p class="ca-section-intro">This is the section that does the matching. The more precisely you answer it, the better the golfers we send you will suit how you actually teach.</p>
+
+        <fieldset class="ca-fieldset">
+          <legend>Who do you primarily work with? <span class="ca-legend-note">Select all that apply</span></legend>
+          <div class="ca-choices">
+            <label class="ca-check"><input type="checkbox" name="worksWith" value="New Golfers"><span>New Golfers</span></label>
+            <label class="ca-check"><input type="checkbox" name="worksWith" value="High Handicap"><span>High Handicap</span></label>
+            <label class="ca-check"><input type="checkbox" name="worksWith" value="Mid Handicap"><span>Mid Handicap</span></label>
+            <label class="ca-check"><input type="checkbox" name="worksWith" value="Low Handicap"><span>Low Handicap</span></label>
+            <label class="ca-check"><input type="checkbox" name="worksWith" value="Competitive / Tournament"><span>Competitive / Tournament</span></label>
+            <label class="ca-check"><input type="checkbox" name="worksWith" value="Juniors"><span>Juniors</span></label>
+            <label class="ca-check"><input type="checkbox" name="worksWith" value="Women"><span>Women</span></label>
+            <label class="ca-check"><input type="checkbox" name="worksWith" value="Seniors"><span>Seniors</span></label>
+            <label class="ca-check"><input type="checkbox" name="worksWith" value="College Players"><span>College Players</span></label>
+            <label class="ca-check"><input type="checkbox" name="worksWith" value="Professional Players"><span>Professional Players</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="ca-fieldset">
+          <legend>What problems do you specialise in solving? <span class="ca-legend-note">Select all that apply</span></legend>
+          <div class="ca-choices">
+            <label class="ca-check"><input type="checkbox" name="solves" value="More Distance"><span>More Distance</span></label>
+            <label class="ca-check"><input type="checkbox" name="solves" value="Better Ball Striking"><span>Better Ball Striking</span></label>
+            <label class="ca-check"><input type="checkbox" name="solves" value="Accuracy"><span>Accuracy</span></label>
+            <label class="ca-check"><input type="checkbox" name="solves" value="Slice / Hook"><span>Slice / Hook</span></label>
+            <label class="ca-check"><input type="checkbox" name="solves" value="Putting"><span>Putting</span></label>
+            <label class="ca-check"><input type="checkbox" name="solves" value="Short Game"><span>Short Game</span></label>
+            <label class="ca-check"><input type="checkbox" name="solves" value="Lower Scores"><span>Lower Scores</span></label>
+            <label class="ca-check"><input type="checkbox" name="solves" value="Fitness / Mobility"><span>Fitness / Mobility</span></label>
+            <label class="ca-check"><input type="checkbox" name="solves" value="Injury Prevention"><span>Injury Prevention</span></label>
+            <label class="ca-check"><input type="checkbox" name="solves" value="Mental Game"><span>Mental Game</span></label>
+            <label class="ca-check"><input type="checkbox" name="solves" value="Tournament Preparation"><span>Tournament Preparation</span></label>
+          </div>
+        </fieldset>
+      </section>
+
+      <!-- ── 6. Availability ───────────────────────────────────────────── -->
+      <section class="ca-section" id="sec-availability" data-title="Availability">
+        <header class="ca-section-head">
+          <span class="ca-section-num">6</span>
+          <h2>Availability</h2>
+        </header>
+
+        <fieldset class="ca-fieldset">
+          <legend>Accepting new clients?</legend>
+          <div class="ca-choices ca-choices-row">
+            <label class="ca-check"><input type="radio" name="acceptingClients" value="Yes"><span>Yes</span></label>
+            <label class="ca-check"><input type="radio" name="acceptingClients" value="No"><span>No</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="ca-fieldset">
+          <legend>Online booking available?</legend>
+          <div class="ca-choices ca-choices-row">
+            <label class="ca-check" data-other="bookingLinkField"><input type="radio" name="onlineBooking" value="Yes"><span>Yes</span></label>
+            <label class="ca-check"><input type="radio" name="onlineBooking" value="No"><span>No</span></label>
+          </div>
+          <p class="ca-field ca-other" id="bookingLinkField" hidden>
+            <label for="bookingLink">Booking link</label>
+            <input type="url" id="bookingLink" name="bookingLink" placeholder="https://">
+          </p>
+        </fieldset>
+
+        <div class="ca-grid">
+          <p class="ca-field ca-span">
+            <label for="typicalAvailability">Typical availability</label>
+            <input type="text" id="typicalAvailability" name="typicalAvailability" placeholder="e.g. Weekday mornings, Saturday afternoons">
+          </p>
+          <p class="ca-field">
+            <label for="leadTime">Average lead time</label>
+            <select id="leadTime" name="leadTime">
+              <option value="">Select one</option>
+              <option>Same day</option>
+              <option>1–3 days</option>
+              <option>About a week</option>
+              <option>2–4 weeks</option>
+              <option>More than a month</option>
+            </select>
+          </p>
+          <p class="ca-field">
+            <label for="seasonal">Seasonal availability</label>
+            <input type="text" id="seasonal" name="seasonal" placeholder="e.g. Year-round, or Apr–Oct only">
+          </p>
+        </div>
+      </section>
+
+      <!-- ── 7. Content & Community ────────────────────────────────────── -->
+      <section class="ca-section" id="sec-content" data-title="Content">
+        <header class="ca-section-head">
+          <span class="ca-section-num">7</span>
+          <h2>Content &amp; Community</h2>
+        </header>
+        <p class="ca-section-intro">Optional, and nothing here is a commitment. It tells us who to come to when an opportunity comes up.</p>
+
+        <fieldset class="ca-fieldset">
+          <legend>I'd be interested in <span class="ca-legend-note">Select all that apply</span></legend>
+          <div class="ca-choices">
+            <label class="ca-check"><input type="checkbox" name="contentInterests" value="Writing instructional content"><span>Writing instructional content</span></label>
+            <label class="ca-check"><input type="checkbox" name="contentInterests" value="Creating videos"><span>Creating videos</span></label>
+            <label class="ca-check"><input type="checkbox" name="contentInterests" value="Hosting virtual clinics"><span>Hosting virtual clinics</span></label>
+            <label class="ca-check"><input type="checkbox" name="contentInterests" value="Hosting Clubhouse events"><span>Hosting Clubhouse events</span></label>
+            <label class="ca-check"><input type="checkbox" name="contentInterests" value="Q&amp;A sessions"><span>Q&amp;A sessions</span></label>
+            <label class="ca-check"><input type="checkbox" name="contentInterests" value="Product reviews"><span>Product reviews</span></label>
+            <label class="ca-check"><input type="checkbox" name="contentInterests" value="Brand partnerships"><span>Brand partnerships</span></label>
+            <label class="ca-check"><input type="checkbox" name="contentInterests" value="Golf challenges"><span>Golf challenges</span></label>
+            <label class="ca-check"><input type="checkbox" name="contentInterests" value="Local events"><span>Local events</span></label>
+            <label class="ca-check"><input type="checkbox" name="contentInterests" value="Clubhouse member discounts"><span>Clubhouse member discounts</span></label>
+            <label class="ca-check"><input type="checkbox" name="contentInterests" value="Referral opportunities"><span>Referral opportunities</span></label>
+          </div>
+        </fieldset>
+      </section>
+
+      <!-- ── 8. Clubhouse Partnership ──────────────────────────────────── -->
+      <section class="ca-section" id="sec-partnership" data-title="Partnership">
+        <header class="ca-section-head">
+          <span class="ca-section-num">8</span>
+          <h2>Clubhouse Partnership</h2>
+        </header>
+
+        <fieldset class="ca-fieldset">
+          <legend>What are you most interested in through Clubhouse? <span class="ca-legend-note">Select all that apply</span></legend>
+          <div class="ca-choices">
+            <label class="ca-check"><input type="checkbox" name="partnershipGoals" value="New Clients"><span>New Clients</span></label>
+            <label class="ca-check"><input type="checkbox" name="partnershipGoals" value="Increased Exposure"><span>Increased Exposure</span></label>
+            <label class="ca-check"><input type="checkbox" name="partnershipGoals" value="Online Coaching Growth"><span>Online Coaching Growth</span></label>
+            <label class="ca-check"><input type="checkbox" name="partnershipGoals" value="Content Distribution"><span>Content Distribution</span></label>
+            <label class="ca-check"><input type="checkbox" name="partnershipGoals" value="Brand Partnerships"><span>Brand Partnerships</span></label>
+            <label class="ca-check"><input type="checkbox" name="partnershipGoals" value="Events"><span>Events</span></label>
+            <label class="ca-check"><input type="checkbox" name="partnershipGoals" value="Networking"><span>Networking</span></label>
+            <label class="ca-check"><input type="checkbox" name="partnershipGoals" value="Affiliate Opportunities"><span>Affiliate Opportunities</span></label>
+            <label class="ca-check"><input type="checkbox" name="partnershipGoals" value="Building My Personal Brand"><span>Building My Personal Brand</span></label>
+            <label class="ca-check" data-other="goalOther"><input type="checkbox" name="partnershipGoals" value="Other"><span>Other</span></label>
+          </div>
+          <p class="ca-field ca-other" id="goalOther" hidden>
+            <label for="partnershipGoalsOther">What else are you hoping for?</label>
+            <input type="text" id="partnershipGoalsOther" name="partnershipGoalsOther">
+          </p>
+        </fieldset>
+
+        <fieldset class="ca-fieldset">
+          <legend>Would you offer an exclusive benefit to Clubhouse members?</legend>
+          <div class="ca-choices ca-choices-row">
+            <label class="ca-check" data-other="benefitDetail"><input type="radio" name="memberBenefit" value="Yes"><span>Yes</span></label>
+            <label class="ca-check"><input type="radio" name="memberBenefit" value="Maybe"><span>Maybe</span></label>
+            <label class="ca-check"><input type="radio" name="memberBenefit" value="No"><span>No</span></label>
+          </div>
+
+          <div class="ca-other" id="benefitDetail" hidden>
+            <div class="ca-choices">
+              <label class="ca-check"><input type="checkbox" name="benefitType" value="% discount"><span>% discount</span></label>
+              <label class="ca-check"><input type="checkbox" name="benefitType" value="Free consultation"><span>Free consultation</span></label>
+              <label class="ca-check"><input type="checkbox" name="benefitType" value="Free assessment"><span>Free assessment</span></label>
+              <label class="ca-check"><input type="checkbox" name="benefitType" value="Package discount"><span>Package discount</span></label>
+              <label class="ca-check"><input type="checkbox" name="benefitType" value="Other"><span>Other</span></label>
+            </div>
+            <p class="ca-field">
+              <label for="benefitNotes">Describe the benefit</label>
+              <input type="text" id="benefitNotes" name="benefitNotes" placeholder="e.g. 15% off a first lesson package">
+            </p>
+          </div>
+        </fieldset>
+      </section>
+
+      <!-- ── 9. Verification ───────────────────────────────────────────── -->
+      <section class="ca-section" id="sec-verification" data-title="Verification">
+        <header class="ca-section-head">
+          <span class="ca-section-num">9</span>
+          <h2>Verification</h2>
+        </header>
+        <p class="ca-section-intro">Verification is what makes a Clubhouse recommendation worth trusting. Upload what you have &mdash; anything missing can follow later.</p>
+
+        <div class="ca-grid">
+          <p class="ca-field">
+            <label for="certUpload">Certifications</label>
+            <input type="file" id="certUpload" name="certUpload" accept="image/*,.pdf" multiple>
+            <span class="ca-hint">PDF or image. Multiple files allowed.</span>
+          </p>
+          <p class="ca-field">
+            <label for="insuranceUpload">Insurance / COI</label>
+            <input type="file" id="insuranceUpload" name="insuranceUpload" accept="image/*,.pdf">
+            <span class="ca-hint">If applicable.</span>
+          </p>
+          <p class="ca-field">
+            <label for="pgaNumber">PGA / LPGA number</label>
+            <input type="text" id="pgaNumber" name="pgaNumber" autocomplete="off">
+          </p>
+          <p class="ca-field">
+            <label for="businessLicense">Business license</label>
+            <input type="file" id="businessLicense" name="businessLicense" accept="image/*,.pdf">
+            <span class="ca-hint">If applicable.</span>
+          </p>
+          <p class="ca-field ca-span">
+            <label for="references">References</label>
+            <textarea id="references" name="references" rows="3" placeholder="Name, relationship and how to reach them. Two is plenty."></textarea>
+          </p>
+        </div>
+
+        <div class="ca-consents">
+          <label class="ca-consent">
+            <input type="checkbox" name="backgroundCheckConsent" value="Yes">
+            <span>
+              <strong>Background check consent</strong>
+              I consent to Clubhouse Golf running a background check if I am matched with junior golfers. Optional now &mdash; we will always ask again, in writing, before any check is run.
+            </span>
+          </label>
+
+          <label class="ca-consent">
+            <input type="checkbox" name="agreeStandards" value="Yes" required>
+            <span>
+              <strong>Clubhouse Professional Standards <span class="req" aria-hidden="true">*</span></strong>
+              I agree to uphold the Clubhouse Professional Standards: teach within my qualifications, represent my credentials honestly, and treat every golfer with respect.
+            </span>
+          </label>
+
+          <label class="ca-consent">
+            <input type="checkbox" name="agreeTerms" value="Yes" required>
+            <span>
+              <strong>Terms &amp; Conditions <span class="req" aria-hidden="true">*</span></strong>
+              I agree to the Clubhouse Golf Terms &amp; Conditions and Privacy Policy, and confirm the information above is accurate.
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <!-- ── Submit ────────────────────────────────────────────────────── -->
+      <div class="ca-submit">
+        <div class="ca-errors" id="ca-errors" role="alert" hidden>
+          <h3 id="ca-errors-title"></h3>
+          <ul id="ca-errors-list"></ul>
+        </div>
+
+        <p class="ca-privacy">
+          We use this to match you with golfers and to verify you are who you say you are. We do not sell it.
+        </p>
+
+        <button type="submit" class="ca-btn ca-btn-primary" id="ca-submit">Submit application</button>
+        <button type="button" class="ca-btn ca-btn-ghost" id="ca-clear">Clear saved draft</button>
+
+        <p class="ca-draft-note" id="ca-draft-note" aria-live="polite"></p>
+      </div>
+
+    </form>
+  </main>
+</div>
+
+<!-- Success panel, swapped in after a successful submit. -->
+<div class="ca-done" id="ca-done" hidden>
+  <div class="ca-done-inner">
+    <img src="assets/clubhouse-mark.svg" alt="" aria-hidden="true" width="72" height="72">
+    <h2>Application received</h2>
+    <p id="ca-done-msg"></p>
+    <div class="ca-done-actions">
+      <a class="ca-btn ca-btn-primary" href="./">Back to Clubhouse</a>
+    </div>
+  </div>
+</div>
+
+<footer class="ca-footer">
+  <p>Everything Golf. One Clubhouse.</p>
+</footer>
+
+<script src="coach-application.js"></script>
+</body>
+</html>
